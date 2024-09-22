@@ -3,9 +3,10 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.9
-  - pyqt
+  - python=3.11
   - matplotlib
+  - seaborn
   - pip
   - pip:
-      - pyqt5-tools # Optional: for Qt Designer and other toolsname: pyqt-env
+      - pyqt6
+      - pyqt6-tools # Optional: for Qt Designer and other tools
