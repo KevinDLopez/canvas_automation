@@ -6,6 +6,10 @@ dependencies:
   - python=3.11
   - matplotlib
   - seaborn
+  - pandas
+  - numpy
+  - scipy
+  - scikit-learn
   - pip
   - pip:
       - pyqt6
