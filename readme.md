@@ -4,4 +4,4 @@
 3. Update packages `conda env update -f pyqt-env.yml --prune`
 
 # Running *canvas_data.py* script
-1. Create an `.env` file and store your canvas access token
+1. Create an `.env` file and store your canvas access token as `API_TOKEN`
