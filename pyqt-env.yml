@@ -10,6 +10,7 @@ dependencies:
   - numpy
   - scipy
   - scikit-learn
+  - requests
   - pip
   - pip:
       - pyqt6
