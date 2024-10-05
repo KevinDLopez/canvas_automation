@@ -1,0 +1,17 @@
+name: pyqt-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - matplotlib
+  - seaborn
+  - pandas
+  - numpy
+  - scipy
+  - scikit-learn
+  - requests
+  - pip
+  - pip:
+      - pyqt6
+      - pyqt6-tools # Optional: for Qt Designer and other tools
