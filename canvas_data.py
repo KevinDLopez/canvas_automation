@@ -24,7 +24,6 @@ def get_users_in_course(course_id):
         # Make API request
         response = requests.get(url, headers=headers, params=params)
         try:
-
             # Checks if response was successful
             response.raise_for_status()  # raises an exception if the response is not successful
 
