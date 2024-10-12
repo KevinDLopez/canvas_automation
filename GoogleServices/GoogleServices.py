@@ -5,6 +5,7 @@ from googleapiclient import discovery
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
+import pandas as pd
 
 from GoogleServices.schemas import (
     BatchUpdateFormResponse,
@@ -72,7 +73,7 @@ class GoogleServicesManager:
         result = self.form_service.forms().get(formId=form_id).execute()
         return result
 
-    def get_form_responses(self, form_id: str) -> ListFormResponsesResponse:
+    def __get_form_responses(self, form_id: str) -> ListFormResponsesResponse:
         """Retrieve and print form responses using the form ID."""
         # MIGHT NEED TO HAN
         responses: ListFormResponsesResponse = (
@@ -80,16 +81,16 @@ class GoogleServicesManager:
         )
         return responses
 
-    def make_copy_of_form(self, form_id: str):
+    def make_copy_of_form(self, form_id: str, new_title: str) -> Form:
         """Make a copy of a form with the given form ID."""
-        form = self.get_form(form_id)
+        template_form = self.get_form(form_id)  # Get the details from the template
 
-        new_form = {"info": {"title": form["info"]["title"]}}
+        new_form = {"info": {"title": new_title}}
         created_form: Form = self.form_service.forms().create(body=new_form).execute()
         print("created_form", created_form)
 
         create_items: List[RequestType] = []
-        for i, item in enumerate(form["items"]):
+        for i, item in enumerate(template_form["items"]):
             create_items.append(
                 {"createItem": {"item": item, "location": {"index": i}}}
             )
@@ -157,6 +158,40 @@ class GoogleServicesManager:
         )
         return batch_update_response
 
+    def get_form_responses(self, form_id: str) -> pd.DataFrame:
+        form_data = self.get_form(form_id)  # questions are in form_data['questions']
+        id_to_question: Dict[str, str] = {}
+        for item in form_data["items"]:
+            if "questionItem" in item:
+                question = item["questionItem"]["question"]
+                id_to_question[question["questionId"]] = item["title"]
+            if "questionGroupItem" in item:
+                for question in item["questionGroupItem"]["questions"]:
+                    id_to_question[question["questionId"]] = question["rowQuestion"][
+                        "title"
+                    ]
+
+        data = self.__get_form_responses(form_id)  # Generate pandas dataframe
+        rows = []
+        if "responses" not in data:
+            print("No responses yet")
+            raise Exception("No responses yet")
+        for response in data["responses"]:
+            # print(response)
+            row = {
+                "responseId": response["responseId"],
+                "createTime": response["createTime"],
+                "lastSubmittedTime": response["lastSubmittedTime"],
+            }
+            for question_id, answer_data in response["answers"].items():
+                row[id_to_question[question_id]] = answer_data["textAnswers"][
+                    "answers"
+                ][0]["value"]
+            rows.append(row)
+
+        df = pd.DataFrame(rows)
+        return df
+
 
 if __name__ == "__main__":
 
@@ -167,4 +202,5 @@ if __name__ == "__main__":
     result = manager.get_form(form_id)
     print(result)
 
-    manager.make_copy_of_form("14vM9XQp7BgHLA6JjtasZoxlFlGfRJdlqrRZqhcw9XHs")
+    # Get form responses
+    df = manager.get_form_responses(form_id)
