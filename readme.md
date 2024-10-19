@@ -59,5 +59,5 @@
 1. Set up python based on above instructions - [Setting up Python](#setting-up-python)
 2. Place `S24-574-all-responses.xlsx` in this same directory 
 3. Open `./removing_outliers.ipynb`  
-4. Select the python environment `pyqt-env` 
+4. Select the python environment `pyqt-env`  or `venv`  
 5. click on run all
