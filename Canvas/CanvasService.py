@@ -3,8 +3,9 @@ import time
 from typing import Any, Dict, List, Literal, Optional
 import requests
 import unittest
+import json
 
-from Canvas.schemas import *
+from schemas import *
 
 
 class CanvasAPI:
@@ -86,7 +87,7 @@ class CanvasAPI:
             data = response.json()
             users.extend(data)
             # Handle pagination
-            endpoint = self._get_next_page(response)
+            endpoint = self.__get_next_page(response)
             params = {}  # Clear params after the first request
         return users
 
@@ -144,7 +145,7 @@ class CanvasAPI:
         }
         return self._make_request("POST", endpoint, json=data)
 
-    def create_quiz(
+    def _create_quiz(
         self,
         title: str,
         description: str,
@@ -180,7 +181,7 @@ class CanvasAPI:
         }
         return self._make_request("POST", endpoint, json=data)
 
-    def add_question_to_quiz(self, quiz_id: int, question_data: Dict) -> Dict:
+    def _add_question_to_quiz(self, quiz_id: int, question_data: Dict) -> Dict:
         """
         Add a question to a specific quiz.
 
@@ -194,7 +195,7 @@ class CanvasAPI:
         endpoint = f"quizzes/{quiz_id}/questions"
         return self._make_request("POST", endpoint, json=question_data)
 
-    def _get_next_page(self, response: requests.Response) -> Optional[str]:
+    def __get_next_page(self, response: requests.Response) -> Optional[str]:
         """
         Parse the 'Link' header to find the URL for the next page.
 
@@ -214,97 +215,75 @@ class CanvasAPI:
                     return next_url
         return None
 
+    def _create_quiz_with_questions(self, validated_quiz: QuizSchema) -> Dict:
+        """
+        Create a quiz and add multiple questions based on the provided data.
 
-class TestCanvasAPI(unittest.TestCase):
+        Args:
+            validated_quiz (QuizSchema): An instance of QuizSchema containing the quiz information and questions.
 
-    @classmethod
-    def setUpClass(cls):
-        # Set up Canvas API with real course data
-        cls.api_token = os.getenv("API_TOKEN")
-        cls.course_id = 15319
-        cls.assignment_id = 53371
-        cls.user_id = 140799
-        cls.canvas = CanvasAPI(course_id=cls.course_id)
+        Returns:
+            Dict: The created quiz data.
 
-    def test_get_student_grade(self):
-        # Call the method
-        current_grade = self.canvas.get_student_grade(self.assignment_id, self.user_id)
-
-        # Assertions
-        self.assertIsNotNone(current_grade, "Grade should not be None")
-        print(f"Current grade for user {self.user_id}: {current_grade}")
-
-    def test_update_student_grade(self):
-        # Call the method to update grade
-        new_grade = 10
-        updated_grade = self.canvas.update_student_grade(
-            self.assignment_id, self.user_id, new_grade
+        Raises:
+            ValidationError: If the input data does not conform to the schema.
+            requests.HTTPError: If the quiz creation or question addition fails after retries.
+            ValueError: If the quiz ID is not found after creation.
+        """
+        # Step 1: Create the quiz
+        quiz = self._create_quiz(
+            title=validated_quiz.title,
+            description=validated_quiz.description,
+            quiz_type=validated_quiz.quiz_type,
+            time_limit=validated_quiz.time_limit,
+            shuffle_answers=validated_quiz.shuffle_answers,
+            allowed_attempts=validated_quiz.allowed_attempts,
         )
+        # Step 2: Add questions to the quiz
+        for idx, question in enumerate(validated_quiz.questions, start=1):
+            question_dict = question.dict()
+            question_data = {"question": question_dict}
+            added_question = self._add_question_to_quiz(quiz["id"], question_data)
+            if not added_question:
+                raise requests.HTTPError(
+                    f"Failed to add question '{question.question_name}' to the quiz."
+                )
 
-        # Assertions
-        self.assertEqual(
-            str(updated_grade),
-            str(new_grade),
-            "Updated grade should match the new grade",
+        print(
+            f"Quiz '{validated_quiz.title}' created successfully with all questions added."
         )
-        print(f"Updated grade for user {self.user_id}: {updated_grade}")
+        return quiz
 
-    def test_get_users_in_course(self):
-        # Call the method to retrieve users
-        users = self.canvas.get_users_in_course()
+    def create_quiz_from_file(self, file_path: str) -> Dict:
+        """
+        Create a quiz by reading quiz data from a JSON file.
 
-        # Assertions
-        self.assertGreater(len(users), 0, "Users should be retrieved from the course")
-        print("Users in course:")
-        for user in users:
-            print(f"Name: {user.get('name')}, Email: {user.get('email')}")
+        Args:
+            file_path (str): Path to the JSON file containing quiz data.
 
-    def test_create_announcement(self):
-        # Call the method to create an announcement
-        announcement_title = "Test Announcement"
-        announcement_message = "This is a test announcement. Please ignore."
-        announcement = self.canvas.create_announcement(
-            announcement_title, announcement_message
-        )
-        print(f"Announcement '{announcement['title']}' created successfully.")
+        Returns:
+            Dict: The created quiz data.
 
-    def test_create_quiz_and_add_question(self):
-        # Call the method to create a quiz
-        quiz_title = "Test Quiz"
-        quiz_description = "This is a test quiz created via API"
-        quiz_type = "assignment"
-        time_limit = 30  # in minutes
-        quiz = self.canvas.create_quiz(
-            quiz_title, quiz_description, quiz_type, time_limit
-        )
-        if not quiz:
-            raise Exception("Failed to create quiz")
-        quiz_id = quiz["id"]
-        print(f"Quiz '{quiz['title']}' created successfully with ID {quiz['id']}.")
+        Raises:
+            FileNotFoundError: If the file does not exist.
+            ValueError: If the file content cannot be parsed as JSON.
+            ValidationError: If the file content does not conform to the QuizSchema.
+            requests.HTTPError: If the quiz creation or question addition fails after retries.
+        """
 
-        # Add a quiz question
-        question_data = {
-            "question": {
-                "question_name": "Test question",
-                "question_text": "1 + 1 = ?",
-                "question_type": "multiple_choice_question",
-                "points_possible": 5,
-                "answers": [
-                    {"answer_text": "2", "answer_weight": 100},
-                    {"answer_text": "1", "answer_weight": 0},
-                    {"answer_text": "3", "answer_weight": 0},
-                    {"answer_text": "4", "answer_weight": 0},
-                ],
-            }
-        }
-        question = self.canvas.add_question_to_quiz(quiz_id, question_data)
-        assert question
-        # Assertions
-        self.assertIsNotNone(
-            question, "Question should be added to the quiz successfully"
-        )
-        print(f"Question added successfully with ID {question['id']}")
+        # Step 1: Check if the file exists
+        if not os.path.isfile(file_path):
+            raise FileNotFoundError(f"The file '{file_path}' does not exist.")
 
+        # Step 2: Read and parse the JSON file
+        try:
+            with open(file_path, "r") as f:
+                quiz_data = json.load(f)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Failed to parse JSON file: {e}")
 
-if __name__ == "__main__":
-    unittest.main()
+        # Unpacking the JSON data into the schema, would raise errors if the data is invalid
+        validated_quiz = QuizSchema(**quiz_data)
+
+        # Step 3: Validate and create the quiz with questions
+        return self._create_quiz_with_questions(validated_quiz)
