@@ -241,7 +241,7 @@ class CanvasAPI:
         )
         # Step 2: Add questions to the quiz
         for idx, question in enumerate(validated_quiz.questions, start=1):
-            question_dict = question.dict()
+            question_dict = question.model_dump()
             question_data = {"question": question_dict}
             added_question = self._add_question_to_quiz(quiz["id"], question_data)
             if not added_question:
