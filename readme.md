@@ -55,7 +55,7 @@
 3. run the python script `python ./GoogleServices/GoogleServices.py/` or use the `./google_forms.ipynb`
 
 
-# For running `removing_outliers.ipynb` - data visualization of grades 
+#  Data visualization of grades 
 1. Set up python based on above instructions - [Setting up Python](#setting-up-python)
 2. Place `S24-574-all-responses.xlsx` in this same directory 
 3. Open `./removing_outliers.ipynb`  
