@@ -4,6 +4,8 @@ from typing import Any, Dict, List, Literal, Optional
 import requests
 import unittest
 
+from Canvas.schemas import *
+
 
 class CanvasAPI:
     def __init__(
