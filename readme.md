@@ -12,3 +12,10 @@
 # Running *canvas_data.py* script
 1. Create an `.env` file and store your canvas access token as `API_TOKEN`
 2. Run python script `python canvas_data.py`
+
+
+# Running google script
+0. Setup google project with API support, allow users to test ap!
+1. Download credentials
+2. The credentials are not pushed to git, it should be a `./client_secrets.json` 
+3. run the python script `python ./GoogleServices/GoogleServices.py/` or use the `./google_forms.ipynb`

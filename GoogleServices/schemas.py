@@ -153,7 +153,7 @@ class Info(TypedDict, total=True):
     title: str
 
 
-class Item(TypedDict, total=False):
+class Item(TypedDict, total=True):
     description: str
     imageItem: "ImageItem"
     itemId: str
