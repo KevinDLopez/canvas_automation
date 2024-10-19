@@ -2,17 +2,17 @@
 
 ## Using Conda Environment
 1. Create Env. 
-```bash 
-        conda env create -f pyqt-env.yml
-```
+    ```bash 
+    conda env create -f pyqt-env.yml
+    ```
 2. Activate 
-```sh 
-        conda activate pyqt-env
-```
+    ```sh 
+    conda activate pyqt-env
+    ```
 3. Update packages 
-```bash 
-        conda env update -f pyqt-env.yml --prune
-```
+    ```bash 
+    conda env update -f pyqt-env.yml --prune
+    ```
 
 ## Using Python Requirements File
 1. Create a virtual environment:
