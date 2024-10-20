@@ -5,7 +5,7 @@ import requests
 import unittest
 import json
 
-from schemas import *
+from Canvas.schemas import *
 
 
 class CanvasAPI:
@@ -124,6 +124,20 @@ class CanvasAPI:
         data = {"submission": {"posted_grade": new_grade}}
         updated_submission = self._make_request("PUT", endpoint, json=data)
         return updated_submission.get("grade", "No grade available")
+
+    def get_assignments(self) -> List[AssignmentSchema]:
+        """
+        Retrieve all assignments in the course.
+
+        Returns:
+            List[AssignmentSchema]: A list of assignment dictionaries.
+        """
+        endpoint = "assignments"
+        assignments_ = self._make_request("GET", endpoint)
+        assignments: List[AssignmentSchema] = []
+        for assignment in assignments_:
+            assignments.append(AssignmentSchema(**assignment))
+        return assignments
 
     def create_announcement(self, title: str, message: str) -> Dict:
         """
@@ -287,3 +301,14 @@ class CanvasAPI:
 
         # Step 3: Validate and create the quiz with questions
         return self._create_quiz_with_questions(validated_quiz)
+
+
+if __name__ == "__main__":
+    api_token = os.getenv("API_TOKEN")
+    course_id = 15319
+    canvas = CanvasAPI(course_id, api_token)
+    assignment = canvas.get_assignments()
+    for a in assignment:
+        print(
+            f"the current assignment is {a.due_at}, with id {a.id}, description {a.description}"
+        )

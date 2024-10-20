@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, ValidationError, field_validator
 from typing import List, Optional
 import pytest
+from datetime import datetime
 
 
 class Answer(BaseModel):
@@ -63,3 +64,72 @@ if __name__ == "__main__":
                     Answer(answer_text="Answer 2", answer_weight=50),
                 ],
             )
+
+
+class AssignmentSchema(BaseModel):
+    id: int
+    description: str
+    due_at: Optional[datetime] = None
+    unlock_at: Optional[datetime] = None
+    lock_at: Optional[datetime] = None
+    points_possible: float
+    grading_type: str
+    assignment_group_id: int
+    grading_standard_id: Optional[int] = None
+    created_at: datetime
+    updated_at: datetime
+    peer_reviews: bool
+    automatic_peer_reviews: bool
+    position: int
+    grade_group_students_individually: bool
+    anonymous_peer_reviews: bool
+    group_category_id: Optional[int] = None
+    post_to_sis: bool
+    moderated_grading: bool
+    omit_from_final_grade: bool
+    intra_group_peer_reviews: bool
+    anonymous_instructor_annotations: bool
+    anonymous_grading: bool
+    graders_anonymous_to_graders: bool
+    grader_count: int
+    grader_comments_visible_to_graders: bool
+    final_grader_id: Optional[int] = None
+    grader_names_visible_to_final_grader: bool
+    allowed_attempts: int
+    annotatable_attachment_id: Optional[int] = None
+    hide_in_gradebook: bool
+    secure_params: str
+    lti_context_id: str
+    course_id: int
+    name: str
+    submission_types: List[str]
+    has_submitted_submissions: bool
+    due_date_required: bool
+    max_name_length: int
+    in_closed_grading_period: bool
+    graded_submissions_exist: bool
+    is_quiz_assignment: bool
+    can_duplicate: bool
+    original_course_id: Optional[int] = None
+    original_assignment_id: Optional[int] = None
+    original_lti_resource_link_id: Optional[int] = None
+    original_assignment_name: Optional[str] = None
+    original_quiz_id: Optional[int] = None
+    workflow_state: str
+    important_dates: bool
+    muted: bool
+    html_url: str
+    has_overrides: bool
+    needs_grading_count: int
+    quiz_id: Optional[int] = None
+    anonymous_submissions: Optional[bool] = None
+    published: bool
+    unpublishable: bool
+    only_visible_to_overrides: bool
+    visible_to_everyone: bool
+    locked_for_user: bool
+    submissions_download_url: str
+    post_manually: bool
+    anonymize_students: bool
+    require_lockdown_browser: bool
+    restrict_quantitative_data: bool

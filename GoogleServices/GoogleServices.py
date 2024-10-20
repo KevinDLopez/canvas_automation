@@ -90,9 +90,26 @@ class GoogleServicesManager:
         print("created_form", created_form)
 
         create_items: List[RequestType] = []
+        create_items.append(
+            {
+                "createItem": {
+                    "item": {
+                        "title": "Email",
+                        "questionItem": {
+                            "question": {
+                                "textQuestion": {"paragraph": False},
+                                "required": True,
+                            },
+                        },
+                        "description": "Enter your CSULB email address, e.g., First.Last.001@student.csulb.edu",
+                    },
+                    "location": {"index": 0},
+                }
+            }  # type: ignore
+        )
         for i, item in enumerate(template_form["items"]):
             create_items.append(
-                {"createItem": {"item": item, "location": {"index": i}}}
+                {"createItem": {"item": item, "location": {"index": i + 1}}}
             )
 
         batch_update_request = {"requests": create_items}
