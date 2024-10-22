@@ -5,7 +5,7 @@ import requests
 import unittest
 import json
 
-from Canvas.schemas import *
+from schemas import *
 
 
 class CanvasAPI:
@@ -38,13 +38,13 @@ class CanvasAPI:
         }
 
     def _make_request(
-        self, method: Literal["GET", "PUT", "POST"], endpoint: str, **kwargs
+        self, method: Literal["GET", "PUT", "POST", "DELETE"], endpoint: str, **kwargs
     ) -> dict:
         """
         Helper method to make HTTP requests and handle errors consistently.
 
         Args:
-            method (str): The HTTP method (e.g., 'GET', 'POST', 'PUT').
+            method (str): The HTTP method (e.g., 'GET', 'POST', 'PUT', 'DELETE').
             endpoint (str): The endpoint part of the URL after /courses/{course_id}.
             **kwargs: Additional arguments to pass to the request.
 
@@ -159,6 +159,8 @@ class CanvasAPI:
         }
         return self._make_request("POST", endpoint, json=data)
 
+    # __private
+    # _protected
     def _create_quiz(
         self,
         title: str,
@@ -302,13 +304,89 @@ class CanvasAPI:
         # Step 3: Validate and create the quiz with questions
         return self._create_quiz_with_questions(validated_quiz)
 
+    def upload_file(self, file_path: str) -> Dict:
+        """
+        Upload an image to the course's files.
+
+        Args:
+            file_path (str): The local path to the image file (e.g., '/path/to/image.png').
+
+        Returns:
+            Dict: The response from Canvas with details about the uploaded file.
+
+        Raises:
+            FileNotFoundError: If the file does not exist.
+            ValueError: If the file is not a PNG file or if the file size cannot be determined.
+            requests.HTTPError: If the upload fails.
+        """
+        # Step 1: Check if the file exists and is a .png file
+        if not os.path.isfile(file_path):
+            raise FileNotFoundError(f"The file '{file_path}' does not exist.")
+        if not file_path.lower().endswith(".png"):
+            raise ValueError("Only .png files are supported for this upload method.")
+        file_path = os.path.abspath(file_path)
+        print(f"file_path = {file_path}")
+
+        # Step 2: Get the file size
+        file_size = os.path.getsize(file_path)
+        if file_size == 0:
+            raise ValueError("Cannot upload an empty file.")
+        print("File size = ", file_size)
+
+        # Step 3: Initiate the file upload
+        file_name = os.path.basename(file_path)
+        print("file_name = ", file_name)
+        data = {
+            "name": file_name,
+            "content_type": "image/png",
+            "size": str(file_size),
+            "parent_folder_path": "/Files",  # Modify as needed for specific folder
+            "on_duplicate": "rename",  # Rename the file if a file with the same name exists
+            "Authorization": f"Bearer {self.api_token}",
+        }
+
+        # Using _make_request to initiate the file upload
+        upload_info = self._make_request("POST", "files", json=data)
+
+        # Step 2: Upload the file to the pre-signed URL
+        upload_url = upload_info["upload_url"]
+        upload_params = upload_info["upload_params"]
+
+        with open(file_path, "rb") as file_data:
+            files = {"file": (file_name, file_data)}
+            upload_response = requests.post(upload_url, data=upload_params, files=files)
+            try:
+                upload_response.raise_for_status()
+            except requests.HTTPError as e:
+                print(f"HTTPError during file upload: {e}")
+                print(f"Response Status Code: {upload_response.status_code}")
+                print(f"Response Text: {upload_response.text}")
+                raise
+
+        # Step 5: Confirm the file upload and retrieve
+        if upload_response.status_code == 201:
+            print(f"File '{file_name}' uploaded successfully!")
+            # The file URI is usually returned as part of the upload_info or can be constructed from the file details
+            file_uri = upload_info.get("url", "No URL available")
+            print(f"File URL: {file_uri}")
+            return upload_info
+        else:
+            raise requests.HTTPError(
+                f"File upload failed with status: {upload_response.status_code}"
+            )
+
 
 if __name__ == "__main__":
     api_token = os.getenv("API_TOKEN")
     course_id = 15319
     canvas = CanvasAPI(course_id, api_token)
-    assignment = canvas.get_assignments()
-    for a in assignment:
-        print(
-            f"the current assignment is {a.due_at}, with id {a.id}, description {a.description}"
-        )
+    # assignment = canvas.get_assignments()
+    # for a in assignment:
+    #     print(
+    #         f"the current assignment is {a.due_at}, with id {a.id}, description {a.description}"
+    #     )
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    image_path = "../histogram.png"
+    path = os.path.join(cur_dir, image_path)
+    # Call the upload function
+    upload_response = canvas.upload_file(path)

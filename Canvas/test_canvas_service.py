@@ -123,6 +123,21 @@ class TestCanvasAPI(unittest.TestCase):
             # os.remove(tmp_file_path)
             pass
 
+    def test_upload_file(self):
+        """testing the upload file method"""
+        # Get the directory of the current script
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the full path to the file
+        file_path = os.path.join(current_dir, "../histogram.png")
+
+        # Call the method to upload the file
+        upload_response = self.canvas.upload_file(file_path)
+
+        # Assertions
+        self.assertIsNotNone(upload_response, "File should be uploaded successfully")
+        print("response = ", upload_response)
+
 
 if __name__ == "__main__":
     unittest.main()
