@@ -6,6 +6,7 @@ import unittest
 import json
 
 from schemas import *
+import pprint
 
 
 class CanvasAPI:
@@ -37,9 +38,7 @@ class CanvasAPI:
             "Content-Type": "application/json",
         }
 
-    def _make_request(
-        self, method: Literal["GET", "PUT", "POST", "DELETE"], endpoint: str, **kwargs
-    ) -> dict:
+    def _make_request(self, method: Literal["GET", "PUT", "POST", "DELETE"], endpoint: str, **kwargs) -> dict:
         """
         Helper method to make HTTP requests and handle errors consistently.
 
@@ -59,11 +58,13 @@ class CanvasAPI:
                 response.raise_for_status()
                 return response.json()
             except requests.HTTPError as http_err:
-                print(
-                    f"HTTP error occurred: {http_err} - {response.status_code} {response.reason}"
-                )
+                print(f"HTTP error occurred: {http_err} - {response.status_code} {response.reason}")
+                print(f"Response content: {response.content.decode('utf-8')}")
                 print(f"Retrying in 1 second (attempt {attempt + 1}/{attempts})...")
                 time.sleep(1)  # Wait for 1 second before retrying
+            except Exception as err:
+                print(f"Other error occurred: {err}")
+
         raise requests.HTTPError(f"Failed to make request after {attempts} attempts")
 
     def get_users_in_course(self) -> List[Dict]:
@@ -106,9 +107,7 @@ class CanvasAPI:
         submission = self._make_request("GET", endpoint)
         return submission.get("grade", "Not graded")
 
-    def update_student_grade(
-        self, assignment_id: int, user_id: int, new_grade: float
-    ) -> str:
+    def update_student_grade(self, assignment_id: int, user_id: int, new_grade: float) -> str:
         """
         Update a student's grade for a specific assignment.
 
@@ -261,13 +260,9 @@ class CanvasAPI:
             question_data = {"question": question_dict}
             added_question = self._add_question_to_quiz(quiz["id"], question_data)
             if not added_question:
-                raise requests.HTTPError(
-                    f"Failed to add question '{question.question_name}' to the quiz."
-                )
+                raise requests.HTTPError(f"Failed to add question '{question.question_name}' to the quiz.")
 
-        print(
-            f"Quiz '{validated_quiz.title}' created successfully with all questions added."
-        )
+        print(f"Quiz '{validated_quiz.title}' created successfully with all questions added.")
         return quiz
 
     def create_quiz_from_file(self, file_path: str) -> Dict:
@@ -371,9 +366,150 @@ class CanvasAPI:
             print(f"File URL: {file_uri}")
             return upload_info
         else:
-            raise requests.HTTPError(
-                f"File upload failed with status: {upload_response.status_code}"
-            )
+            raise requests.HTTPError(f"File upload failed with status: {upload_response.status_code}")
+
+    def list_modules(self) -> List[ModuleSchema]:
+        """
+        Retrieve all modules in the course.
+
+        Returns:
+            List[Dict]: A list of module dictionaries.
+        """
+        endpoint = "modules"
+        modules_dict = self._make_request("GET", endpoint)
+        # print(modules_dict[0])
+        modules: List[ModuleSchema] = [ModuleSchema(**module) for module in modules_dict]
+        return modules
+
+    def get_module_by_title(self, title: int) -> Optional[ModuleSchema]:
+        """
+        Retrieve a specific module by its ID.
+
+        Args:
+            title (int): The ID of the module.
+
+        Returns:
+            Dict: The module data if found, otherwise None.
+        """
+        self.list_modules()
+        for module in self.list_modules():
+            if module.id == title:
+                return module
+        return None
+
+    def create_module(
+        self, name: str, position: Optional[int] = None, unlock_at: Optional[datetime] = None
+    ) -> ModuleSchema:
+        """
+        Create a module in the course.
+
+        Args:
+            name (str): The name of the module.
+            position (int): The position of the module in the course.
+
+        Returns:
+            Dict: The created module data if successful, otherwise None.
+        """
+        endpoint = "modules"
+        data = {"module": {"name": name}}
+        if position:
+            data["module"]["position"] = str(position)
+        if unlock_at:
+            data["module"]["unlock_at"] = unlock_at.isoformat()
+
+        module = self._make_request("POST", endpoint, json=data)
+        return ModuleSchema(**module)
+
+    def list_module_items(self, module_id: int) -> List[ModuleItemSchema]:
+        """
+        Retrieve all items in a specific module.
+
+        Args:
+            module_id (int): The ID of the module.
+
+        Returns:
+            List[Dict]: A list of module item dictionaries.
+        """
+        endpoint = f"modules/{module_id}/items"
+        moduleItem = self._make_request("GET", endpoint)
+        return [ModuleItemSchema(**item) for item in moduleItem]
+
+    def create_page(
+        self,
+        title: str,
+        body: Optional[str] = None,
+        editing_roles: Optional[Literal["teachers", "students", "members", "public"]] = None,
+        notify_of_update: Optional[bool] = None,
+        published: Optional[bool] = None,
+        front_page: Optional[bool] = None,
+        publish_at: Optional[datetime] = None,
+    ) -> PageSchema:
+        """
+        Create a new wiki page with the specified parameters.
+
+        :param title: The title for the new page.
+        :param body: The content for the new page.
+        :param editing_roles: Which user roles are allowed to edit this page.
+                            Allowed values: 'teachers', 'students', 'members', 'public'.
+        :param notify_of_update: Whether participants should be notified when this page changes.
+        :param published: Whether the page is published (true) or draft state (false).
+        :param front_page: Set an unhidden page as the front page (if true).
+        :param publish_at: Schedule a future date/time to publish the page.
+        """
+        endpoint = "pages"
+        data = {
+            "wiki_page": {
+                "title": title,
+            }
+        }
+        if body:
+            data["wiki_page"]["body"] = body
+        if editing_roles:
+            data["wiki_page"]["editing_roles"] = editing_roles
+        if notify_of_update is not None:
+            data["wiki_page"]["notify_of_update"] = str(notify_of_update)
+        if published is not None:
+            data["wiki_page"]["published"] = str(published)
+        if front_page is not None:
+            data["wiki_page"]["front_page"] = str(front_page)
+        if publish_at:
+            data["wiki_page"]["publish_at"] = publish_at.isoformat()
+
+        page = self._make_request("POST", endpoint, json=data)
+        # print("new_page = ")
+        # pprint.pprint(page)
+        return PageSchema(**page)
+
+    def create_module_item(
+        self,
+        title: str,
+        module_id: int,
+        page_url: str,
+        type: Literal["File", "Page", "Discussion"] = "Page",
+    ) -> ModuleItemSchema:
+        """
+        Create a module item in a specific module.
+
+        Args:
+            title (str): The title of the module item.
+            module_id (str): The ID of the module.
+            type (str): The type of the module item.
+
+        Returns:
+            Dict: The created module item data if successful, otherwise None.
+        """
+        endpoint = f"modules/{module_id}/items"
+        data = {
+            "module_item": {
+                "title": title,
+                "type": type,
+                "page_url": page_url,
+                # "content_id": 123,
+            },
+            # "Authorization": f"Bearer {self.api_token}",
+        }
+        module_item = self._make_request("POST", endpoint, json=data)
+        return ModuleItemSchema(**module_item)
 
 
 if __name__ == "__main__":
@@ -385,8 +521,28 @@ if __name__ == "__main__":
     #     print(
     #         f"the current assignment is {a.due_at}, with id {a.id}, description {a.description}"
     #     )
-    cur_dir = os.path.dirname(os.path.abspath(__file__))
-    image_path = "../histogram.png"
-    path = os.path.join(cur_dir, image_path)
-    # Call the upload function
-    upload_response = canvas.upload_file(path)
+    # cur_dir = os.path.dirname(os.path.abspath(__file__))
+    # image_path = "../histogram.png"
+    # path = os.path.join(cur_dir, image_path)
+    # # Call the upload function
+    # upload_response = canvas.upload_file(path)
+
+    modules = canvas.list_modules()
+    a = modules[1].model_dump()
+
+    # #  a new module
+    # newCreate_module = canvas.create_module(name="New Module")
+    # print("new_module = ", new_module)
+
+    module_id = modules[0].id
+    items = canvas.list_module_items(module_id)
+    print("items = ", pprint.pformat([item.model_dump() for item in items]))
+
+    page = canvas.create_page(
+        title="New Page", body="This is a new page"
+    )  # TODO: We need to add the body, add the files, link to github, etc
+    print("page = ", pprint.pformat(page.model_dump()))
+    page.url
+    # Create a new module item
+    new_item = canvas.create_module_item(title="New Page", module_id=module_id, page_url=page.url)
+    print("new_item = ", new_item)

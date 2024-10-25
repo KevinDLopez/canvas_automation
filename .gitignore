@@ -8,4 +8,6 @@ client_secrets.json
 
 *.pyc
 
+*.DS_Store
+
 S24-574-all-responses.xlsx

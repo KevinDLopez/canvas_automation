@@ -1,7 +1,7 @@
-from pydantic import BaseModel, Field, ValidationError, field_validator
-from typing import List, Optional
+from pydantic import BaseModel, EmailStr, Field, HttpUrl, ValidationError, field_validator
+from typing import Any, Dict, List, Literal, Optional
 import pytest
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class Answer(BaseModel):
@@ -30,40 +30,25 @@ class QuizSchema(BaseModel):
     quiz_type: str = "assignment"  # Default value is 'assignment'
     time_limit: int = Field(ge=1, description="Time limit must be at least 1 minute")
     shuffle_answers: bool = False
-    allowed_attempts: int = Field(
-        ge=1, description="Allowed attempts must be at least 1"
-    )
+    allowed_attempts: int = Field(ge=1, description="Allowed attempts must be at least 1")
     questions: List[Question]
 
 
-if __name__ == "__main__":
-
-    def test_answer_weight_validation():
-        # * Valid case
-        question = Question(
-            question_name="Sample Question",
-            question_text="What is the answer?",
-            question_type="multiple_choice",
-            points_possible=10,
-            answers=[  # Total weight is 100
-                Answer(answer_text="Answer 1", answer_weight=50),
-                Answer(answer_text="Answer 2", answer_weight=50),
-            ],
-        )
-        assert question
-
-        # !  Invalid case: total weight not equal to 100
-        with pytest.raises(ValidationError):
-            Question(
-                question_name="Sample Question",
-                question_text="What is the answer?",
-                question_type="multiple_choice",
-                points_possible=10,
-                answers=[  # Total weight is 80
-                    Answer(answer_text="Answer 1", answer_weight=30),
-                    Answer(answer_text="Answer 2", answer_weight=50),
-                ],
-            )
+class ModuleSchema(BaseModel):
+    id: int
+    workflow_state: str = "active"  # Default value
+    position: int
+    name: str
+    unlock_at: Optional[datetime] = None
+    require_sequential_progress: bool
+    prerequisite_module_ids: List[int]
+    items_count: int
+    items_url: HttpUrl
+    items: Optional[List] = None
+    state: Optional[str] = None
+    completed_at: Optional[datetime] = None
+    publish_final_grade: Optional[bool] = None
+    published: Optional[bool] = None
 
 
 class AssignmentSchema(BaseModel):
@@ -133,3 +118,137 @@ class AssignmentSchema(BaseModel):
     anonymize_students: bool
     require_lockdown_browser: bool
     restrict_quantitative_data: bool
+
+
+############# MODULE ITEM ############
+class CompletionRequirement(BaseModel):
+    type: str
+    min_score: Optional[int] = None
+    completed: bool
+
+
+class ContentDetails(BaseModel):
+    points_possible: Optional[int] = None
+    due_at: Optional[datetime] = None
+    unlock_at: Optional[datetime] = None
+    lock_at: Optional[datetime] = None
+
+
+class ModuleItemSchema(BaseModel):
+    id: int
+    module_id: int
+    position: int
+    title: str
+    indent: int
+    type: str
+    content_id: Optional[int] = None
+    html_url: HttpUrl
+    url: Optional[HttpUrl] = None
+    page_url: Optional[str] = None
+    external_url: Optional[HttpUrl] = None
+    new_tab: Optional[bool] = None
+    completion_requirement: Optional[CompletionRequirement] = None
+    content_details: Optional[ContentDetails] = None
+    published: Optional[bool] = None
+
+
+############### Page schema  ###############
+class LastEditedBy(BaseModel):
+    anonymous_id: Optional[str] = None
+    avatar_image_url: Optional[HttpUrl] = None
+    display_name: Optional[str] = None
+    html_url: Optional[HttpUrl] = None
+    id: Optional[int] = None
+    pronouns: Optional[str] = None
+
+
+class BlockEditorAttributes(BaseModel):
+    id: int
+    version: str
+    blocks: str
+
+
+class PageSchema(BaseModel):
+    page_id: int
+    url: str
+    title: str
+    created_at: datetime
+    updated_at: datetime
+    hide_from_students: bool
+    editing_roles: str
+    last_edited_by: Optional[LastEditedBy] = None
+    body: Optional[str] = None
+    published: bool
+    publish_at: Optional[datetime] = None
+    front_page: bool
+    locked_for_user: bool
+    lock_info: Optional[Dict[str, Any]] = None
+    lock_explanation: Optional[str] = None
+    editor: Optional[Literal["rce", "block_editor"]] = None
+    block_editor_attributes: Optional[BlockEditorAttributes] = None
+
+
+############### TEAM FORMS ###############
+class TeamMember(BaseModel):
+    name: str
+    email: EmailStr
+
+
+class PresentationTime(BaseModel):
+    start: datetime
+    end: datetime
+
+
+class TeamInfo(BaseModel):
+    team_name: str
+    topic: str
+    team_members: List[TeamMember]
+    github_repo: str
+    presentation_time: PresentationTime
+
+
+if __name__ == "__main__":
+
+    def test_answer_weight_validation():
+        # * Valid case
+        question = Question(
+            question_name="Sample Question",
+            question_text="What is the answer?",
+            question_type="multiple_choice",
+            points_possible=10,
+            answers=[  # Total weight is 100
+                Answer(answer_text="Answer 1", answer_weight=50),
+                Answer(answer_text="Answer 2", answer_weight=50),
+            ],
+        )
+        assert question
+
+        # !  Invalid case: total weight not equal to 100
+        with pytest.raises(ValidationError):
+            Question(
+                question_name="Sample Question",
+                question_text="What is the answer?",
+                question_type="multiple_choice",
+                points_possible=10,
+                answers=[  # Total weight is 80
+                    Answer(answer_text="Answer 1", answer_weight=30),
+                    Answer(answer_text="Answer 2", answer_weight=50),
+                ],
+            )
+
+    data = {
+        "team_name": "SampleTeam",
+        "topic": "SampleTopic",
+        "team_members": [
+            {"name": "John Doe", "email": "johnDoe@example.com"},
+            {"name": "Jane Doe", "email": "janeDoe@example.com"},
+        ],
+        "github_repo": "github.com/username/repo",
+        "presentation_time": {
+            "start": datetime(2021, 1, 1, 0, 0, tzinfo=timezone.utc),
+            "end": datetime(2021, 1, 1, 1, 0, tzinfo=timezone.utc),
+        },
+    }
+
+    team_info = TeamInfo(**data)
+    print(team_info)
