@@ -247,7 +247,7 @@ class CanvasAPI:
             ValueError: If the quiz ID is not found after creation.
         """
         # Step 1: Create the quiz
-        quiz = self._create_quiz(
+        quiz = self._create_quiz(  # TODO: Might need to change some of the parameters
             title=validated_quiz.title,
             description=validated_quiz.description,
             quiz_type=validated_quiz.quiz_type,
@@ -439,21 +439,21 @@ class CanvasAPI:
         modules: List[ModuleSchema] = [ModuleSchema(**module) for module in modules_dict]
         return modules
 
-    def get_module_by_title(self, title: int) -> Optional[ModuleSchema]:
+    def get_module_by_title(self, name: str) -> ModuleSchema:
         """
         Retrieve a specific module by its ID.
 
         Args:
-            title (int): The ID of the module.
+            name (str): The ID of the module.
 
         Returns:
             Dict: The module data if found, otherwise None.
         """
         self.list_modules()
         for module in self.list_modules():
-            if module.id == title:
+            if module.name == name:
                 return module
-        return None
+        raise ValueError(f"Module with name '{name}' not found.")
 
     def create_module(
         self, name: str, position: Optional[int] = None, unlock_at: Optional[datetime] = None
