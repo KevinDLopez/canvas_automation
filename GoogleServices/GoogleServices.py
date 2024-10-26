@@ -6,6 +6,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 import pandas as pd
+import requests
 
 from GoogleServices.schemas import (
     BatchUpdateFormResponse,
@@ -40,11 +41,7 @@ class GoogleServicesManager:
         if not self.__creds or not self.__creds.valid:
             if self.__creds and self.__creds.expired and self.__creds.refresh_token:
                 try:
-                    if (
-                        self.__creds
-                        and self.__creds.expired
-                        and self.__creds.refresh_token
-                    ):
+                    if self.__creds and self.__creds.expired and self.__creds.refresh_token:
                         self.__creds.refresh(Request())
                     else:
                         raise Exception("Invalid credentials")
@@ -52,17 +49,13 @@ class GoogleServicesManager:
                     print(f"Error during token refresh: {e}")
                     if os.path.exists("token.json"):
                         os.remove("token.json")
-                    flow = InstalledAppFlow.from_client_secrets_file(
-                        "client_secrets.json", SCOPES
-                    )
+                    flow = InstalledAppFlow.from_client_secrets_file("client_secrets.json", SCOPES)
                     self.__creds = flow.run_local_server(port=0)
                     # Save the credentials for the next run
                     with open("token.json", "w") as token:
                         token.write(self.__creds.to_json())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    "client_secrets.json", SCOPES
-                )
+                flow = InstalledAppFlow.from_client_secrets_file("client_secrets.json", SCOPES)
                 self.__creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open("token.json", "w") as token:
@@ -76,9 +69,7 @@ class GoogleServicesManager:
     def __get_form_responses(self, form_id: str) -> ListFormResponsesResponse:
         """Retrieve and print form responses using the form ID."""
         # MIGHT NEED TO HAN
-        responses: ListFormResponsesResponse = (
-            self.form_service.forms().responses().list(formId=form_id).execute()
-        )
+        responses: ListFormResponsesResponse = self.form_service.forms().responses().list(formId=form_id).execute()
         return responses
 
     def make_copy_of_form(self, form_id: str, new_title: str) -> Form:
@@ -108,17 +99,13 @@ class GoogleServicesManager:
             }  # type: ignore
         )
         for i, item in enumerate(template_form["items"]):
-            create_items.append(
-                {"createItem": {"item": item, "location": {"index": i + 1}}}
-            )
+            create_items.append({"createItem": {"item": item, "location": {"index": i + 1}}})
 
         batch_update_request = {"requests": create_items}
 
         # Execute the batch update
         batch_update_response: BatchUpdateFormResponse = (
-            self.form_service.forms()
-            .batchUpdate(formId=created_form["formId"], body=batch_update_request)
-            .execute()
+            self.form_service.forms().batchUpdate(formId=created_form["formId"], body=batch_update_request).execute()
         )
         print("batch_update_response", batch_update_response)
 
@@ -162,17 +149,13 @@ class GoogleServicesManager:
 
         # Execute the batch update
         batch_update_response: BatchUpdateFormResponse = (
-            self.form_service.forms()
-            .batchUpdate(formId=created_form["formId"], body=batch_update_request)
-            .execute()
+            self.form_service.forms().batchUpdate(formId=created_form["formId"], body=batch_update_request).execute()
         )
         print("batch_update_response", batch_update_response)
 
         # Print the form ID and URL
         print(f"Form ID: {created_form['formId']}")
-        print(
-            f"Form URL: https://docs.google.com/forms/d/{created_form['formId']}/edit"
-        )
+        print(f"Form URL: https://docs.google.com/forms/d/{created_form['formId']}/edit")
         return batch_update_response
 
     def get_form_responses(self, form_id: str) -> pd.DataFrame:
@@ -184,9 +167,7 @@ class GoogleServicesManager:
                 id_to_question[question["questionId"]] = item["title"]
             if "questionGroupItem" in item:
                 for question in item["questionGroupItem"]["questions"]:
-                    id_to_question[question["questionId"]] = question["rowQuestion"][
-                        "title"
-                    ]
+                    id_to_question[question["questionId"]] = question["rowQuestion"]["title"]
 
         data = self.__get_form_responses(form_id)  # Generate pandas dataframe
         rows = []
@@ -201,13 +182,39 @@ class GoogleServicesManager:
                 "lastSubmittedTime": response["lastSubmittedTime"],
             }
             for question_id, answer_data in response["answers"].items():
-                row[id_to_question[question_id]] = answer_data["textAnswers"][
-                    "answers"
-                ][0]["value"]
+                row[id_to_question[question_id]] = answer_data["textAnswers"]["answers"][0]["value"]
             rows.append(row)
 
         df = pd.DataFrame(rows)
         return df
+
+    def disable_form(self, form_id: str):
+        # THIS DOES NOT WORK
+        """Disable a form by stopping it from accepting responses."""
+        if not self.__creds:
+            raise Exception("Not authenticated")
+
+        url = f"https://forms.googleapis.com/v1/forms/{form_id}:batchUpdate"
+        headers = {"Authorization": f"Bearer {self.__creds.token}", "Content-Type": "application/json"}
+        body = {
+            "requests": [
+                {"updateSettings": {"settings": {"acceptingResponses": False}, "updateMask": "acceptingResponses"}}
+            ]
+        }
+
+        # Debugging information
+        print("URL:", url)
+        print("Headers:", headers)
+        print("Body:", body)
+
+        response = requests.post(url, headers=headers, json=body)
+
+        # More debugging information
+        print("Response Status Code:", response.status_code)
+        print("Response Content:", response.content.decode("utf-8"))
+
+        response.raise_for_status()
+        return response.json()
 
 
 if __name__ == "__main__":

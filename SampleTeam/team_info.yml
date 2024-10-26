@@ -3,9 +3,9 @@ team_name: SampleTeam
 topic: SampleTopic
 team_members:
   - name: John Doe
-    email: johnDoe
+    email: johnDoe@gmail.com
   - name: Jane does
-    email: johnDoe
+    email: johnDoe@gmail.com
 github_repo: github.com/username/repo
 presentation_time:
   start: 2021-01-01T00:00:00Z

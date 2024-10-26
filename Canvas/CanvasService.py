@@ -1,3 +1,4 @@
+import base64
 import os
 import time
 from typing import Any, Dict, List, Literal, Optional
@@ -5,7 +6,7 @@ import requests
 import unittest
 import json
 
-from schemas import *
+from Canvas.schemas import *
 import pprint
 
 
@@ -299,7 +300,23 @@ class CanvasAPI:
         # Step 3: Validate and create the quiz with questions
         return self._create_quiz_with_questions(validated_quiz)
 
-    def upload_file(self, file_path: str) -> Dict:
+    def get_public_file_url(self, file_id: int) -> str:
+        """
+        Retrieve the public URL for a file in the course.
+
+        Args:
+            file_id (int): The ID of the file.
+
+        Returns:
+            str: The public URL for the file.
+        """
+        url = f"{self.base_url}/api/v1/files/{file_id}/public_url"
+        response = requests.get(url, headers=self.headers).json()
+        return response["public_url"]
+
+        return response["url"]
+
+    def upload_file(self, file_path: str) -> str:
         """
         Upload an image to the course's files.
 
@@ -307,7 +324,7 @@ class CanvasAPI:
             file_path (str): The local path to the image file (e.g., '/path/to/image.png').
 
         Returns:
-            Dict: The response from Canvas with details about the uploaded file.
+            str: public URL .
 
         Raises:
             FileNotFoundError: If the file does not exist.
@@ -317,8 +334,8 @@ class CanvasAPI:
         # Step 1: Check if the file exists and is a .png file
         if not os.path.isfile(file_path):
             raise FileNotFoundError(f"The file '{file_path}' does not exist.")
-        if not file_path.lower().endswith(".png"):
-            raise ValueError("Only .png files are supported for this upload method.")
+        # if not file_path.lower().endswith(".png"):
+        #     raise ValueError("Only .png files are supported for this upload method.")
         file_path = os.path.abspath(file_path)
         print(f"file_path = {file_path}")
 
@@ -331,11 +348,12 @@ class CanvasAPI:
         # Step 3: Initiate the file upload
         file_name = os.path.basename(file_path)
         print("file_name = ", file_name)
+        file_type = file_name.split(".")[-1]
         data = {
             "name": file_name,
-            "content_type": "image/png",
+            # "content_type": "image/png",
             "size": str(file_size),
-            "parent_folder_path": "/Files",  # Modify as needed for specific folder
+            "parent_folder_path": "",  # Modify as needed for specific folder
             "on_duplicate": "rename",  # Rename the file if a file with the same name exists
             "Authorization": f"Bearer {self.api_token}",
         }
@@ -362,9 +380,49 @@ class CanvasAPI:
         if upload_response.status_code == 201:
             print(f"File '{file_name}' uploaded successfully!")
             # The file URI is usually returned as part of the upload_info or can be constructed from the file details
-            file_uri = upload_info.get("url", "No URL available")
-            print(f"File URL: {file_uri}")
-            return upload_info
+            """
+            print("upload_info", pprint.pformat(upload_info))
+            {
+                "file_param": "file",
+                "progress": None,
+                "upload_params": {"content_type": "image/png", "filename": "histogram.png"},
+                "upload_url": "https://inst-fs-pdx-prod.inscloudgate.net/files?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3Mjk4ODUxMTEsInVzZXJfaWQiOiIyMTEzOTAwMDAwMDAwMDU4MTMiLCJyZXNvdXJjZSI6Ii9maWxlcyIsImNhcHR1cmVfdXJsIjoiaHR0cHM6Ly9jc3VsYi5pbnN0cnVjdHVyZS5jb20vYXBpL3YxL2ZpbGVzL2NhcHR1cmUiLCJjYXB0dXJlX3BhcmFtcyI6eyJjb250ZXh0X3R5cGUiOiJDb3Vyc2UiLCJjb250ZXh0X2lkIjoiMjExMzkwMDAwMDAwMDE1MzE5IiwidXNlcl9pZCI6IjIxMTM5MDAwMDAwMDAwNTgxMyIsImZvbGRlcl9pZCI6IjIxMTM5MDAwMDAwMDA5NjIwMyIsInJvb3RfYWNjb3VudF9pZCI6IjIxMTM5MDAwMDAwMDAwMDAwMSIsInF1b3RhX2V4ZW1wdCI6ZmFsc2UsIm9uX2R1cGxpY2F0ZSI6InJlbmFtZSIsInByb2dyZXNzX2lkIjpudWxsLCJpbmNsdWRlIjpudWxsfSwibGVnYWN5X2FwaV9kZXZlbG9wZXJfa2V5X2lkIjoiMTcwMDAwMDAwMDAwMDE2IiwibGVnYWN5X2FwaV9yb290X2FjY291bnRfaWQiOiIyMTEzOTAwMDAwMDAwMDAwMDEiLCJleHAiOjE3Mjk4ODU3MTF9.BymDwnCLWTpRgo1wdRMGtOMbT1cDzxqTyYKJSdrO0pcQJf1n6g_h-3014MWKpzFmqV5zq49TGVsPbKKGgVQp-w",
+            }
+
+
+            print("upload_reponse", pprint.pformat(upload_response.json()))
+            {
+                "category": "uncategorized",
+                "content-type": "image/png",
+                "created_at": "2024-10-25T19:38:31Z",
+                "display_name": "histogram-4.png",
+                "filename": "histogram.png",
+                "folder_id": 96203,
+                "hidden": False,
+                "hidden_for_user": False,
+                "id": 19085526,
+                "instfs_uuid": "026c4bf1-408b-4a0a-8669-cc5124287114",
+                "location": "https://csulb.instructure.com/api/v1/files/19085526?include%5B%5D=enhanced_preview_url",
+                "lock_at": None,
+                "locked": False,
+                "locked_for_user": False,
+                "media_entry_id": None,
+                "mime_class": "image",
+                "modified_at": "2024-10-25T19:38:31Z",
+                "preview_url": "/courses/15319/files/19085526/file_preview?annotate=0&verifier=KyOBPQpIratVM9u5nL4hx7K9O2OjfW6sIEogYgac",
+                "size": 23543,
+                "thumbnail_url": "https://csulb.instructure.com/images/thumbnails/19085526/KyOBPQpIratVM9u5nL4hx7K9O2OjfW6sIEogYgac",
+                "unlock_at": None,
+                "updated_at": "2024-10-25T19:38:31Z",
+                "upload_status": "success",
+                "url": "https://csulb.instructure.com/files/19085526/download?download_frd=1&verifier=KyOBPQpIratVM9u5nL4hx7K9O2OjfW6sIEogYgac",
+                "uuid": "KyOBPQpIratVM9u5nL4hx7K9O2OjfW6sIEogYgac",
+                "visibility_level": "inherit",
+            }
+            """
+
+            # self.get_public_file_url(upload_response.json()["id"]),
+            return upload_response.json()["url"]
         else:
             raise requests.HTTPError(f"File upload failed with status: {upload_response.status_code}")
 
@@ -480,6 +538,36 @@ class CanvasAPI:
         # pprint.pprint(page)
         return PageSchema(**page)
 
+    def update_page(self, id: int, body: str, title: Optional[str] = None) -> PageSchema:
+        """
+        Update an existing wiki page with the specified parameters.
+
+        :param id: The ID of the page to update.
+        :param body: The new content for the page.
+        :param title: The new title for the page.
+        """
+        endpoint = f"pages/{id}"
+        data = {
+            "wiki_page": {
+                "body": body,
+            }
+        }
+        if title:
+            data["wiki_page"]["title"] = title
+        page = self._make_request("PUT", endpoint, json=data)
+        return PageSchema(**page)
+
+    def list_pages(self) -> List[PageSchema]:
+        """
+        Retrieve all pages in the course.
+
+        Returns:
+            List[Dict]: A list of page dictionaries.
+        """
+        endpoint = "pages"
+        pages = self._make_request("GET", endpoint)
+        return [PageSchema(**page) for page in pages]
+
     def create_module_item(
         self,
         title: str,
@@ -521,18 +609,19 @@ if __name__ == "__main__":
     #     print(
     #         f"the current assignment is {a.due_at}, with id {a.id}, description {a.description}"
     #     )
-    # cur_dir = os.path.dirname(os.path.abspath(__file__))
-    # image_path = "../histogram.png"
-    # path = os.path.join(cur_dir, image_path)
-    # # Call the upload function
-    # upload_response = canvas.upload_file(path)
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    image_path = "../histogram.png"
+    path = os.path.join(cur_dir, image_path)
+    # Call the upload function
+    url = canvas.upload_file(path)
+    print(f" URL for the uploaded file: {url}")
 
     modules = canvas.list_modules()
     a = modules[1].model_dump()
 
     # #  a new module
-    # newCreate_module = canvas.create_module(name="New Module")
-    # print("new_module = ", new_module)
+    newCreate_module = canvas.create_module(name="New Module")
+    print("new_module = ", newCreate_module)
 
     module_id = modules[0].id
     items = canvas.list_module_items(module_id)
@@ -542,6 +631,12 @@ if __name__ == "__main__":
         title="New Page", body="This is a new page"
     )  # TODO: We need to add the body, add the files, link to github, etc
     print("page = ", pprint.pformat(page.model_dump()))
+
+    list_pages = canvas.list_pages()
+    print("**list_pages = ", pprint.pformat([page.model_dump() for page in list_pages]), "\n\n")
+
+    updated_page = canvas.update_page(id=page.page_id, body="This is an updated page")
+    print("updated_page = ", updated_page)
     page.url
     # Create a new module item
     new_item = canvas.create_module_item(title="New Page", module_id=module_id, page_url=page.url)

@@ -1,5 +1,6 @@
 import json
 import os
+import pprint
 import unittest
 from CanvasService import CanvasAPI
 
@@ -31,9 +32,7 @@ class TestCanvasAPI(unittest.TestCase):
     def test_update_student_grade(self):
         # Call the method to update grade
         new_grade = 10
-        updated_grade = self.canvas.update_student_grade(
-            self.assignment_id, self.user_id, new_grade
-        )
+        updated_grade = self.canvas.update_student_grade(self.assignment_id, self.user_id, new_grade)
 
         # Assertions
         self.assertEqual(
@@ -57,9 +56,7 @@ class TestCanvasAPI(unittest.TestCase):
         # Call the method to create an announcement
         announcement_title = "Test Announcement"
         announcement_message = "This is a test announcement. Please ignore."
-        announcement = self.canvas.create_announcement(
-            announcement_title, announcement_message
-        )
+        announcement = self.canvas.create_announcement(announcement_title, announcement_message)
         print(f"Announcement '{announcement['title']}' created successfully.")
 
     def test_create_quiz_and_add_question(self):
@@ -68,9 +65,7 @@ class TestCanvasAPI(unittest.TestCase):
         quiz_description = "This is a test quiz created via API"
         quiz_type = "assignment"
         time_limit = 30  # in minutes
-        quiz = self.canvas._create_quiz(
-            quiz_title, quiz_description, quiz_type, time_limit
-        )
+        quiz = self.canvas._create_quiz(quiz_title, quiz_description, quiz_type, time_limit)
         quiz_id = quiz["id"]
         print(f"Quiz '{quiz['title']}' created successfully with ID {quiz['id']}.")
 
@@ -92,9 +87,7 @@ class TestCanvasAPI(unittest.TestCase):
         question = self.canvas._add_question_to_quiz(quiz_id, question_data)
         assert question
         # Assertions
-        self.assertIsNotNone(
-            question, "Question should be added to the quiz successfully"
-        )
+        self.assertIsNotNone(question, "Question should be added to the quiz successfully")
         print(f"Question added successfully with ID {question['id']}")
 
     def test_create_quiz_from_file(self):
@@ -111,12 +104,8 @@ class TestCanvasAPI(unittest.TestCase):
         # Call the method to create quiz from file
         try:
             quiz_response = self.canvas.create_quiz_from_file(quiz_file_path)
-            self.assertIsNotNone(
-                quiz_response, "Quiz should be created successfully from file."
-            )
-            self.assertEqual(
-                quiz_response["title"], quiz_data["title"], "Quiz title mismatch."
-            )
+            self.assertIsNotNone(quiz_response, "Quiz should be created successfully from file.")
+            self.assertEqual(quiz_response["title"], quiz_data["title"], "Quiz title mismatch.")
             print("Quiz created successfully from file")
         finally:
             # Clean up the temporary file
@@ -137,6 +126,55 @@ class TestCanvasAPI(unittest.TestCase):
         # Assertions
         self.assertIsNotNone(upload_response, "File should be uploaded successfully")
         print("response = ", upload_response)
+
+    def test_create_module(self):
+        """testing the create module method"""
+        new_create_module = self.canvas.create_module(name="New Module")
+        self.assertIsNotNone(new_create_module, "New module should be created successfully")
+        print("new_module = ", new_create_module)
+
+    def test_list_modules(self):
+        """testing the list modules method"""
+        modules = self.canvas.list_modules()
+        self.assertGreater(len(modules), 0, "Modules should be listed successfully")
+
+    def test_create_module_item(self):
+        """testing the create module item method"""
+        modules = self.canvas.list_modules()
+        module_id = modules[0].id
+        page = self.canvas.create_page(title="New Page", body="This is a new page")
+        new_item = self.canvas.create_module_item(title="New Page", module_id=module_id, page_url=page.url)
+        self.assertIsNotNone(new_item, "New module item should be created successfully")
+        print("new_item = ", new_item)
+
+    def test_list_module_items(self):
+        """testing the list module items method"""
+        modules = self.canvas.list_modules()
+        module_id = modules[0].id
+        items = self.canvas.list_module_items(module_id)
+        self.assertGreater(len(items), 0, "Module items should be listed successfully")
+        print("items = ", pprint.pformat([item.model_dump() for item in items]))
+
+    def test_create_page(self):
+        """testing the create page method"""
+        page = self.canvas.create_page(
+            title="New Page", body="This is a new page"
+        )  # TODO: We need to add the body, add the files, link to github, etc
+        self.assertIsNotNone(page, "Page should be created successfully")
+        print("page = ", pprint.pformat(page.model_dump()))
+
+    def test_list_pages(self):
+        """testing the list pages method"""
+        list_pages = self.canvas.list_pages()
+        self.assertGreater(len(list_pages), 0, "Pages should be listed successfully")
+        print("**list_pages = ", pprint.pformat([page.model_dump() for page in list_pages]), "\n\n")
+
+    def test_update_page(self):
+        """testing the update page method"""
+        page = self.canvas.create_page(title="New Page", body="This is a new page")
+        updated_page = self.canvas.update_page(id=page.page_id, body="This is an updated page")
+        self.assertIsNotNone(updated_page, "Page should be updated successfully")
+        print("updated_page = ", updated_page)
 
 
 if __name__ == "__main__":

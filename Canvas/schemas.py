@@ -188,25 +188,6 @@ class PageSchema(BaseModel):
     block_editor_attributes: Optional[BlockEditorAttributes] = None
 
 
-############### TEAM FORMS ###############
-class TeamMember(BaseModel):
-    name: str
-    email: EmailStr
-
-
-class PresentationTime(BaseModel):
-    start: datetime
-    end: datetime
-
-
-class TeamInfo(BaseModel):
-    team_name: str
-    topic: str
-    team_members: List[TeamMember]
-    github_repo: str
-    presentation_time: PresentationTime
-
-
 if __name__ == "__main__":
 
     def test_answer_weight_validation():
@@ -235,20 +216,3 @@ if __name__ == "__main__":
                     Answer(answer_text="Answer 2", answer_weight=50),
                 ],
             )
-
-    data = {
-        "team_name": "SampleTeam",
-        "topic": "SampleTopic",
-        "team_members": [
-            {"name": "John Doe", "email": "johnDoe@example.com"},
-            {"name": "Jane Doe", "email": "janeDoe@example.com"},
-        ],
-        "github_repo": "github.com/username/repo",
-        "presentation_time": {
-            "start": datetime(2021, 1, 1, 0, 0, tzinfo=timezone.utc),
-            "end": datetime(2021, 1, 1, 1, 0, tzinfo=timezone.utc),
-        },
-    }
-
-    team_info = TeamInfo(**data)
-    print(team_info)
