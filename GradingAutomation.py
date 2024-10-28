@@ -28,9 +28,9 @@ def read_yml_file(file_path: str) -> Dict[str, Any]:
 
 
 class Grader:
-    def __init__(self, course_id: int):
+    def __init__(self, course_id: int, api_token: Optional[str] = None):
         self.class_info = ClassInfoSchema(**read_yml_file("class_info.yml"))
-        self.canvas = CanvasAPI(course_id=course_id)
+        self.canvas = CanvasAPI(course_id=course_id, api_token=api_token)
         self.google = GoogleServicesManager()
         self.module_id_with_presentations = self.canvas.get_module_by_title(self.class_info.presentation_module_title)
 
@@ -211,7 +211,7 @@ class Grader:
 
     def verify_all_projects(self, folders: List[str]) -> List[Tuple[str, List[str]]]:
         """Verify all projects in the given folders and return a list of folders with their errors.
-
+            Only returns when there is an error
         Args:
             folders (List[str]): List of folder paths to verify
 
@@ -322,37 +322,32 @@ if __name__ == "__main__":
 
     # 0. Persistent State
     # Save all the information of the UI and the state in a file (state.json)
+    #         - Checkboxes, textboxes, etc
     # save the file every time there is a change in the state
 
     # 1. Course Selection Screen
-    #    - Dropdown to select course from Canvas courses
-    #    - Input field for course ID
-    #    - "Connect" button to initialize grader
+    #    -  Screen Only shows whenever a course ID, canvas API token is not saved ( it is saved in state.json )
+    #    - Input field for course ID, Canvas API Token ( if not saved )
+    #    - "Connect" button to initialize grader ( if not saved )
+    #    - If connected has been done before, prefill the course ID ( saved in state.json )
 
     # 2. Project Verification Panel
     #    - File browser to select root folder containing team projects
-    #    - "Verify All Projects" button
+    #    - "Verify selected Projects" button
     #    - Results display showing:
     #      * Progress bar during verification
     #      * Table of verification results with folder paths and errors
     #      * Color coding for pass/fail status
-    #    - Option to export verification results
 
-    # 3. Canvas Pages Management
-    #    - Table showing all folders and their current Canvas page status
-    #    - Checkboxes to select which pages to create/update
-    #    - Preview button to see page content before creation
-    #    - Bulk actions for creating multiple pages
+    # After verification
+    #   It shows all the pages  get_pages_to_create
+    #    - Checkboxes to select which pages to create
     #    - Status indicators for page creation progress
-
-    # 4. Forms & Quiz Management
+    # After creating pages
     #    - Table of all pages with toggles for:
-    #      * Adding feedback forms
-    #      * Adding quizzes
-    #      * Removing forms/quizzes
-    #    - Scheduling options for form availability
-    #    - Quiz preview functionality
-    #    - Batch operations for forms/quizzes
+    #      * Adding feedback forms and quizzes
+    # After adding feedback forms and quizzes
+    #      * Removing feedback forms and quizzes ( remove_feedback_url_and_quiz) , then grading automation ( grade_presentation_project)
 
     # Sample Implementation
     grader = Grader(course_id=15319)
