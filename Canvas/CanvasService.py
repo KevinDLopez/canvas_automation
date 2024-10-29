@@ -492,6 +492,21 @@ class CanvasAPI:
         moduleItem = self._make_request("GET", endpoint)
         return [ModuleItemSchema(**item) for item in moduleItem]
 
+    def get_page_by_id(self, url: str) -> PageSchema:
+        endpoint = f"pages/{url}"
+        page = self._make_request("GET", endpoint)
+        return PageSchema(**page)
+
+    def get_module_pages(self, module_id: int) -> List[PageSchema]:
+        items = self.list_module_items(module_id)
+        pages: List[PageSchema] = []
+        for item in items:
+            if item.type == "Page":
+                if not item.page_url:
+                    raise ValueError(f"Page {item.id} has no page_url")
+                pages.append(self.get_page_by_id(item.page_url))
+        return pages
+
     def create_page(
         self,
         title: str,
@@ -534,9 +549,10 @@ class CanvasAPI:
             data["wiki_page"]["publish_at"] = publish_at.isoformat()
 
         page = self._make_request("POST", endpoint, json=data)
-        # print("new_page = ")
-        # pprint.pprint(page)
-        return PageSchema(**page)
+        print("new_page = ")
+        page = PageSchema(**page)
+        pprint.pprint(page.model_dump()["body"])
+        return page
 
     def update_page(self, id: int, body: str, title: Optional[str] = None) -> PageSchema:
         """
@@ -625,6 +641,9 @@ if __name__ == "__main__":
 
     module_id = modules[0].id
     items = canvas.list_module_items(module_id)
+    pages = canvas.get_module_pages(module_id)
+    print("**pages = ", pprint.pformat([page.model_dump() for page in pages]))
+    raise Exception("stop here")
     print("items = ", pprint.pformat([item.model_dump() for item in items]))
 
     page = canvas.create_page(

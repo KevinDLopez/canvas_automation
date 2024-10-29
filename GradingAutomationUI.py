@@ -1,3 +1,4 @@
+from typing import List, Tuple, TypedDict, Optional, Literal
 from PyQt6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -18,12 +19,34 @@ from PyQt6.QtWidgets import (
     QHeaderView,
 )
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor
 import json
 import sys
+from Canvas.schemas import PageSchema
 from GradingAutomation import Grader
+from schemas import TeamInfo
+
+
+# Define valid color strings
+
+
+class QuizTableRowData(TypedDict, total=False):
+    LocalPath: str
+    PageName: str
+    Status: str
+    StatusColor: Optional[Literal["red", "green", "gray", "yellow", "white"]]  # Now accepts string literals
 
 
 class GradingAutomationUI(QMainWindow):
+    # Color mapping dictionary
+    _COLOR_MAP = {
+        "red": Qt.GlobalColor.red,
+        "green": Qt.GlobalColor.green,
+        "gray": Qt.GlobalColor.lightGray,
+        "yellow": Qt.GlobalColor.yellow,
+        "white": Qt.GlobalColor.white,
+    }
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Grading Automation")
@@ -32,9 +55,6 @@ class GradingAutomationUI(QMainWindow):
         # Initialize state
         self.state = {}
         self.load_state()
-
-        if self.state.get("course_id", None) and self.state.get("canvas_token", None):
-            self.grader = Grader(self.state["course_id"], self.state["canvas_token"])
 
         # Create main widget and layout
         main_widget = QWidget()
@@ -49,15 +69,17 @@ class GradingAutomationUI(QMainWindow):
 
         # Initialize tabs but don't create them yet
         self.tabs = QTabWidget()
+        self.pages_created: List[PageSchema] = []
 
         # Check if we need to show course selection or main interface
         if not self.is_course_connected():
             self.show_course_selection()
         else:
+            self.grader = Grader(self.state["course_id"], self.state["module_title"], self.state["canvas_token"])
             self.show_main_interface()
 
     def is_course_connected(self):
-        return self.state.get("course_id") and self.state.get("canvas_token")
+        return self.state.get("course_id") and self.state.get("canvas_token") and self.state.get("module_title")
 
     def show_course_selection(self):
         widget = QWidget()
@@ -77,8 +99,16 @@ class GradingAutomationUI(QMainWindow):
         self.token_input = QLineEdit()
         if self.state.get("canvas_token"):
             self.token_input.setText(self.state["canvas_token"])
+
         group_layout.addWidget(QLabel("Canvas API Token:"))
         group_layout.addWidget(self.token_input)
+
+        # Add Module Title input
+        self.module_title_input = QLineEdit()
+        if self.state.get("module_title"):
+            self.module_title_input.setText(self.state["module_title"])
+        group_layout.addWidget(QLabel("Presentations Module Title:"))
+        group_layout.addWidget(self.module_title_input)
 
         # Connect button
         self.connect_button = QPushButton("Connect")
@@ -116,13 +146,15 @@ class GradingAutomationUI(QMainWindow):
         try:
             course_id = int(self.course_id_input.text())
             canvas_token = self.token_input.text()
+            module_title = self.module_title_input.text()  # Get module title
 
-            # Initialize grader with course ID only (assuming Grader class takes only course_id)
-            self.grader = Grader(course_id, canvas_token)
+            # Initialize grader
+            self.grader = Grader(course_id, module_title, canvas_token)
 
             # Save to state
             self.state["course_id"] = course_id
             self.state["canvas_token"] = canvas_token
+            self.state["module_title"] = module_title  # Save module title to state
             self.save_state()
 
             # Switch to main interface
@@ -144,23 +176,25 @@ class GradingAutomationUI(QMainWindow):
     def verify_projects(self):
         try:
             folder = self.folder_path.text()
-            folders = self.grader.get_folders_with_team(folder)
+            folders_with_team = self.grader.get_folders_with_team(folder)
 
             # Setup progress bar
-            self.verify_progress.setMaximum(len(folders))
+            self.verify_progress.setMaximum(len(folders_with_team))
             self.verify_progress.setValue(0)
             self.verify_progress.setVisible(True)
 
             # Get failed projects (those with errors)
-            failed_projects = dict(self.grader.verify_all_projects(folders))
-
+            self.local_projects_info = {
+                folder_path: (team, errors)
+                for folder_path, team, errors in self.grader.verify_all_projects(folders_with_team)
+            }
             # Update results table with all folders
-            self.verify_results.setRowCount(len(folders))
-            for i, folder_path in enumerate(folders):
+            self.verify_results.setRowCount(len(folders_with_team))
+            for i, folder_path in enumerate(folders_with_team):
                 self.verify_progress.setValue(i + 1)
 
                 folder_item = QTableWidgetItem(folder_path)
-                errors = failed_projects.get(folder_path, None)
+                errors = self.local_projects_info[folder_path][1]
                 status = "Failed" if errors else "Passed"
                 # add the projects that did not fail to self.pages_to_create
                 if not errors:
@@ -179,7 +213,9 @@ class GradingAutomationUI(QMainWindow):
                         # Move folder path to column 1
                         self.pages_table.setItem(i, 1, QTableWidgetItem(folder_path))
                         # Status in column 2
-                        self.pages_table.setItem(i, 2, QTableWidgetItem("Not Created"))
+                        status_item = QTableWidgetItem("**")
+                        status_item.setBackground(Qt.GlobalColor.green)
+                        self.pages_table.setItem(i, 2, status_item)
                 status_item = QTableWidgetItem(status)
                 error_item = QTableWidgetItem("\n".join(errors) if errors else "")
 
@@ -205,8 +241,34 @@ class GradingAutomationUI(QMainWindow):
             self.show_error(str(e))
 
     def create_pages(self):
-        # Implementation for creating selected pages
-        print("**create_pages")
+        try:
+            # Get the pages to create from the table
+            pages_to_create = [
+                self.pages_table.item(i, 1).text()
+                for i in range(self.pages_table.rowCount())
+                if self.pages_table.item(i, 0).checkState() == Qt.CheckState.Checked
+            ]
+            print(f"pages_to_create: {pages_to_create}")
+            pages = self.grader.create_multiple_canvas_pages_based_on_folder(pages_to_create)
+
+            # Update status in pages table for created pages
+            for i in range(self.pages_table.rowCount()):
+                folder_path = self.pages_table.item(i, 1).text()
+                if folder_path in pages_to_create:
+                    # Update status
+                    status_item = QTableWidgetItem("Created")
+                    status_item.setBackground(Qt.GlobalColor.green)
+                    self.pages_table.setItem(i, 2, status_item)
+
+                    # Update checkbox
+                    checkbox_item = self.pages_table.item(i, 0)
+                    if checkbox_item:
+                        checkbox_item.setFlags(Qt.ItemFlag.ItemIsEnabled)  # Remove ItemIsUserCheckable
+                        checkbox_item.setCheckState(Qt.CheckState.Unchecked)
+                        checkbox_item.setToolTip("Cannot create page: Page already exists")
+
+        except Exception as e:
+            self.show_error(str(e))
 
     def add_forms_quizzes(self):
         # Implementation for adding forms/quizzes
@@ -274,10 +336,10 @@ class GradingAutomationUI(QMainWindow):
 
         # Set column widths
         header = self.verify_results.horizontalHeader()
-        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Interactive)  # Folder column stretches
-        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Fixed)  # Status column fixed
-        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)  # Errors column expands to fill available space
-        self.verify_results.setColumnWidth(1, 100)  # Status column width in pixels
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)  # Folder column stretches
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Fixed)  # Status
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Errors column
+        # self.verify_results.setColumnWidth(1, 100)  # Status column width in pixels
 
         self.verify_results.setMinimumWidth(400)  # Set minimum width for the table
         self.verify_results.setColumnWidth(0, 200)  # Minimum width for Folder column
@@ -305,17 +367,14 @@ class GradingAutomationUI(QMainWindow):
 
         # Set column widths and behaviors
         header = self.pages_table.horizontalHeader()
-        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)  # Fixed width for checkbox
-        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)  # Page path stretches
-        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Fixed)  # Fixed width for status
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Fixed)
 
-        self.pages_table.setColumnWidth(0, 50)  # Narrow checkbox column
-        self.pages_table.setColumnWidth(2, 100)  # Status column width
+        self.pages_table.setColumnWidth(0, 50)
+        self.pages_table.setColumnWidth(2, 100)
 
-        # Make table read-only
         self.pages_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
-
-        # Center align the checkbox column
         self.pages_table.horizontalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
 
         create_pages_button = QPushButton("Create Selected Pages")
@@ -337,58 +396,44 @@ class GradingAutomationUI(QMainWindow):
         forms_group = QGroupBox("Forms and Quizzes Management")
         forms_layout = QVBoxLayout()
 
-        self.forms_table = QTableWidget()
-        self.forms_table.setColumnCount(3)
-        self.forms_table.setHorizontalHeaderLabels(["Page", "Add Form/Quiz", "Remove Form/Quiz"])
-        self.forms_table.horizontalHeader().setStretchLastSection(True)
+        self.quizzes_table = QTableWidget()
+        self.quizzes_table.setColumnCount(4)  # Changed to 4 columns
+        self.quizzes_table.setHorizontalHeaderLabels(["Select", "Local Path", "Page Name", "Status"])
+
+        header = self.quizzes_table.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)  # Checkbox column
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)  # Local Path
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Page Name
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)  # Status column
+
+        self.quizzes_table.setColumnWidth(0, 50)  # Checkbox column
+        self.quizzes_table.setColumnWidth(3, 100)  # Status column
+
+        self.quizzes_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
 
         button_layout = QHBoxLayout()
         add_forms_button = QPushButton("Add Forms/Quizzes")
         add_forms_button.clicked.connect(self.add_forms_quizzes)
-        remove_forms_button = QPushButton("Remove Forms/Quizzes")
+        remove_forms_button = QPushButton("Close and Grade)")
+        remove_forms_button.setToolTip(
+            "This will remove the quizzes/feedback form, post a image of the feedback and post grades"
+        )
         remove_forms_button.clicked.connect(self.remove_forms_quizzes)
 
         button_layout.addWidget(add_forms_button)
         button_layout.addWidget(remove_forms_button)
 
-        forms_layout.addWidget(self.forms_table)
+        forms_layout.addWidget(self.quizzes_table)
         forms_layout.addLayout(button_layout)
         forms_group.setLayout(forms_layout)
         layout.addWidget(forms_group)
 
         return tab
 
-    def update_pages_table(self):
-        """Update the pages table with available pages"""
-        try:
-            pages_to_create = self.grader.get_pages_to_create(
-                folders=[
-                    item.text()
-                    for item in self.pages_table.findItems("", Qt.MatchFlag.MatchContains)
-                    if item.column() == 1
-                ]
-            )  # Returns a list of strings ( which pages need to be created )
-
-            # update the 3rd column based on this list
-            for i, page in enumerate(pages_to_create):
-                self.pages_table.setItem(i, 2, QTableWidgetItem("Not Created"))
-        except Exception as e:
-            self.show_error(str(e))
-
     def save_ui_state(self):
         """Save the current state of UI elements"""
         # Save folder path
         self.state["last_folder"] = self.folder_path.text()
-
-        # Save selected pages
-        selected_pages = []
-        for i in range(self.pages_table.rowCount()):
-            checkbox = self.pages_table.cellWidget(i, 1)
-            if checkbox and isinstance(checkbox, QCheckBox) and checkbox.isChecked():
-                page_item = self.pages_table.item(i, 0)
-                if page_item:
-                    selected_pages.append(page_item.text())
-        self.state["selected_pages"] = selected_pages
 
         self.save_state()
 
@@ -401,12 +446,137 @@ class GradingAutomationUI(QMainWindow):
         # Check if the new tab is Pages Management (index 1)
         if index == 1:  # Pages Management tab
             self.on_pages_management_selected()
+        elif index == 2:  # Forms and Quizzes tab
+            self.on_forms_quizzes_management_selected()
+
+    def on_forms_quizzes_management_selected(self):
+        print("Switched to Forms and Quizzes Management tab")
+        # Update the forms table, all the pages that are created should be added here and get the status of the page using self.grader.get_page_status( page )
+        # From all the pages in the module folder
+        folder = self.folder_path.text()
+        folders_with_team = self.grader.get_folders_with_team(folder)
+        self.local_projects_info = {
+            folder_path: (team, errors)
+            for folder_path, team, errors in self.grader.verify_all_projects(folders_with_team)
+        }  # Dict[dict[str, tuple[TeamInfo | None, List[str]]]. PATH, (team, errors)
+
+        pages_posted_in_module = self.grader.get_pages_posted_in_module()  # List[PageSchema]
+
+        for path, (team, errors) in self.local_projects_info.items():
+            # print(f"path: {path}, team: {team}, errors: {errors}")
+            if not team:
+                continue
+            if any(team.team_name == page.title for page in pages_posted_in_module):
+                page = [page for page in pages_posted_in_module if page.title == team.team_name][0]
+                status = self.grader.get_page_status(page)  # Literal['Created', 'Quiz and Feedback added', 'Done']
+                color = "green" if status == "Done" else "yellow" if status == "Quiz and Feedback added" else "gray"
+                self._add_quiz_table_row(
+                    {"LocalPath": path, "PageName": page.title, "Status": status, "StatusColor": color}
+                )
+            else:
+                print(f"Page {path} is not posted in the module")
+                self._add_quiz_table_row(
+                    {"LocalPath": path, "PageName": team.team_name, "Status": "Not Added", "StatusColor": "white"}
+                )
+        # check for pages that are not in the module but in the folder
+        local_team_names = {team.team_name for _, (team, _) in self.local_projects_info.items() if team}
+        # Find pages that exist in Canvas but not locally
+        for page in pages_posted_in_module:
+            if page.title not in local_team_names:
+                self._add_quiz_table_row(
+                    {
+                        "LocalPath": "",
+                        "PageName": page.title,
+                        "Status": "No Local Files",
+                        "StatusColor": "red",
+                    }
+                )
 
     def on_pages_management_selected(self):
         # Add your logic here for what should happen when switching to Pages Management
         print("Switched to Pages Management tab")
         # For example, you could refresh the pages table:
-        self.update_pages_table()
+        """Update the pages table with available pages"""
+        try:
+            pages_to_create = self.grader.get_pages_to_create(
+                folders=[
+                    item.text()
+                    for item in self.pages_table.findItems("", Qt.MatchFlag.MatchContains)
+                    if item.column() == 1
+                ]
+            )  # Returns a list of strings ( which pages need to be created )
+
+            # Update each row in the table
+            for i in range(self.pages_table.rowCount()):
+                folder_item = self.pages_table.item(i, 1)  # Get folder path from column 1
+                if folder_item:
+                    folder_path = folder_item.text()
+                    # If the page needs to be created
+                    if folder_path in pages_to_create:
+                        status_item = QTableWidgetItem("Not Created")
+                        checkbox_item = self.pages_table.item(i, 0)
+                        if checkbox_item:
+                            checkbox_item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+                            checkbox_item.setCheckState(Qt.CheckState.Checked)
+                            checkbox_item.setToolTip("")  # Clear any existing tooltip
+                            # checkbox_item.setBackground(Qt.GlobalColor.white)  # Reset background
+                    else:
+                        # Page is already created
+                        status_item = QTableWidgetItem("Created")
+                        status_item.setBackground(Qt.GlobalColor.green)
+                        checkbox_item = self.pages_table.item(i, 0)
+                        if checkbox_item:
+                            checkbox_item.setFlags(Qt.ItemFlag.ItemIsEnabled)  # Remove ItemIsUserCheckable
+                            checkbox_item.setCheckState(Qt.CheckState.Unchecked)
+                            checkbox_item.setToolTip("Cannot create page: Page already exists")
+                            # checkbox_item.setBackground(Qt.GlobalColor.lightGray)  # Gray out the checkbox cell
+
+                    self.pages_table.setItem(i, 2, status_item)
+
+        except Exception as e:
+            self.show_error(str(e))
+
+    def _add_quiz_table_row(self, data: QuizTableRowData) -> None:
+        """
+        Protected method to add a row to the quizzes table.
+
+        Args:
+            data: Dictionary containing the row data with predefined types
+
+        Example:
+            ```python
+            self._add_quiz_table_row({
+                "LocalPath": "/path/to/quiz",
+                "PageName": "Team 1 Quiz",
+                "Status": "Not Added",
+                "StatusColor": "red"  # Optional: "red", "green", "gray", "yellow", "white"
+            })
+            ```
+        """
+        row = self.quizzes_table.rowCount()
+        self.quizzes_table.insertRow(row)
+
+        # Add checkbox
+        checkbox = QTableWidgetItem()
+        checkbox.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+
+        # Only enable checkbox if status isn't "Done" and has local files
+        if data.get("Status") != "Done" and data.get("Status") != "No Local Files" and data.get("LocalPath"):
+            checkbox.setCheckState(Qt.CheckState.Unchecked)
+        else:
+            checkbox.setFlags(Qt.ItemFlag.ItemIsEnabled)  # Disable checkbox
+            checkbox.setCheckState(Qt.CheckState.Unchecked)
+
+        self.quizzes_table.setItem(row, 0, checkbox)
+
+        # Add other columns (shifted by 1)
+        self.quizzes_table.setItem(row, 1, QTableWidgetItem(str(data.get("LocalPath", ""))))
+        self.quizzes_table.setItem(row, 2, QTableWidgetItem(str(data.get("PageName", ""))))
+
+        status_item = QTableWidgetItem(str(data.get("Status", "")))
+        if "StatusColor" in data and data["StatusColor"] in self._COLOR_MAP:
+            status_item.setBackground(self._COLOR_MAP[data["StatusColor"]])
+        self.quizzes_table.setItem(row, 3, status_item)
 
 
 if __name__ == "__main__":

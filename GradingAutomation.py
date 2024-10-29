@@ -28,11 +28,15 @@ def read_yml_file(file_path: str) -> Dict[str, Any]:
 
 
 class Grader:
-    def __init__(self, course_id: int, api_token: Optional[str] = None):
-        self.class_info = ClassInfoSchema(**read_yml_file("class_info.yml"))
+    def __init__(
+        self,
+        course_id: int,
+        module_title: str,
+        api_token: Optional[str] = None,
+    ):
         self.canvas = CanvasAPI(course_id=course_id, api_token=api_token)
         self.google = GoogleServicesManager()
-        self.module_id_with_presentations = self.canvas.get_module_by_title(self.class_info.presentation_module_title)
+        self.module_id_with_presentations = self.canvas.get_module_by_title(module_title)
 
     def get_folders_with_team(self, path: str) -> List[str]:
         # Get the folders that contain the team_info.yml file
@@ -40,8 +44,11 @@ class Grader:
         for root, dirs, files in os.walk(path):
             if "team_info.yml" in files:
                 folders.append(root)
-        print("folders = ", folders)
+        # print("folders = ", folders)
         return folders
+
+    def set_module_id_with_presentations(self, module_title: str):
+        self.module_id_with_presentations = self.canvas.get_module_by_title(module_title)
 
     def get_pages_to_create(self, folders: List[str]) -> List[str]:
         # Get the folders that do not have a page in Canvas inside the module self.module_id_with_presentations[id]
@@ -209,21 +216,21 @@ class Grader:
 
         return abs_folder_path, team_info, errors
 
-    def verify_all_projects(self, folders: List[str]) -> List[Tuple[str, List[str]]]:
-        """Verify all projects in the given folders and return a list of folders with their errors.
-            Only returns when there is an error
+    def verify_all_projects(self, folders: List[str]) -> List[Tuple[str, Union[TeamInfo, None], List[str]]]:
+        """Verify all projects in the given folders and return verification results for all folders.
+
         Args:
             folders (List[str]): List of folder paths to verify
 
         Returns:
-            List[Tuple[str, List[str]]]: List of tuples containing (folder_path, list_of_errors)
+            List[Tuple[str, Union[TeamInfo, None], List[str]]]: List of tuples containing
+                (folder_path, team_info, list_of_errors) for all folders
         """
         verification_results = []
 
         for folder in folders:
-            _, _, errors = self.verify_project_files(folder)
-            if errors:
-                verification_results.append((folder, errors))
+            result = self.verify_project_files(folder)
+            verification_results.append(result)
 
         return verification_results
 
@@ -269,6 +276,15 @@ class Grader:
                 <p><strong>Paper:</strong> <a href="{paper_url}" style="color: #3498db;">paper</a></p>
         """
         page = self.canvas.create_page(title=team_info.team_name, body=body)
+
+        # Add the page to the module
+        self.canvas.create_module_item(
+            title=team_info.team_name,
+            module_id=self.module_id_with_presentations.id,
+            type="Page",
+            page_url=page.url,
+        )
+
         return page
 
     def add_google_forms_and_create_quiz(self, page: PageSchema, folder_path: str):
@@ -302,6 +318,17 @@ class Grader:
         # create canvas quiz based on the quiz file
         return self.canvas.update_page(page.page_id, body=body)
 
+    def get_page_status(self, page: PageSchema) -> Literal["Created", "Quiz and Feedback added", "Done"]:
+        if not page.body:
+            raise ValueError("Page body is None")
+
+        if "Feedback Form:" in page.body:
+            return "Quiz and Feedback added"
+        elif "::DONE::" in page.body:
+            return "Done"
+        # else
+        return "Created"
+
     def remove_feedback_url_and_quiz(self, page: PageSchema):
         old_body: str = page.body  # type: ignore
         # Remove the feedback form and quiz
@@ -314,7 +341,12 @@ class Grader:
         for image_path in image_paths:
             image_url = self.canvas.upload_file(image_path)
             old_body += f'<img src="{image_url}" alt="Image" >'
+            # add HTML comment to the body "DONE"
+            old_body += "<!-- ::DONE:: -->"
         return self.canvas.update_page(page.page_id, body=old_body)
+
+    def get_pages_posted_in_module(self) -> List[PageSchema]:
+        return self.canvas.get_module_pages(self.module_id_with_presentations.id)
 
 
 if __name__ == "__main__":
@@ -350,7 +382,7 @@ if __name__ == "__main__":
     #      * Removing feedback forms and quizzes ( remove_feedback_url_and_quiz) , then grading automation ( grade_presentation_project)
 
     # Sample Implementation
-    grader = Grader(course_id=15319)
+    grader = Grader(course_id=15319, module_title="Fall 2024 - Presentation")
     folders = grader.get_folders_with_team(".")
 
     # Project Verification Step
