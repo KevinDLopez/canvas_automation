@@ -271,8 +271,30 @@ class GradingAutomationUI(QMainWindow):
             self.show_error(str(e))
 
     def add_forms_quizzes(self):
-        # Implementation for adding forms/quizzes
-        print("add_forms_quizzes")
+        try:
+            # folder = self.folder_path.text()
+            # folders_with_team = self.grader.get_folders_with_team(folder)
+            # # Get all existing pages
+            # pages_posted_in_module = self.grader.get_pages_posted_in_module()
+
+          forms_quizzes_to_create = []
+
+          # Get all checked rows to add forms/quizzes and retrieve their folder paths
+          for i in range(self.quizzes_table.rowCount()):
+              checkbox_item = self.quizzes_table.item(i, 0)  # Get the checkbox item
+
+              if checkbox_item is not None:  # Ensure the item exists
+
+                  # Check the state of the checkbox
+                  if checkbox_item.checkState() == Qt.CheckState.Checked:
+                      folder_path_item = self.quizzes_table.item(i, 1)  # Get the folder path item
+                      if folder_path_item is not None:  # Ensure the item exists
+                          forms_quizzes_to_create.append(folder_path_item.text())
+
+          print(f"Items to add forms/quizzes: {forms_quizzes_to_create}")
+
+        except Exception as e:
+            self.show_error(str(e))
 
     def remove_forms_quizzes(self):
         # Implementation for removing forms/quizzes
@@ -410,6 +432,9 @@ class GradingAutomationUI(QMainWindow):
         self.quizzes_table.setColumnWidth(3, 100)  # Status column
 
         self.quizzes_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+
+        # Connect the checkbox state change signal to the slot
+        self.quizzes_table.cellChanged.connect(self.onCheckBoxChanged)
 
         button_layout = QHBoxLayout()
         add_forms_button = QPushButton("Add Forms/Quizzes")
@@ -581,6 +606,12 @@ class GradingAutomationUI(QMainWindow):
             status_item.setBackground(self._COLOR_MAP[data["StatusColor"]])
         self.quizzes_table.setItem(row, 3, status_item)
 
+    def onCheckBoxChanged(self, row, column):
+        item = self.quizzes_table.item(row, column)
+        lastState = item.data(Qt.ItemDataRole.UserRole)
+        currentState = item.checkState()
+        if currentState != lastState:
+            item.setData(Qt.ItemDataRole.UserRole, currentState)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
