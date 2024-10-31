@@ -450,6 +450,9 @@ class GradingAutomationUI(QMainWindow):
             self.on_forms_quizzes_management_selected()
 
     def on_forms_quizzes_management_selected(self):
+        # Clear existing rows if they exist
+        self.quizzes_table.setRowCount(0)
+
         print("Switched to Forms and Quizzes Management tab")
         # Update the forms table, all the pages that are created should be added here and get the status of the page using self.grader.get_page_status( page )
         # From all the pages in the module folder
