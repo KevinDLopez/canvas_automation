@@ -2,9 +2,11 @@
 # Adding quizzes is allowed when done ( Image is present )
 # get page status not working - done
 # Do not append image (replace it) # Maybe is working
-# Add icon
 
 # Add the presentation assignment title in the initial page
 
 # ------ Test it more ----
 # Add test students with emails, also allow us to grade
+
+# ------ Questions to clarify ------
+# Add the presentation assignment title in the initial page or create assignment with script
