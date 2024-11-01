@@ -128,7 +128,7 @@ class GradingAutomationUI(QMainWindow):
         self.tabs = QTabWidget()
         self.tabs.addTab(self.create_project_verification_tab(), "Project Verification")
         self.tabs.addTab(self.create_pages_management_tab(), "Pages Management")
-        self.tabs.addTab(self.create_forms_management_tab(), "Forms & Quizzes")
+        self.tabs.addTab(self.create_forms_management_tab(), "Forms and Quizzes")
 
         # Connect the tab changed signal
         self.tabs.currentChanged.connect(self.on_tab_changed)
@@ -249,7 +249,7 @@ class GradingAutomationUI(QMainWindow):
                 if self.pages_table.item(i, 0).checkState() == Qt.CheckState.Checked
             ]
             print(f"pages_to_create: {pages_to_create}")
-            pages = self.grader.create_multiple_canvas_pages_based_on_folder(pages_to_create)
+            self.grader.create_multiple_canvas_pages_based_on_folder(pages_to_create)
 
             # Update status in pages table for created pages
             for i in range(self.pages_table.rowCount()):
@@ -272,26 +272,35 @@ class GradingAutomationUI(QMainWindow):
 
     def add_forms_quizzes(self):
         try:
-            # folder = self.folder_path.text()
-            # folders_with_team = self.grader.get_folders_with_team(folder)
-            # # Get all existing pages
-            # pages_posted_in_module = self.grader.get_pages_posted_in_module()
+            form_quizzes_to_create = [] # Contains folder paths and page names
 
-          forms_quizzes_to_create = []
+            # Get all checked rows to add forms/quizzes and retrieve their folder paths
+            for i in range(self.quizzes_table.rowCount()):
+                checkbox_item = self.quizzes_table.item(i, 0)  # Get the checkbox item
 
-          # Get all checked rows to add forms/quizzes and retrieve their folder paths
-          for i in range(self.quizzes_table.rowCount()):
-              checkbox_item = self.quizzes_table.item(i, 0)  # Get the checkbox item
+                if checkbox_item is not None and checkbox_item.checkState() == Qt.CheckState.Checked:
+                    folder_path_item = self.quizzes_table.item(i, 1) # Folder data column
+                    page_name_item = self.quizzes_table.item(i, 2) # Page name data column
 
-              if checkbox_item is not None:  # Ensure the item exists
+                    if folder_path_item is not None and page_name_item is not None:  # Ensure the items exist
+                        folder_path = folder_path_item.text()
+                        page_name = page_name_item.text()
+                        form_quizzes_to_create.append((folder_path, page_name, i))
 
-                  # Check the state of the checkbox
-                  if checkbox_item.checkState() == Qt.CheckState.Checked:
-                      folder_path_item = self.quizzes_table.item(i, 1)  # Get the folder path item
-                      if folder_path_item is not None:  # Ensure the item exists
-                          forms_quizzes_to_create.append(folder_path_item.text())
-
-          print(f"Items to add forms/quizzes: {forms_quizzes_to_create}")
+            # Add forms and quizzes to each page
+            for folder_path, page_name, row_index in form_quizzes_to_create:
+                # Get page schema
+                page = self.grader.retrieve_page_structure(page_name)
+                try:
+                    self.grader.add_google_forms_and_create_quiz(page, folder_path)
+                    status_item = QTableWidgetItem("Quiz and Feedback added")
+                    status_item.setBackground(Qt.GlobalColor.yellow)
+                    self.quizzes_table.setItem(row_index, 3, status_item)
+                except Exception as inner_e: # Set "Status" column as an error
+                    print(inner_e)
+                    status_item = QTableWidgetItem("Failed")
+                    status_item.setBackground(Qt.GlobalColor.red)
+                    self.quizzes_table.setItem(row_index, 3, status_item)
 
         except Exception as e:
             self.show_error(str(e))
@@ -439,7 +448,7 @@ class GradingAutomationUI(QMainWindow):
         button_layout = QHBoxLayout()
         add_forms_button = QPushButton("Add Forms/Quizzes")
         add_forms_button.clicked.connect(self.add_forms_quizzes)
-        remove_forms_button = QPushButton("Close and Grade)")
+        remove_forms_button = QPushButton("Close and Grade")
         remove_forms_button.setToolTip(
             "This will remove the quizzes/feedback form, post a image of the feedback and post grades"
         )
