@@ -316,7 +316,27 @@ class GradingAutomationUI(QMainWindow):
 
     def remove_forms_quizzes(self):
         # Implementation for removing forms/quizzes
-        print("remove_forms_quizzes")
+        local_paths_selected = []
+        for i in range(self.quizzes_table.rowCount()):
+            checkbox_item = self.quizzes_table.item(i, 0)
+            if checkbox_item is not None and checkbox_item.checkState() == Qt.CheckState.Checked:
+                local_path_item = self.quizzes_table.item(i, 1)
+                if local_path_item is not None:
+                    local_paths_selected.append(local_path_item.text())
+
+        for local_path in local_paths_selected:
+            team, errors, page = self.local_projects_info[local_path]
+            if not team:
+                raise Exception(f"Team not found for {local_path}")
+            if not page:
+                raise Exception(f"Page not found for {local_path}")
+            page = self.grader.remove_feedback_url_and_quiz(page)
+            # add grate and create image
+            emails = [team_member.email for team_member in team.team_members]
+            image = local_path + "/" + team.team_name + ".png"
+            # TODO: Get the form id and Assigment id
+            self.grader.grade_presentation_project(form_id="1", assignment_id=1, emails=emails, path_image=image)
+            page = self.grader.add_images_to_body(page, image)
 
     def load_state(self):
         """Load application state from state.json"""

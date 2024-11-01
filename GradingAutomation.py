@@ -2,6 +2,7 @@ import os
 import pprint
 from typing import List, Tuple, Union
 
+from matplotlib import pyplot as plt
 import pandas as pd
 import yaml
 from Canvas.CanvasService import CanvasAPI
@@ -25,6 +26,36 @@ def read_yml_file(file_path: str) -> Dict[str, Any]:
     with open(file_path, "r") as file:
         data = yaml.load(file, Loader=yaml.FullLoader)
     return data
+
+
+def create_image(responses: pd.DataFrame, output_path: str):
+    """
+    This function takes a DataFrame of responses and an output path to save the generated image.
+
+    Parameters:
+        responses (pd.DataFrame): DataFrame containing student data
+        output_path (str): Path where the image will be saved
+
+    Example:
+        >>> import pandas as pd
+        >>> responses = pd.DataFrame({
+        ...     'Student': ['Alice', 'Bob', 'Charlie'],
+        ...     'Score': [85, 90, 78]
+        ... })
+        >>> output_path = 'output/grades_chart.png'
+        >>> create_image(responses, output_path)
+    """
+    plt.figure(figsize=(8, 4))
+    plt.hist(
+        responses["Overall grade to this team's Slide deck?"].dropna(), bins=10, edgecolor="black", color="skyblue"
+    )
+    plt.title("Histogram of Overall Grades", fontsize=12)
+    plt.xlabel("Overall Grade", fontsize=10)
+    plt.ylabel("Frequency", fontsize=10)
+    plt.xticks(fontsize=8)
+    plt.yticks(fontsize=8)
+    plt.grid(True, linestyle="--", alpha=0.7)
+    plt.savefig(output_path)
 
 
 class Grader:
@@ -67,7 +98,13 @@ class Grader:
         print("pages to create = ", pages_to_create)
         return pages_to_create
 
-    def grade_presentation_project(self, form_id: str, assignment_id: int, emails: List[str]):
+    def grade_presentation_project(
+        self,
+        form_id: str,
+        assignment_id: int,
+        emails: List[str],
+        path_image: str,
+    ):
         """Grade the presentation for a group of students, this will read the scores from a Google Forms and update the grades in Canvas"""
         print("Grading presentation project...")
         # Get responses from Google Forms
@@ -89,7 +126,7 @@ class Grader:
         df_responses = df_responses[df_responses["Email"].isin(student_emails)]
         print("Cleaned responses = ", df_responses)
         # fmt: off
-
+        create_image(df_responses, path_image)
         # Check if there are repeated emails in the responses
         if df_responses["Email"].duplicated().any():
             print("There are repeated emails in the responses")
@@ -291,6 +328,10 @@ class Grader:
         return self.canvas.get_page_by_id(url)
 
     def add_google_forms_and_create_quiz(self, page: PageSchema, folder_path: str) -> PageSchema:
+        page_status = self.get_page_status(page)
+        if page.body and (page_status == "Quiz and Feedback added" or page_status == "Done"):
+            print("Form and quiz URLs already present on the page. Skipping update.")
+            raise Exception("Form and quiz URLs already present on the page. Skipping update ")
 
         cur_dir = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(cur_dir, folder_path)
@@ -304,7 +345,7 @@ class Grader:
 
         # Create a create a google forms for feedback to open at start time and close at end time + 20minutes
         form = self.google.make_copy_of_form(
-            "1FtwRfOuUl6eqDw-PzNYE94Ybe2LsUOYu1Txwm69qQnI",  # FIXME: THis id already has a Question for email, either change ID or remove the question in the code
+            "1FtwRfOuUl6eqDw-PzNYE94Ybe2LsUOYu1Txwm69qQnI",
             f"Feedback for {team_info.team_name}",
             False,
         )
@@ -314,12 +355,6 @@ class Grader:
         quiz_url = quiz["html_url"]
 
         # Check if form and quiz already exist on the page to avoid duplicates
-        if page.body and form_url in page.body and quiz_url in page.body:
-            print("Form and quiz URLs already present on the page. Skipping update.")
-            raise Exception(
-                "Form and quiz URLs already present on the page. Skipping update "
-            )  # Exit the function early if URLs are already present
-
         old_body = page.body
         # Add the google form to the page
         body = f"""
@@ -337,7 +372,7 @@ class Grader:
 
         if "Feedback Form:" in page.body:
             return "Quiz and Feedback added"
-        elif "::DONE::" in page.body:
+        elif "::DONE::" in page.body:  # Have not tested this
             return "Done"
         # else
         return "Created"
