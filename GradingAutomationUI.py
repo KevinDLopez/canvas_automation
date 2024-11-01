@@ -1,4 +1,5 @@
-from typing import List, Tuple, TypedDict, Optional, Literal
+import pprint
+from typing import List, Tuple, TypedDict, Optional, Literal, Union
 from PyQt6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -184,10 +185,11 @@ class GradingAutomationUI(QMainWindow):
             self.verify_progress.setVisible(True)
 
             # Get failed projects (those with errors)
-            self.local_projects_info = {
-                folder_path: (team, errors)
+            self.local_projects_info: dict[str, tuple[TeamInfo | None, List[str], PageSchema | None]] = {
+                folder_path: (team, errors, None)
                 for folder_path, team, errors in self.grader.verify_all_projects(folders_with_team)
-            }
+            }  # Dict[dict[str, tuple[TeamInfo | None, List[str]]]. PATH, (team, errors)
+
             # Update results table with all folders
             self.verify_results.setRowCount(len(folders_with_team))
             for i, folder_path in enumerate(folders_with_team):
@@ -290,15 +292,20 @@ class GradingAutomationUI(QMainWindow):
             # Add forms and quizzes to each page
             for folder_path, page_name, row_index in form_quizzes_to_create:
                 # Get page schema
-                page = self.grader.retrieve_page_structure(page_name)
-                print(f"page = {page}")
+                # page = self.grader.retrieve_page_structure(page_name)
+                page = self.local_projects_info[folder_path][2]
+                if not page:
+                    raise Exception(f"Page {page_name} not found in local projects")
+                print(f"\n\n1**page = {pprint.pformat(page.model_dump())}\n\n")
                 try:
                     page = self.grader.add_google_forms_and_create_quiz(page, folder_path)
-                    print(f"page = {page.model_dump()}")
-                    status_item = QTableWidgetItem("Quiz and Feedback added")
+                    print(f"page = {pprint.pformat(page.model_dump())}")
+                    print(f"\n\n2**page = {pprint.pformat(page.model_dump())}\n\n")
+                    status_item = QTableWidgetItem("Failed")
                     status_item.setBackground(Qt.GlobalColor.yellow)
                     self.quizzes_table.setItem(row_index, 3, status_item)
                 except Exception as inner_e:  # Set "Status" column as an error
+                    print("Failed to add forms and quizzes")
                     print(inner_e)
                     status_item = QTableWidgetItem("Failed")
                     status_item.setBackground(Qt.GlobalColor.red)
@@ -494,14 +501,14 @@ class GradingAutomationUI(QMainWindow):
         # From all the pages in the module folder
         folder = self.folder_path.text()
         folders_with_team = self.grader.get_folders_with_team(folder)
-        self.local_projects_info = {
-            folder_path: (team, errors)
+        self.local_projects_info: dict[str, tuple[TeamInfo | None, List[str], PageSchema | None]] = {
+            folder_path: (team, errors, None)
             for folder_path, team, errors in self.grader.verify_all_projects(folders_with_team)
         }  # Dict[dict[str, tuple[TeamInfo | None, List[str]]]. PATH, (team, errors)
 
         pages_posted_in_module = self.grader.get_pages_posted_in_module()  # List[PageSchema]
 
-        for path, (team, errors) in self.local_projects_info.items():
+        for path, (team, errors, page) in self.local_projects_info.items():
             # print(f"path: {path}, team: {team}, errors: {errors}")
             if not team:
                 continue
@@ -512,13 +519,15 @@ class GradingAutomationUI(QMainWindow):
                 self._add_quiz_table_row(
                     {"LocalPath": path, "PageName": page.title, "Status": status, "StatusColor": color}
                 )
+                # add this to self.local_projects_info
+                self.local_projects_info[path] = (team, errors, page)
             else:
                 print(f"Page {path} is not posted in the module")
                 self._add_quiz_table_row(
                     {"LocalPath": path, "PageName": team.team_name, "Status": "Not Added", "StatusColor": "white"}
                 )
         # check for pages that are not in the module but in the folder
-        local_team_names = {team.team_name for _, (team, _) in self.local_projects_info.items() if team}
+        local_team_names = {team.team_name for _, (team, _, _) in self.local_projects_info.items() if team}
         # Find pages that exist in Canvas but not locally
         for page in pages_posted_in_module:
             if page.title not in local_team_names:
