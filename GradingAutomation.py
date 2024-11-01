@@ -89,7 +89,7 @@ class Grader:
         df_responses = df_responses[df_responses["Email"].isin(student_emails)]
         print("Cleaned responses = ", df_responses)
         # fmt: off
-        
+
         # Check if there are repeated emails in the responses
         if df_responses["Email"].duplicated().any():
             print("There are repeated emails in the responses")
@@ -97,7 +97,7 @@ class Grader:
             print(df_responses[df_responses["Email"].duplicated()])
             # Drop the repeated emails
             df_responses = df_responses.drop_duplicates(subset="Email")
-        # TODO: Remove outliers 
+        # TODO: Remove outliers
         grade = (
             df_responses["Overall grade to this team's Slide deck?"].mean()
             + df_responses["Overall grade to this team's Presentation skills?"].mean()
@@ -287,6 +287,9 @@ class Grader:
 
         return page
 
+    def retrieve_page_structure(self, url: str) -> PageSchema:
+        return self.canvas.get_page_by_id(url)
+
     def add_google_forms_and_create_quiz(self, page: PageSchema, folder_path: str):
 
         cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -299,15 +302,22 @@ class Grader:
         team_info_path = folder_path + "/team_info.yml"
         team_info = self.__read_team_info_file(team_info_path)
 
-        old_body = page.body
         # Create a create a google forms for feedback to open at start time and close at end time + 20minutes
         form = self.google.make_copy_of_form(
             "1UwS-2ntDwCXjQWsS0ADsZvDWzV0MMeo6I-mw5zcbVrw",  # FIXME: THis id already has a Question for email, either change ID or remove the question in the code
             f"Feedback for {team_info.team_name}",
         )
+
         form_url = form["responderUri"]
         quiz = self.canvas.create_quiz_from_file(folder_path + "/quiz.json")
         quiz_url = quiz["html_url"]
+
+         # Check if form and quiz already exist on the page to avoid duplicates
+        if form_url in page.body and quiz_url in page.body:
+          print("Form and quiz URLs already present on the page. Skipping update.")
+          return  # Exit the function early if URLs are already present
+
+        old_body = page.body
         # Add the google form to the page
         body = f"""
             {old_body}
