@@ -297,6 +297,8 @@ class GradingAutomationUI(QMainWindow):
                 try:
                     page, form = self.grader.add_google_forms_and_create_quiz(page, folder_path)
                     self.path_to_forms[folder_path] = form
+                    # create a form json file and store it under path
+                    json.dump(form, open(folder_path + "/form.json", "w"))
                     # TODO: Might need to update the page object in self.local_projects_info
                     print(f"page = {pprint.pformat(page.model_dump())}")
                     status_item = QTableWidgetItem("Quiz and Feedback added")
@@ -331,11 +333,18 @@ class GradingAutomationUI(QMainWindow):
             # add grate and create image
             emails = [team_member.email for team_member in team.team_members]
             image = local_path + "/" + team.team_name + ".png"
-            form = self.path_to_forms[local_path]  # Get the form object
-            self.grader.grade_presentation_project(
-                form_id=form["formId"], assignment_title="Presentation Grade", emails=emails, path_image=image
-            )
-            page = self.grader.add_images_to_body(page, image)
+            # form = self.path_to_forms[local_path]  # Get the form object
+            # read the                     json.dump(form, open(folder_path + "/form.json", "w"))
+            form: Form = json.load(open(local_path + "/form.json"))
+            if not form:
+                raise Exception(f"Form not found for {local_path}")
+            try:
+                self.grader.grade_presentation_project(
+                    form_id=form["formId"], assignment_title="Presentation Grade", emails=emails, path_image=image
+                )
+            except Exception as e:
+                print(f"Error grading project {local_path}: {e}")
+            page = self.grader.add_images_to_body(page, [image])
 
     def load_state(self):
         """Load application state from state.json"""

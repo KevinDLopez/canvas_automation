@@ -45,7 +45,8 @@ def create_image(responses: pd.DataFrame, output_path: str):
         >>> output_path = 'output/grades_chart.png'
         >>> create_image(responses, output_path)
     """
-    plt.figure(figsize=(8, 4))
+    plt.figure(figsize=(15, 4))
+    plt.subplot(1, 3, 1)
     plt.hist(
         responses["Overall grade to this team's Slide deck?"].dropna(), bins=10, edgecolor="black", color="skyblue"
     )
@@ -55,6 +56,37 @@ def create_image(responses: pd.DataFrame, output_path: str):
     plt.xticks(fontsize=8)
     plt.yticks(fontsize=8)
     plt.grid(True, linestyle="--", alpha=0.7)
+
+    # Overall grade to this team's Research topic and (summary) paper content?
+    # Overall grade to this team's Presentation skills?
+    plt.subplot(1, 3, 2)
+    plt.hist(
+        responses["Overall grade to this team's Presentation skills?"].dropna(),
+        bins=10,
+        edgecolor="black",
+        color="skyblue",
+    )
+    plt.title("Histogram of Presentation Skills Grades", fontsize=12)
+    plt.xlabel("Presentation Skills Grade", fontsize=10)
+    plt.ylabel("Frequency", fontsize=10)
+    plt.xticks(fontsize=8)
+    plt.yticks(fontsize=8)
+    plt.grid(True, linestyle="--", alpha=0.7)
+
+    plt.subplot(1, 3, 3)
+    plt.hist(
+        responses["Overall grade to this team's Research topic and (summary) paper content?"].dropna(),
+        bins=10,
+        edgecolor="black",
+        color="skyblue",
+    )
+    plt.title("Histogram of Research Topic Grades", fontsize=12)
+    plt.xlabel("Research Topic Grade", fontsize=10)
+    plt.ylabel("Frequency", fontsize=10)
+    plt.xticks(fontsize=8)
+    plt.yticks(fontsize=8)
+    plt.grid(True, linestyle="--", alpha=0.7)
+
     plt.savefig(output_path)
 
 
@@ -101,7 +133,7 @@ class Grader:
     def get_assignment_id_by_title(self, assignment_title):
         assignment_id = self.canvas.get_assignment_by_title(assignment_title)
         if assignment_id is None:
-            raise Exception ("Can't find assignment id with assignment title.")
+            raise Exception("Can't find assignment id with assignment title.")
         return assignment_id
 
     def grade_presentation_project(
@@ -115,6 +147,8 @@ class Grader:
         print("Grading presentation project...")
         # Get responses from Google Forms
         df_responses = self.google.get_form_responses(form_id)  # DataFrame
+        excel_path = path_image.replace("png", "xlsx")
+        df_responses.to_excel(excel_path)
         # fmt: off
         df_responses["Overall grade to this team's Slide deck?"] = pd.to_numeric(df_responses["Overall grade to this team's Slide deck?"], errors='coerce')
         df_responses["Overall grade to this team's Presentation skills?"] = pd.to_numeric(df_responses["Overall grade to this team's Presentation skills?"], errors='coerce')
@@ -132,7 +166,6 @@ class Grader:
         df_responses = df_responses[df_responses["Email"].isin(student_emails)]
         print("Cleaned responses = ", df_responses)
         # fmt: off
-        create_image(df_responses, path_image)
         # Check if there are repeated emails in the responses
         if df_responses["Email"].duplicated().any():
             print("There are repeated emails in the responses")
@@ -141,6 +174,7 @@ class Grader:
             # Drop the repeated emails
             df_responses = df_responses.drop_duplicates(subset="Email")
         # TODO: Remove outliers
+        create_image(df_responses, path_image)
         grade = (
             df_responses["Overall grade to this team's Slide deck?"].mean()
             + df_responses["Overall grade to this team's Presentation skills?"].mean()
@@ -382,7 +416,7 @@ class Grader:
 
         if "Feedback Form:" in page.body:
             return "Quiz and Feedback added"
-        elif "::DONE::" in page.body:  # Have not tested this
+        elif ".png" in page.body:  # Have not tested this
             return "Done"
         # else
         return "Created"
@@ -397,10 +431,17 @@ class Grader:
         old_body: str = page.body  # type: ignore
         # Add the images to the body
         for image_path in image_paths:
+            file_name = os.path.basename(image_path)
             image_url = self.canvas.upload_file(image_path)
-            old_body += f'<img src="{image_url}" alt="Image" >'
+            if file_name in old_body:  # Replace the image
+                print("*****")
+                old_image_url = old_body.split(file_name)[0]
+                old_image_url = old_image_url.split('src="')[-1]
+                print(f"old_image_url = {old_image_url}")
+                old_body = old_body.replace(old_image_url, image_url)
+            else:  # add image
+                old_body += f'<img src="{image_url}" alt="Image" >'
             # add HTML comment to the body "DONE"
-            old_body += "<!-- ::DONE:: -->"
         return self.canvas.update_page(page.page_id, body=old_body)
 
     def get_pages_posted_in_module(self) -> List[PageSchema]:

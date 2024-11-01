@@ -11,3 +11,5 @@ client_secrets.json
 *.DS_Store
 
 S24-574-all-responses.xlsx
+
+state.json

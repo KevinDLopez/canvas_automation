@@ -146,11 +146,13 @@ class CanvasAPI:
         Returns:
             Assignment ID if it exists
         """
-        assignments = self.get_assignments
+        assignments = self.get_assignments()
         for assignment in assignments:
-            if assignment["name"] == assignment_title:
-                return assignment["id"]
-        return None
+            if assignment.name.strip().lower() == assignment_title.strip().lower():
+                return assignment.id
+        raise ValueError(
+            f"Assignment with title '{assignment_title}' not found. The assignments are {[a.name for a in assignments]}"
+        )
 
     def create_announcement(self, title: str, message: str) -> Dict:
         """
