@@ -1,5 +1,5 @@
 import pprint
-from typing import List, Tuple, TypedDict, Optional, Literal, Union
+from typing import Dict, List, Tuple, TypedDict, Optional, Literal, Union
 from PyQt6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -24,6 +24,7 @@ from PyQt6.QtGui import QColor
 import json
 import sys
 from Canvas.schemas import PageSchema
+from GoogleServices.schemas import Form
 from GradingAutomation import Grader
 from schemas import TeamInfo
 
@@ -275,7 +276,7 @@ class GradingAutomationUI(QMainWindow):
     def add_forms_quizzes(self):
         try:
             form_quizzes_to_create = []  # Contains folder paths
-
+            self.path_to_forms: Dict[str, Form] = {}
             # Get all checked rows to add forms/quizzes and retrieve their folder paths
             for i in range(self.quizzes_table.rowCount()):
                 checkbox_item = self.quizzes_table.item(i, 0)  # Get the checkbox item
@@ -294,7 +295,8 @@ class GradingAutomationUI(QMainWindow):
                     raise Exception(f"Page {page} not found in local projects")
                 print(f"\n\n1**page = {pprint.pformat(page.model_dump())}\n\n")
                 try:
-                    page = self.grader.add_google_forms_and_create_quiz(page, folder_path)
+                    page, form = self.grader.add_google_forms_and_create_quiz(page, folder_path)
+                    self.path_to_forms[folder_path] = form
                     # TODO: Might need to update the page object in self.local_projects_info
                     print(f"page = {pprint.pformat(page.model_dump())}")
                     status_item = QTableWidgetItem("Quiz and Feedback added")
@@ -330,7 +332,10 @@ class GradingAutomationUI(QMainWindow):
             emails = [team_member.email for team_member in team.team_members]
             image = local_path + "/" + team.team_name + ".png"
             # TODO: Get the form id and Assigment id
-            self.grader.grade_presentation_project(form_id="1", assignment_id=1, emails=emails, path_image=image)
+            form = self.path_to_forms[local_path]  # Get the form object
+            self.grader.grade_presentation_project(
+                form_id=form["formId"], assignment_id=1, emails=emails, path_image=image
+            )
             page = self.grader.add_images_to_body(page, image)
 
     def load_state(self):

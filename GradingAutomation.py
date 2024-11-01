@@ -327,7 +327,7 @@ class Grader:
     def retrieve_page_structure(self, url: str) -> PageSchema:
         return self.canvas.get_page_by_id(url)
 
-    def add_google_forms_and_create_quiz(self, page: PageSchema, folder_path: str) -> PageSchema:
+    def add_google_forms_and_create_quiz(self, page: PageSchema, folder_path: str):
         page_status = self.get_page_status(page)
         if page.body and (page_status == "Quiz and Feedback added" or page_status == "Done"):
             print("Form and quiz URLs already present on the page. Skipping update.")
@@ -364,7 +364,7 @@ class Grader:
         """
 
         # create canvas quiz based on the quiz file
-        return self.canvas.update_page(page.page_id, body=body)
+        return self.canvas.update_page(page.page_id, body=body), form
 
     def get_page_status(self, page: PageSchema) -> Literal["Created", "Quiz and Feedback added", "Done"]:
         if not page.body:
