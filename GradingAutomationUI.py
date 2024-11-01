@@ -330,7 +330,7 @@ class GradingAutomationUI(QMainWindow):
             emails = [team_member.email for team_member in team.team_members]
             image = local_path + "/" + team.team_name + ".png"
             # TODO: Get the form id and Assigment id
-            self.grader.grade_presentation_project(form_id="1", assignment_id=1, emails=emails, path_image=image)
+            self.grader.grade_presentation_project(form_id="1", assignment_title="Presentation Grade", emails=emails, path_image=image)
             page = self.grader.add_images_to_body(page, image)
 
     def load_state(self):

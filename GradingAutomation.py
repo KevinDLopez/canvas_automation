@@ -98,10 +98,16 @@ class Grader:
         print("pages to create = ", pages_to_create)
         return pages_to_create
 
+    def get_assignment_id_by_title(self, assignment_title):
+        assignment_id = self.canvas.get_assignment_by_title(assignment_title)
+        if assignment_id is None:
+            raise Exception ("Can't find assignment id with assignment title.")
+        return assignment_id
+
     def grade_presentation_project(
         self,
         form_id: str,
-        assignment_id: int,
+        assignment_title: str,
         emails: List[str],
         path_image: str,
     ):
@@ -142,6 +148,10 @@ class Grader:
         ) / 3
         # fmt: on
         print("Grade:", grade)
+
+        # Get assignment id based on title
+        assignment_id = self.get_assignment_id_by_title(assignment_title)
+
         # Update grades in Canvas
         for student in students:
             if student["email"].strip().lower() in emails:
