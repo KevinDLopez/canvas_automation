@@ -14,3 +14,7 @@ S24-574-all-responses.xlsx
 
 state.json
 class_info.yml
+
+# PyInstaller build directories
+dist/
+build/

@@ -307,15 +307,27 @@ class GradingAutomationUI(QMainWindow):
                     raise Exception(f"Page {page} not found in local projects")
                 print(f"\n\n1**page = {pprint.pformat(page.model_dump())}\n\n")
                 try:
+                    status = self.grader.get_page_status(page)
+                    print(f" ****status = {status}")
+                    if status == "Done":
+                        status_item = QTableWidgetItem("Done")
+                        status_item.setBackground(Qt.GlobalColor.green)
+                        self.quizzes_table.setItem(row_index, 3, status_item)
+                        continue
                     page, form = self.grader.add_google_forms_and_create_quiz(page, folder_path)
-                    self.path_to_forms[folder_path] = form
-                    # create a form json file and store it under path
-                    json.dump(form, open(folder_path + "/form.json", "w"))
-                    # TODO: Might need to update the page object in self.local_projects_info
-                    print(f"page = {pprint.pformat(page.model_dump())}")
-                    status_item = QTableWidgetItem("Quiz and Feedback added")
-                    status_item.setBackground(Qt.GlobalColor.yellow)
-                    self.quizzes_table.setItem(row_index, 3, status_item)
+                    if page is None or form is None:
+                        status_item = QTableWidgetItem("Quiz and Feedback added")
+                        status_item.setBackground(Qt.GlobalColor.yellow)
+                        self.quizzes_table.setItem(row_index, 3, status_item)
+                    else:
+                        self.path_to_forms[folder_path] = form
+                        # create a form json file and store it under path
+                        json.dump(form, open(folder_path + "/form.json", "w"))
+                        # TODO: Might need to update the page object in self.local_projects_info
+                        print(f"page = {pprint.pformat(page.model_dump())}")
+                        status_item = QTableWidgetItem("Quiz and Feedback added")
+                        status_item.setBackground(Qt.GlobalColor.yellow)
+                        self.quizzes_table.setItem(row_index, 3, status_item)
                 except Exception as inner_e:  # Set "Status" column as an error
                     print(inner_e)
                     status_item = QTableWidgetItem("Failed")
@@ -326,6 +338,7 @@ class GradingAutomationUI(QMainWindow):
             self.show_error(str(e))
 
     def remove_forms_quizzes(self):
+        # TODO: Do not allow when quiz is not added
         # Implementation for removing forms/quizzes
         local_paths_selected = []
         for i in range(self.quizzes_table.rowCount()):
@@ -333,14 +346,20 @@ class GradingAutomationUI(QMainWindow):
             if checkbox_item is not None and checkbox_item.checkState() == Qt.CheckState.Checked:
                 local_path_item = self.quizzes_table.item(i, 1)
                 if local_path_item is not None:
-                    local_paths_selected.append(local_path_item.text())
+                    local_paths_selected.append((local_path_item.text(), i))
 
-        for local_path in local_paths_selected:
+        for local_path, row_index in local_paths_selected:
             team, errors, page = self.local_projects_info[local_path]
             if not team:
-                raise Exception(f"Team not found for {local_path}")
+                print("### not team -  HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
+                continue
             if not page:
-                raise Exception(f"Page not found for {local_path}")
+                print("### not page - HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
+                continue
+            status = self.grader.get_page_status(page)
+            if status == "Created":
+                print("### Created - HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
+                continue
             page = self.grader.remove_feedback_url_and_quiz(page)
             # add grate and create image
             emails = [team_member.email for team_member in team.team_members]
@@ -354,6 +373,9 @@ class GradingAutomationUI(QMainWindow):
                 self.grader.grade_presentation_project(
                     form_id=form["formId"], assignment_title="Presentation Grade", emails=emails, path_image=image
                 )
+                status_item = QTableWidgetItem("Done")
+                status_item.setBackground(Qt.GlobalColor.green)
+                self.quizzes_table.setItem(row_index, 3, status_item)
             except Exception as e:
                 print(f"Error grading project {local_path}: {e}")
             page = self.grader.add_images_to_body(page, [image])
@@ -555,6 +577,7 @@ class GradingAutomationUI(QMainWindow):
             if any(team.team_name == page.title for page in pages_posted_in_module):
                 page = [page for page in pages_posted_in_module if page.title == team.team_name][0]
                 status = self.grader.get_page_status(page)  # Literal['Created', 'Quiz and Feedback added', 'Done']
+                print(f" ###status = {status}")
                 color = "green" if status == "Done" else "yellow" if status == "Quiz and Feedback added" else "gray"
                 self._add_quiz_table_row(
                     {"LocalPath": path, "PageName": page.title, "Status": status, "StatusColor": color}
@@ -566,6 +589,7 @@ class GradingAutomationUI(QMainWindow):
                 self._add_quiz_table_row(
                     {"LocalPath": path, "PageName": team.team_name, "Status": "Not Added", "StatusColor": "white"}
                 )
+                # disable the checkbox
         # check for pages that are not in the module but in the folder
         local_team_names = {team.team_name for _, (team, _, _) in self.local_projects_info.items() if team}
         # Find pages that exist in Canvas but not locally
@@ -649,9 +673,14 @@ class GradingAutomationUI(QMainWindow):
         checkbox.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
 
         # Only enable checkbox if status isn't "Done" and has local files
-        if data.get("Status") != "Done" and data.get("Status") != "No Local Files" and data.get("LocalPath"):
+        if (
+            data.get("Status") != "Done"
+            and data.get("Status") != "No Local Files"
+            and data.get("LocalPath")
+            and data.get("Status") != "Not Added"
+        ):
             checkbox.setCheckState(Qt.CheckState.Unchecked)
-        else:
+        else:  # or data['Status']=="Not Added"
             checkbox.setFlags(Qt.ItemFlag.ItemIsEnabled)  # Disable checkbox
             checkbox.setCheckState(Qt.CheckState.Unchecked)
 

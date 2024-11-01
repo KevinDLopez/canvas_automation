@@ -375,7 +375,7 @@ class Grader:
         page_status = self.get_page_status(page)
         if page.body and (page_status == "Quiz and Feedback added" or page_status == "Done"):
             print("Form and quiz URLs already present on the page. Skipping update.")
-            raise Exception("Form and quiz URLs already present on the page. Skipping update ")
+            return None, None
 
         cur_dir = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(cur_dir, folder_path)
@@ -411,12 +411,17 @@ class Grader:
         return self.canvas.update_page(page.page_id, body=body), form
 
     def get_page_status(self, page: PageSchema) -> Literal["Created", "Quiz and Feedback added", "Done"]:
+        if page.url is None:
+            raise ValueError("Page ID is None")
+
+        page = self.canvas.get_page_by_id(page.url)
+
         if not page.body:
             raise ValueError("Page body is None")
 
         if "Feedback Form:" in page.body:
             return "Quiz and Feedback added"
-        elif ".png" in page.body:  # Have not tested this
+        elif "<img" in page.body:  # Have not tested this
             return "Done"
         # else
         return "Created"
