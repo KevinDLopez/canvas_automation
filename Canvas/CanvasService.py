@@ -139,6 +139,19 @@ class CanvasAPI:
             assignments.append(AssignmentSchema(**assignment))
         return assignments
 
+    def get_assignment_by_title(self, assignment_title) -> int:
+        """
+        Gets assignment id based on title
+
+        Returns:
+            Assignment ID if it exists
+        """
+        assignments = self.get_assignments
+        for assignment in assignments:
+            if assignment["name"] == assignment_title:
+                return assignment["id"]
+        return None
+
     def create_announcement(self, title: str, message: str) -> Dict:
         """
         Create an announcement in the course.

@@ -331,10 +331,9 @@ class GradingAutomationUI(QMainWindow):
             # add grate and create image
             emails = [team_member.email for team_member in team.team_members]
             image = local_path + "/" + team.team_name + ".png"
-            # TODO: Get the form id and Assigment id
             form = self.path_to_forms[local_path]  # Get the form object
             self.grader.grade_presentation_project(
-                form_id=form["formId"], assignment_id=1, emails=emails, path_image=image
+                form_id=form["formId"], assignment_title="Presentation Grade", emails=emails, path_image=image
             )
             page = self.grader.add_images_to_body(page, image)
 
