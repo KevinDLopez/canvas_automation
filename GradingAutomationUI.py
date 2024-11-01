@@ -274,7 +274,7 @@ class GradingAutomationUI(QMainWindow):
 
     def add_forms_quizzes(self):
         try:
-            form_quizzes_to_create = []  # Contains folder paths and page names
+            form_quizzes_to_create = []  # Contains folder paths
 
             # Get all checked rows to add forms/quizzes and retrieve their folder paths
             for i in range(self.quizzes_table.rowCount()):
@@ -282,30 +282,24 @@ class GradingAutomationUI(QMainWindow):
 
                 if checkbox_item is not None and checkbox_item.checkState() == Qt.CheckState.Checked:
                     folder_path_item = self.quizzes_table.item(i, 1)  # Folder data column
-                    page_name_item = self.quizzes_table.item(i, 2)  # Page name data column
-
-                    if folder_path_item is not None and page_name_item is not None:  # Ensure the items exist
+                    if folder_path_item is not None:  # Ensure the items exist
                         folder_path = folder_path_item.text()
-                        page_name = page_name_item.text()
-                        form_quizzes_to_create.append((folder_path, page_name, i))
+                        form_quizzes_to_create.append((folder_path, i))
 
             # Add forms and quizzes to each page
-            for folder_path, page_name, row_index in form_quizzes_to_create:
+            for folder_path, row_index in form_quizzes_to_create:
                 # Get page schema
-                # page = self.grader.retrieve_page_structure(page_name)
                 page = self.local_projects_info[folder_path][2]
                 if not page:
-                    raise Exception(f"Page {page_name} not found in local projects")
+                    raise Exception(f"Page {page} not found in local projects")
                 print(f"\n\n1**page = {pprint.pformat(page.model_dump())}\n\n")
                 try:
                     page = self.grader.add_google_forms_and_create_quiz(page, folder_path)
                     print(f"page = {pprint.pformat(page.model_dump())}")
-                    print(f"\n\n2**page = {pprint.pformat(page.model_dump())}\n\n")
-                    status_item = QTableWidgetItem("Failed")
+                    status_item = QTableWidgetItem("Quiz and Feedback added")
                     status_item.setBackground(Qt.GlobalColor.yellow)
                     self.quizzes_table.setItem(row_index, 3, status_item)
                 except Exception as inner_e:  # Set "Status" column as an error
-                    print("Failed to add forms and quizzes")
                     print(inner_e)
                     status_item = QTableWidgetItem("Failed")
                     status_item.setBackground(Qt.GlobalColor.red)
@@ -315,8 +309,8 @@ class GradingAutomationUI(QMainWindow):
             self.show_error(str(e))
 
     def remove_forms_quizzes(self):
-        # Implementation for removing forms/quizzes
-        print("remove_forms_quizzes")
+
+        print("hello")
 
     def load_state(self):
         """Load application state from state.json"""
