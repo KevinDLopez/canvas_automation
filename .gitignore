@@ -1,7 +1,7 @@
 .vscode
 .env
 
-# Personal tockens from google 
+# Personal tokens from google 
 token.json 
 client_secrets.json 
 .env
@@ -13,3 +13,4 @@ client_secrets.json
 S24-574-all-responses.xlsx
 
 state.json
+class_info.yml

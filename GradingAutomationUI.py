@@ -1,3 +1,4 @@
+import os
 import pprint
 from typing import Dict, List, Tuple, TypedDict, Optional, Literal, Union
 from PyQt6.QtWidgets import (
@@ -20,7 +21,8 @@ from PyQt6.QtWidgets import (
     QHeaderView,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor
+from PyQt6.QtGui import QColor, QIcon, QKeySequence, QShortcut
+from pathlib import Path
 import json
 import sys
 from Canvas.schemas import PageSchema
@@ -51,6 +53,11 @@ class GradingAutomationUI(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        # Set application icon
+        icon_path = str(Path(__file__).parent / "assets" / "app_icon.png")
+        app_icon = QIcon(icon_path)
+        self.setWindowIcon(app_icon)
+        QApplication.setWindowIcon(app_icon)
         self.setWindowTitle("Grading Automation")
         self.setMinimumSize(1200, 800)  # Sets minimum window size to 800x600 pixels
 
@@ -79,6 +86,11 @@ class GradingAutomationUI(QMainWindow):
         else:
             self.grader = Grader(self.state["course_id"], self.state["module_title"], self.state["canvas_token"])
             self.show_main_interface()
+
+        # Set up keyboard shortcut for saving state
+        save_sequence = QKeySequence("Ctrl+S")
+        save_shortcut = QShortcut(save_sequence, self)
+        save_shortcut.activated.connect(self.save_ui_state)
 
     def is_course_connected(self):
         return self.state.get("course_id") and self.state.get("canvas_token") and self.state.get("module_title")
@@ -504,8 +516,8 @@ class GradingAutomationUI(QMainWindow):
     def save_ui_state(self):
         """Save the current state of UI elements"""
         # Save folder path
+        print("Saving UI state")
         self.state["last_folder"] = self.folder_path.text()
-
         self.save_state()
 
     def closeEvent(self, event):

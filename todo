@@ -1,8 +1,10 @@
 # Add verify on emails in the first step. Make sure that everyone in team_form is enrolled in the course.
-# Add the presentation assignment title in the initial page
-# Disable checkboxes to summit quizzes when quiz is already submitted
+# Adding quizzes is allowed when done ( Image is present )
+# get page status not working - done
 # Do not append image (replace it) # Maybe is working
 # Add icon
+
+# Add the presentation assignment title in the initial page
 
 # ------ Test it more ----
 # Add test students with emails, also allow us to grade
