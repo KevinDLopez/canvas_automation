@@ -272,15 +272,15 @@ class GradingAutomationUI(QMainWindow):
 
     def add_forms_quizzes(self):
         try:
-            form_quizzes_to_create = [] # Contains folder paths and page names
+            form_quizzes_to_create = []  # Contains folder paths and page names
 
             # Get all checked rows to add forms/quizzes and retrieve their folder paths
             for i in range(self.quizzes_table.rowCount()):
                 checkbox_item = self.quizzes_table.item(i, 0)  # Get the checkbox item
 
                 if checkbox_item is not None and checkbox_item.checkState() == Qt.CheckState.Checked:
-                    folder_path_item = self.quizzes_table.item(i, 1) # Folder data column
-                    page_name_item = self.quizzes_table.item(i, 2) # Page name data column
+                    folder_path_item = self.quizzes_table.item(i, 1)  # Folder data column
+                    page_name_item = self.quizzes_table.item(i, 2)  # Page name data column
 
                     if folder_path_item is not None and page_name_item is not None:  # Ensure the items exist
                         folder_path = folder_path_item.text()
@@ -291,12 +291,14 @@ class GradingAutomationUI(QMainWindow):
             for folder_path, page_name, row_index in form_quizzes_to_create:
                 # Get page schema
                 page = self.grader.retrieve_page_structure(page_name)
+                print(f"page = {page}")
                 try:
-                    self.grader.add_google_forms_and_create_quiz(page, folder_path)
+                    page = self.grader.add_google_forms_and_create_quiz(page, folder_path)
+                    print(f"page = {page.model_dump()}")
                     status_item = QTableWidgetItem("Quiz and Feedback added")
                     status_item.setBackground(Qt.GlobalColor.yellow)
                     self.quizzes_table.setItem(row_index, 3, status_item)
-                except Exception as inner_e: # Set "Status" column as an error
+                except Exception as inner_e:  # Set "Status" column as an error
                     print(inner_e)
                     status_item = QTableWidgetItem("Failed")
                     status_item.setBackground(Qt.GlobalColor.red)
@@ -621,6 +623,7 @@ class GradingAutomationUI(QMainWindow):
         currentState = item.checkState()
         if currentState != lastState:
             item.setData(Qt.ItemDataRole.UserRole, currentState)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -72,7 +72,7 @@ class GoogleServicesManager:
         responses: ListFormResponsesResponse = self.form_service.forms().responses().list(formId=form_id).execute()
         return responses
 
-    def make_copy_of_form(self, form_id: str, new_title: str) -> Form:
+    def make_copy_of_form(self, form_id: str, new_title: str, add_email: bool) -> Form:
         """Make a copy of a form with the given form ID."""
         template_form = self.get_form(form_id)  # Get the details from the template
 
@@ -81,25 +81,28 @@ class GoogleServicesManager:
         print("created_form", created_form)
 
         create_items: List[RequestType] = []
-        create_items.append(
-            {
-                "createItem": {
-                    "item": {
-                        "title": "Email",
-                        "questionItem": {
-                            "question": {
-                                "textQuestion": {"paragraph": False},
-                                "required": True,
+        j = 0
+        if add_email:
+            create_items.append(
+                {
+                    "createItem": {
+                        "item": {
+                            "title": "Email",
+                            "questionItem": {
+                                "question": {
+                                    "textQuestion": {"paragraph": False},
+                                    "required": True,
+                                },
                             },
+                            "description": "Enter your CSULB email address, e.g., First.Last.001@student.csulb.edu",
                         },
-                        "description": "Enter your CSULB email address, e.g., First.Last.001@student.csulb.edu",
-                    },
-                    "location": {"index": 0},
-                }
-            }  # type: ignore
-        )
+                        "location": {"index": j},
+                    }
+                }  # type: ignore
+            )
+            j += 1
         for i, item in enumerate(template_form["items"]):
-            create_items.append({"createItem": {"item": item, "location": {"index": i + 1}}})
+            create_items.append({"createItem": {"item": item, "location": {"index": i + j}}})
 
         batch_update_request = {"requests": create_items}
 

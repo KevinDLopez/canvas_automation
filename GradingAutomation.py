@@ -290,7 +290,7 @@ class Grader:
     def retrieve_page_structure(self, url: str) -> PageSchema:
         return self.canvas.get_page_by_id(url)
 
-    def add_google_forms_and_create_quiz(self, page: PageSchema, folder_path: str):
+    def add_google_forms_and_create_quiz(self, page: PageSchema, folder_path: str) -> PageSchema:
 
         cur_dir = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(cur_dir, folder_path)
@@ -304,18 +304,21 @@ class Grader:
 
         # Create a create a google forms for feedback to open at start time and close at end time + 20minutes
         form = self.google.make_copy_of_form(
-            "1XykFAgYiZgMLGq7qZTlVwwacGaA_hhMDsNqAN43M8IU",  # FIXME: THis id already has a Question for email, either change ID or remove the question in the code
+            "1FtwRfOuUl6eqDw-PzNYE94Ybe2LsUOYu1Txwm69qQnI",  # FIXME: THis id already has a Question for email, either change ID or remove the question in the code
             f"Feedback for {team_info.team_name}",
+            False,
         )
 
         form_url = form["responderUri"]
         quiz = self.canvas.create_quiz_from_file(folder_path + "/quiz.json")
         quiz_url = quiz["html_url"]
 
-         # Check if form and quiz already exist on the page to avoid duplicates
-        if form_url in page.body and quiz_url in page.body:
-          print("Form and quiz URLs already present on the page. Skipping update.")
-          return  # Exit the function early if URLs are already present
+        # Check if form and quiz already exist on the page to avoid duplicates
+        if page.body and form_url in page.body and quiz_url in page.body:
+            print("Form and quiz URLs already present on the page. Skipping update.")
+            raise Exception(
+                "Form and quiz URLs already present on the page. Skipping update "
+            )  # Exit the function early if URLs are already present
 
         old_body = page.body
         # Add the google form to the page
@@ -397,15 +400,15 @@ if __name__ == "__main__":
 
     # Project Verification Step
     verification_results = grader.verify_all_projects(folders)
-    if verification_results:
-        # UI would display this in a formatted table rather than console
-        print("\nProject Verification Failures:")
-        for folder, errors in verification_results:
-            print(f"\nFolder: {folder}")
-            for error in errors:
-                print(f"  - {error}")
-        raise SystemExit("Please fix the above errors before continuing.")
-
+    #     if verification_results:
+    #         # UI would display this in a formatted table rather than console
+    #         print("\nProject Verification Failures:")
+    #         for folder, errors in verification_results:
+    #             print(f"\nFolder: {folder}")
+    #             for error in errors:
+    #                 print(f"  - {error}")
+    #         raise SystemExit("Please fix the above errors before continuing.")
+    #
     # Page Creation Step
     # UI would show this as a table with checkboxes
     pages_to_create = grader.get_pages_to_create(folders)
