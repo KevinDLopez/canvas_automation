@@ -1,17 +1,26 @@
 # Running Python Script
 Before running the script, please complete the **Python environment setup** to ensure all necessary libraries are installed.
 ## Prerequisites
-1. **Complete the [Setting up Python](#setting-up-python) section** for required installations.
-2. Ensure the Canvas access token is configured (see [Setting up Canvas access token](#setting-up-canvas-access-token)).
+1. Ensure the Canvas access token is configured (see [Setting up Canvas access token](#setting-up-canvas-access-token)).
+2. Have an google email with permissions and a  `client_secrets.json` to allow testing. 
+
 ## Steps:
-1. Navigate to the project directory and Run `python GradingAutomationUI.py`
+1. Run application using one of the following methods:
+   -  Navigate to the project directory and Run `python GradingAutomationUI.py`
+      -  **Complete the [Setting up Python](#setting-up-python) section** for required installations.
+      - Place the `client_secrets.json` file in repository. 
+   -  Download application from the latest release. # IS IT POSSIBLE TO ADD A URL or LINK here?
+      -  Run the executable file not the .app file. Is easier for deluging and it runs faster
+      -  If running in macOS, you will need to [allow opening the app from an unknown developer](https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unknown-developer-mh40616/mac)
+      - Place the `client_secrets.json` file in the same location of executable. 
+
 2. Enter the canvas class id, your canvas access token, and the presentation module title.
    
    For this demo, the class id is `15319` and the presentation module title is `Fall 2024 - Presentation`
    
     <img width="1186" alt="Screenshot 2024-11-01 at 4 29 14 PM" src="https://github.com/user-attachments/assets/d814e957-45bf-4f06-8d14-9b09df544b76">
 
-3. Locate the path for this git repository and Click on "Verify Selected Projects".
+3. Locate the path for this git repository/tests/ ( or any location where students projects are located) and Click on "Verify Selected Projects".
 
    A sample output would look like this:
 
