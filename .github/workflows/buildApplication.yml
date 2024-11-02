@@ -1,82 +1,48 @@
-name: Build and Release Application
+name: Build and Release
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
-
-permissions:
-  contents: write
+    tags:
+      - "v*" # Trigger on version tags
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      # Set up Python environment
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.x"
 
-      # Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pyinstaller
 
-      # Build the application using PyInstaller
       - name: Build with PyInstaller
         run: |
           pyinstaller GradingAutomation.spec --noconfirm
 
-      # Upload build artifacts
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: GradingAutomationBuild
-          path: dist/
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      # Download build artifacts
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: GradingAutomationBuild
-          path: dist/
-
-      # Create a new GitHub release
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        with:
-          tag_name: v1.0.${{ github.run_number }}
-          release_name: Release v1.0.${{ github.run_number }}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Zip the build artifacts
-      - name: Zip Build Artifacts
+      - name: Zip build artifacts
         run: |
           cd dist
           ls -lrt 
-          zip -r GradingAutomationBuild.zip ./*
+          zip -r ../GradingAutomation.zip *
+          cd ..
 
-      # Upload release assets to the GitHub release
-      - name: Upload Release Assets
-        uses: actions/upload-release-asset@v1
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/GradingAutomationBuild.zip
-          asset_name: GradingAutomationBuild.zip
-          asset_content_type: application/zip
-          token: ${{ secrets.GITHUB_TOKEN }} # Added token input
+          files: |
+            GradingAutomation.zip
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
