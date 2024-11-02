@@ -85,10 +85,10 @@ pydantic_core==2.23.4
 pyfiglet==1.0.2
 PyJWT==2.9.0
 PyQt6==6.4.2
-pyqt6-plugins==6.4.2.2.3
-PyQt6-Qt6==6.4.3
-pyqt6-tools==6.4.2.3.3
-PyQt6_sip==13.8.0
+pyqt6-plugins~=6.4
+PyQt6-Qt6~=6.4
+pyqt6-tools!=6.4
+PyQt6_sip!=13.8.0
 pytest==8.3.3
 python-dotenv==1.0.1
 python-json-logger==2.0.7
