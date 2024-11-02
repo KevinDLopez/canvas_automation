@@ -20,19 +20,16 @@ jobs:
           - os: windows-latest
             architecture: x64
             platform-name: windows-x64
-            artifact-extension: .exe
 
           # macOS ARM64
           - os: macos-14
             architecture: arm64
             platform-name: macos-arm64
-            artifact-extension: .app
 
           # macOS Intel
           - os: macos-latest
             architecture: x64
             platform-name: macos-x64
-            artifact-extension: .app
 
           # Linux x86_64
           - os: ubuntu-latest
@@ -51,12 +48,10 @@ jobs:
           python-version: "3.x"
           architecture: ${{ matrix.architecture }}
 
-      - name: Install dependencies (All Platforms)
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyinstaller
-          pip install matplotlib
-          pip install -r requirements.txt
+          python -m pip install -r requirements.txt
 
       - name: Install additional dependencies (Linux)
         if: runner.os == 'Linux'
@@ -75,27 +70,19 @@ jobs:
         run: |
           python -m PyInstaller GradingAutomation.spec --noconfirm --clean
 
-      - name: Create distribution artifact (Windows)
+      - name: Zip dist directory (Windows)
         if: runner.os == 'Windows'
         run: |
           cd dist
-          Compress-Archive -Path GradingAutomation.exe -DestinationPath ../GradingAutomation-${{ matrix.platform-name }}.zip
+          Compress-Archive -Path * -DestinationPath ../GradingAutomation-${{ matrix.platform-name }}.zip
           cd ..
         shell: pwsh
 
-      - name: Create distribution artifact (macOS)
-        if: runner.os == 'Darwin'
+      - name: Zip dist directory (Unix)
+        if: runner.os != 'Windows'
         run: |
           cd dist
-          ditto -c -k --sequesterRsrc --keepParent GradingAutomation.app ../GradingAutomation-${{ matrix.platform-name }}.zip
-          cd ..
-        shell: bash
-
-      - name: Create distribution artifact (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          cd dist
-          zip -r ../GradingAutomation-${{ matrix.platform-name }}.zip GradingAutomation
+          zip -r ../GradingAutomation-${{ matrix.platform-name }}.zip *
           cd ..
         shell: bash
 
@@ -104,6 +91,7 @@ jobs:
         with:
           name: GradingAutomation-${{ matrix.platform-name }}
           path: GradingAutomation-${{ matrix.platform-name }}.zip
+          if-no-files-found: error
 
   release:
     needs: build
