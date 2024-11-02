@@ -1,11 +1,10 @@
-name: Build and Release
+name: Multi-Platform Build and Release
 
 on:
   push:
     tags:
       - "v*"
 
-# Add permissions configuration
 permissions:
   contents: write
   packages: write
@@ -14,7 +13,34 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # Windows x86_64
+          - os: windows-latest
+            architecture: x64
+            platform-name: windows-x64
+
+          # macOS ARM64
+          - os: macos-14 # macos-14 is Apple Silicon
+            architecture: arm64
+            platform-name: macos-arm64
+
+          # macOS Intel
+          - os: macos-latest
+            architecture: x64
+            platform-name: macos-x64
+
+          # Linux x86_64
+          - os: ubuntu-latest
+            architecture: x64
+            platform-name: linux-x64
+
+          # Linux ARM64
+          - os: ubuntu-latest
+            architecture: arm64
+            platform-name: linux-arm64
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v3
@@ -23,6 +49,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.x"
+          architecture: ${{ matrix.architecture }}
 
       - name: Install dependencies
         run: |
@@ -30,22 +57,49 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Build with PyInstaller
+      - name: Build with PyInstaller (Windows)
+        if: runner.os == 'Windows'
         run: |
           pyinstaller GradingAutomation.spec --noconfirm
 
-      - name: Zip build artifacts
+      - name: Build with PyInstaller (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          pyinstaller GradingAutomation.spec --noconfirm
+
+      - name: Zip artifacts (Windows)
+        if: runner.os == 'Windows'
         run: |
           cd dist
-          zip -r ../GradingAutomation.zip *
+          Compress-Archive -Path * -DestinationPath ../GradingAutomation-${{ matrix.platform-name }}.zip
+          cd ..
+        shell: pwsh
+
+      - name: Zip artifacts (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cd dist
+          zip -r ../GradingAutomation-${{ matrix.platform-name }}.zip *
           cd ..
 
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: GradingAutomation-${{ matrix.platform-name }}
+          path: GradingAutomation-${{ matrix.platform-name }}.zip
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+
       - name: Create Release
-        id: create_release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            GradingAutomation.zip
+            */GradingAutomation-*.zip
           name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
