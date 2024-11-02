@@ -32,6 +32,8 @@ from schemas import TeamInfo
 
 
 # Define valid color strings
+base_path = os.path.dirname(sys.executable) if getattr(sys, "frozen", False) else os.path.abspath(".")
+state_path = os.path.join(base_path, "state.json")
 
 
 class QuizTableRowData(TypedDict, total=False):
@@ -383,7 +385,7 @@ class GradingAutomationUI(QMainWindow):
     def load_state(self):
         """Load application state from state.json"""
         try:
-            with open("state.json", "r") as f:
+            with open(state_path, "r") as f:
                 self.state = json.load(f)
         except FileNotFoundError:
             self.state = {}
@@ -392,7 +394,7 @@ class GradingAutomationUI(QMainWindow):
 
     def save_state(self):
         """Save current application state to state.json"""
-        with open("state.json", "w") as f:
+        with open(state_path, "w") as f:
             json.dump(self.state, f)
 
     def show_error(self, message):

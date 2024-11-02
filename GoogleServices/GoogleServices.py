@@ -1,5 +1,6 @@
 import os.path
 import pprint
+import sys
 from typing import Literal, TypedDict, List, Dict, Union
 from googleapiclient import discovery
 from google.auth.transport.requests import Request
@@ -24,6 +25,11 @@ SCOPES = [
 ]
 DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
 
+base_path = os.path.dirname(sys.executable) if getattr(sys, "frozen", False) else os.path.abspath(".")
+
+client_secrets_path = os.path.join(base_path, "client_secrets.json")
+token_path = os.path.join(base_path, "token.json")
+
 
 class GoogleServicesManager:
     def __init__(self):
@@ -35,8 +41,8 @@ class GoogleServicesManager:
     def __authenticate(self):
         # The file token.json stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first time.
-        if os.path.exists("token.json"):
-            self.__creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+        if os.path.exists(token_path):
+            self.__creds = Credentials.from_authorized_user_file(token_path, SCOPES)
         # If there are no (valid) credentials available, let the user log in.
         if not self.__creds or not self.__creds.valid:
             if self.__creds and self.__creds.expired and self.__creds.refresh_token:
@@ -47,18 +53,18 @@ class GoogleServicesManager:
                         raise Exception("Invalid credentials")
                 except Exception as e:
                     print(f"Error during token refresh: {e}")
-                    if os.path.exists("token.json"):
-                        os.remove("token.json")
-                    flow = InstalledAppFlow.from_client_secrets_file("client_secrets.json", SCOPES)
+                    if os.path.exists(token_path):
+                        os.remove(token_path)
+                    flow = InstalledAppFlow.from_client_secrets_file(client_secrets_path, SCOPES)
                     self.__creds = flow.run_local_server(port=0)
                     # Save the credentials for the next run
-                    with open("token.json", "w") as token:
+                    with open(token_path, "w") as token:
                         token.write(self.__creds.to_json())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file("client_secrets.json", SCOPES)
+                flow = InstalledAppFlow.from_client_secrets_file(client_secrets_path, SCOPES)
                 self.__creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
-            with open("token.json", "w") as token:
+            with open(token_path, "w") as token:
                 token.write(self.__creds.to_json())
 
     def get_form(self, form_id: str) -> Form:
