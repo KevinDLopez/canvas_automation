@@ -157,9 +157,7 @@ class TestCanvasAPI(unittest.TestCase):
 
     def test_create_page(self):
         """testing the create page method"""
-        page = self.canvas.create_page(
-            title="New Page", body="This is a new page"
-        )  # TODO: We need to add the body, add the files, link to github, etc
+        page = self.canvas.create_page(title="New Page", body="This is a new page")
         self.assertIsNotNone(page, "Page should be created successfully")
         print("page = ", pprint.pformat(page.model_dump()))
 

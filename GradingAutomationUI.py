@@ -344,7 +344,6 @@ class GradingAutomationUI(QMainWindow):
             self.show_error(str(e))
 
     def remove_forms_quizzes(self):
-        # TODO: Do not allow when quiz is not added
         # Implementation for removing forms/quizzes
         local_paths_selected = []
         for i in range(self.quizzes_table.rowCount()):
