@@ -1,7 +1,7 @@
 import os.path
 import pprint
 import sys
-from typing import Literal, TypedDict, List, Dict, Union
+from typing import Literal, Optional, TypedDict, List, Dict, Union
 from googleapiclient import discovery
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -167,7 +167,7 @@ class GoogleServicesManager:
         print(f"Form URL: https://docs.google.com/forms/d/{created_form['formId']}/edit")
         return batch_update_response
 
-    def get_form_responses(self, form_id: str) -> pd.DataFrame:
+    def get_form_responses(self, form_id: str) -> Optional[pd.DataFrame]:
         form_data = self.get_form(form_id)  # questions are in form_data['questions']
         id_to_question: Dict[str, str] = {}
         for item in form_data["items"]:
@@ -182,7 +182,7 @@ class GoogleServicesManager:
         rows = []
         if "responses" not in data:
             print("No responses yet")
-            raise Exception("No responses yet")
+            return None
         for response in data["responses"]:
             # print(response)
             row = {

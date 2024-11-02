@@ -147,6 +147,8 @@ class Grader:
         print("Grading presentation project...")
         # Get responses from Google Forms
         df_responses = self.google.get_form_responses(form_id)  # DataFrame
+        if df_responses is None:
+            raise Exception("No responses found in the Google Form.")
         excel_path = path_image.replace("png", "xlsx")
         df_responses.to_excel(excel_path)
         # fmt: off
@@ -389,9 +391,9 @@ class Grader:
 
         # Create a create a google forms for feedback to open at start time and close at end time + 20minutes
         form = self.google.make_copy_of_form(
-            "1FtwRfOuUl6eqDw-PzNYE94Ybe2LsUOYu1Txwm69qQnI",
+            "1XykFAgYiZgMLGq7qZTlVwwacGaA_hhMDsNqAN43M8IU",  # TODO: Need to create a shared form for everyone
             f"Feedback for {team_info.team_name}",
-            False,
+            True,
         )
 
         form_url = form["responderUri"]

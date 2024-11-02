@@ -185,7 +185,11 @@ class GradingAutomationUI(QMainWindow):
             self.error_label.setVisible(True)
 
     def browse_folder(self):
-        folder = QFileDialog.getExistingDirectory(self, "Select Project Folder")
+        if self.folder_path.text():
+            directory = self.folder_path.text()
+        else:
+            directory = self.state.get("last_folder", base_path)
+        folder = QFileDialog.getExistingDirectory(self, caption="Select Project Folder", directory=directory)
         if folder:
             self.folder_path.setText(folder)
 
@@ -362,13 +366,17 @@ class GradingAutomationUI(QMainWindow):
             if status == "Created":
                 print("### Created - HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
                 continue
+            form: Form = json.load(open(local_path + "/form.json"))
+            responses = self.grader.google.get_form_responses(form["formId"])
+            if responses is None:
+                print("### No responses - MAKE SURE PEOPLE HAVE RESPONDED ####")
+                continue
             page = self.grader.remove_feedback_url_and_quiz(page)
             # add grate and create image
             emails = [team_member.email for team_member in team.team_members]
             image = local_path + "/" + team.team_name + ".png"
             # form = self.path_to_forms[local_path]  # Get the form object
             # read the                     json.dump(form, open(folder_path + "/form.json", "w"))
-            form: Form = json.load(open(local_path + "/form.json"))
             if not form:
                 raise Exception(f"Form not found for {local_path}")
             try:
