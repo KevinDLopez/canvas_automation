@@ -5,7 +5,7 @@ team_members:
   - name: John Doe
     email: johnDoe@gmail.com
   - name: Jane does
-    email: johnDoe@gmail.com
+    email: johnDoe@gmail.com # Make this only be a csulb email ( student.csulb.edu )
 github_repo: github.com/username/repo
 presentation_time:
   start: 2021-01-01T00:00:00Z
