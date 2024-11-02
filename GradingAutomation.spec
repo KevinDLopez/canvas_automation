@@ -9,7 +9,6 @@ matplotlib_datas = collect_data_files('matplotlib')
 
 # Define your application data files
 app_datas = [
-    ('client_secrets.json', 'client_secrets.json'),
     ('assets', 'assets'),
 ]
 
