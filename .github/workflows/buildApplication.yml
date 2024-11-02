@@ -68,6 +68,7 @@ jobs:
       - name: Zip Build Artifacts
         run: |
           cd dist
+          ls -lrt 
           zip -r GradingAutomationBuild.zip ./*
 
       # Upload release assets to the GitHub release
