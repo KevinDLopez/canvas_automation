@@ -78,3 +78,4 @@ jobs:
           asset_path: dist/GradingAutomationBuild.zip
           asset_name: GradingAutomationBuild.zip
           asset_content_type: application/zip
+          token: ${{ secrets.GITHUB_TOKEN }} # Added token input
