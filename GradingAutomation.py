@@ -391,8 +391,7 @@ class Grader:
 
         # Create a create a google forms for feedback to open at start time and close at end time + 20minutes
         form = self.google.make_copy_of_form(
-            "1FtwRfOuUl6eqDw-PzNYE94Ybe2LsUOYu1Txwm69qQnI", # Personal Google Form
-            # "1XykFAgYiZgMLGq7qZTlVwwacGaA_hhMDsNqAN43M8IU",  # TODO: Need to create a shared form for everyone
+            "1XykFAgYiZgMLGq7qZTlVwwacGaA_hhMDsNqAN43M8IU",  # TODO: Need to create a shared form for everyone
             f"Feedback for {team_info.team_name}",
             True,
         )
