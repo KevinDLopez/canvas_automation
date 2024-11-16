@@ -17,6 +17,7 @@ from GoogleServices.schemas import (
     Request as RequestType,
     Response,
 )
+from Logging import Print
 
 SCOPES = [
     "https://www.googleapis.com/auth/forms.body",
@@ -52,7 +53,7 @@ class GoogleServicesManager:
                     else:
                         raise Exception("Invalid credentials")
                 except Exception as e:
-                    print(f"Error during token refresh: {e}")
+                    Print(f"Error during token refresh: {e}", type="ERROR")
                     if os.path.exists(token_path):
                         os.remove(token_path)
                     flow = InstalledAppFlow.from_client_secrets_file(client_secrets_path, SCOPES)
@@ -84,7 +85,7 @@ class GoogleServicesManager:
 
         new_form = {"info": {"title": new_title}}
         created_form: Form = self.form_service.forms().create(body=new_form).execute()
-        print("created_form", created_form)
+        Print("created_form", created_form)
 
         create_items: List[RequestType] = []
         j = 0
@@ -116,14 +117,14 @@ class GoogleServicesManager:
         batch_update_response: BatchUpdateFormResponse = (
             self.form_service.forms().batchUpdate(formId=created_form["formId"], body=batch_update_request).execute()
         )
-        print("batch_update_response", batch_update_response)
+        Print("batch_update_response", batch_update_response)
 
         # Print the form ID and URL
         # fmt: off
-        print(f"Form ID: {created_form['formId']}")
-        print(f"Form URL to edit: https://docs.google.com/forms/d/{created_form['formId']}/edit")
-        print(f"Form URL to view: {created_form['responderUri']}")
-        print(f"Title = {created_form['info']['title']}")
+        Print(f"Form ID: {created_form['formId']}", type="INFO")
+        Print(f"Form URL to edit: https://docs.google.com/forms/d/{created_form['formId']}/edit", type="INFO")
+        Print(f"Form URL to view: {created_form['responderUri']}", type="INFO")
+        Print(f"Title = {created_form['info']['title']}", type="INFO")
         # fmt: on
         return created_form
 
@@ -160,11 +161,11 @@ class GoogleServicesManager:
         batch_update_response: BatchUpdateFormResponse = (
             self.form_service.forms().batchUpdate(formId=created_form["formId"], body=batch_update_request).execute()
         )
-        print("batch_update_response", batch_update_response)
+        Print("batch_update_response", batch_update_response)
 
         # Print the form ID and URL
-        print(f"Form ID: {created_form['formId']}")
-        print(f"Form URL: https://docs.google.com/forms/d/{created_form['formId']}/edit")
+        Print(f"Form ID: {created_form['formId']}", type="INFO")
+        Print(f"Form URL: https://docs.google.com/forms/d/{created_form['formId']}/edit", type="INFO")
         return batch_update_response
 
     def get_form_responses(self, form_id: str) -> Optional[pd.DataFrame]:
@@ -181,10 +182,10 @@ class GoogleServicesManager:
         data = self.__get_form_responses(form_id)  # Generate pandas dataframe
         rows = []
         if "responses" not in data:
-            print("No responses yet")
+            Print("No responses yet", type="WARN")
             return None
         for response in data["responses"]:
-            # print(response)
+            # Print(response)
             row = {
                 "responseId": response["responseId"],
                 "createTime": response["createTime"],
@@ -212,15 +213,15 @@ class GoogleServicesManager:
         }
 
         # Debugging information
-        print("URL:", url)
-        print("Headers:", headers)
-        print("Body:", body)
+        Print("URL:", url)
+        Print("Headers:", headers)
+        Print("Body:", body)
 
         response = requests.post(url, headers=headers, json=body)
 
         # More debugging information
-        print("Response Status Code:", response.status_code)
-        print("Response Content:", response.content.decode("utf-8"))
+        Print("Response Status Code:", response.status_code)
+        Print("Response Content:", response.content.decode("utf-8"))
 
         response.raise_for_status()
         return response.json()
@@ -233,7 +234,7 @@ if __name__ == "__main__":
     # Get form details
     form_id = "14vM9XQp7BgHLA6JjtasZoxlFlGfRJdlqrRZqhcw9XHs"
     result = manager.get_form(form_id)
-    print(result)
+    Print(result)
 
     # Get form responses
     df = manager.get_form_responses(form_id)

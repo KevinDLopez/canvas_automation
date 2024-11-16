@@ -8,6 +8,7 @@ import yaml
 from Canvas.CanvasService import CanvasAPI
 from Canvas.schemas import PageSchema, QuizSchema
 from GoogleServices.GoogleServices import GoogleServicesManager
+from Logging import Print
 from schemas import *
 import json
 
@@ -107,7 +108,7 @@ class Grader:
         for root, dirs, files in os.walk(path):
             if "team_info.yml" in files:
                 folders.append(root)
-        # print("folders = ", folders)
+        # Print("folders = ", folders)
         return folders
 
     def set_module_id_with_presentations(self, module_title: str):
@@ -118,7 +119,7 @@ class Grader:
 
         # Get the pages in the module
         pages_created = self.canvas.list_module_items(self.module_id_with_presentations.id)
-        print("pages already created = ", pages_created)
+        Print("pages already created = ", pages_created)
         pages_to_create: List[str] = []
         for folder in folders:
             team_info = self.__read_team_info_file(folder + "/team_info.yml")
@@ -127,7 +128,7 @@ class Grader:
             page_exists = any([team_name in page.title for page in pages_created])
             if not page_exists:
                 pages_to_create.append(folder)
-        print("pages to create = ", pages_to_create)
+        Print("pages to create = ", pages_to_create)
         return pages_to_create
 
     def get_assignment_id_by_title(self, assignment_title):
@@ -144,7 +145,7 @@ class Grader:
         path_image: str,
     ):
         """Grade the presentation for a group of students, this will read the scores from a Google Forms and update the grades in Canvas"""
-        print("Grading presentation project...")
+        Print("Grading presentation project...")
         # Get responses from Google Forms
         df_responses = self.google.get_form_responses(form_id)  # DataFrame
         if df_responses is None:
@@ -156,23 +157,23 @@ class Grader:
         df_responses["Overall grade to this team's Presentation skills?"] = pd.to_numeric(df_responses["Overall grade to this team's Presentation skills?"], errors='coerce')
         df_responses["Overall grade to this team's Research topic and (summary) paper content?"] = pd.to_numeric(df_responses["Overall grade to this team's Research topic and (summary) paper content?"], errors='coerce')
         # fmt: on
-        print("responses = ", df_responses["Email"])
-        print("\n\n")
+        Print("responses = ", df_responses["Email"])
+        Print("\n\n")
         #### PROCESSING ####
         # processing - removing emails that are not in the class list
         students = self.canvas.get_users_in_course()
         student_emails = [student["email"].strip().lower() for student in students]
-        print("student_emails = ", student_emails)
+        Print("student_emails = ", student_emails)
         # Remove responses from students not in the class
         df_responses["Email"] = df_responses["Email"].str.strip().str.lower()
         df_responses = df_responses[df_responses["Email"].isin(student_emails)]
-        print("Cleaned responses = ", df_responses)
+        Print("Cleaned responses = ", df_responses)
         # fmt: off
         # Check if there are repeated emails in the responses
         if df_responses["Email"].duplicated().any():
-            print("There are repeated emails in the responses")
+            Print("There are repeated emails in the responses")
             # Print the repeated emails
-            print(df_responses[df_responses["Email"].duplicated()])
+            Print(df_responses[df_responses["Email"].duplicated()])
             # Drop the repeated emails
             df_responses = df_responses.drop_duplicates(subset="Email")
         # TODO: Remove outliers
@@ -183,7 +184,7 @@ class Grader:
             + df_responses["Overall grade to this team's Research topic and (summary) paper content?"].mean()
         ) / 3
         # fmt: on
-        print("Grade:", grade)
+        Print("Grade:", grade, type="INFO")
 
         # Get assignment id based on title
         assignment_id = self.get_assignment_id_by_title(assignment_title)
@@ -192,7 +193,7 @@ class Grader:
         for student in students:
             if student["email"].strip().lower() in emails:
                 self.canvas.update_student_grade(assignment_id, student["id"], grade)
-        print("Grading complete")
+        Print("Grading complete", type="INFO")
 
     def __read_team_info_file(self, path: str, raise_error: bool = True) -> TeamInfo:  # type: ignore
         try:
@@ -401,7 +402,7 @@ class Grader:
     def add_google_forms_and_create_quiz(self, page: PageSchema, folder_path: str):
         page_status = self.get_page_status(page)
         if page.body and (page_status == "Quiz and Feedback added" or page_status == "Done"):
-            print("Form and quiz URLs already present on the page. Skipping update.")
+            Print("Form and quiz URLs already present on the page. Skipping update.")
             return None, None
 
         cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -466,10 +467,10 @@ class Grader:
             file_name = os.path.basename(image_path)
             image_url = self.canvas.upload_file(image_path)
             if file_name in old_body:  # Replace the image
-                print("*****")
+                Print("*****")
                 old_image_url = old_body.split(file_name)[0]
                 old_image_url = old_image_url.split('src="')[-1]
-                print(f"old_image_url = {old_image_url}")
+                Print(f"old_image_url = {old_image_url}")
                 old_body = old_body.replace(old_image_url, image_url)
             else:  # add image
                 old_body += f'<img src="{image_url}" alt="Image" >'
@@ -520,11 +521,11 @@ if __name__ == "__main__":
     verification_results = grader.verify_all_projects(folders)
     #     if verification_results:
     #         # UI would display this in a formatted table rather than console
-    #         print("\nProject Verification Failures:")
+    #         Print("\nProject Verification Failures:")
     #         for folder, errors in verification_results:
-    #             print(f"\nFolder: {folder}")
+    #             Print(f"\nFolder: {folder}")
     #             for error in errors:
-    #                 print(f"  - {error}")
+    #                 Print(f"  - {error}")
     #         raise SystemExit("Please fix the above errors before continuing.")
     #
     # Page Creation Step

@@ -8,6 +8,7 @@ import json
 
 from Canvas.schemas import *
 import pprint
+from Logging import Print
 
 
 class CanvasAPI:
@@ -59,12 +60,12 @@ class CanvasAPI:
                 response.raise_for_status()
                 return response.json()
             except requests.HTTPError as http_err:
-                print(f"HTTP error occurred: {http_err} - {response.status_code} {response.reason}")
-                print(f"Response content: {response.content.decode('utf-8')}")
-                print(f"Retrying in 1 second (attempt {attempt + 1}/{attempts})...")
+                Print(f"HTTP error occurred: {http_err} - {response.status_code} {response.reason}", type="ERROR")
+                Print(f"Response content: {response.content.decode('utf-8')}", type="ERROR")
+                Print(f"Retrying in 1 second (attempt {attempt + 1}/{attempts})...", type="ERROR")
                 time.sleep(1)  # Wait for 1 second before retrying
             except Exception as err:
-                print(f"Other error occurred: {err}")
+                Print(f"Other error occurred: {err}", type="ERROR")
 
         raise requests.HTTPError(f"Failed to make request after {attempts} attempts")
 
@@ -278,7 +279,7 @@ class CanvasAPI:
             if not added_question:
                 raise requests.HTTPError(f"Failed to add question '{question.question_name}' to the quiz.")
 
-        print(f"Quiz '{validated_quiz.title}' created successfully with all questions added.")
+        Print(f"Quiz '{validated_quiz.title}' created successfully with all questions added.", type="INFO")
         return quiz
 
     def create_quiz_from_file(self, file_path: str) -> Dict:
@@ -352,17 +353,17 @@ class CanvasAPI:
         # if not file_path.lower().endswith(".png"):
         #     raise ValueError("Only .png files are supported for this upload method.")
         file_path = os.path.abspath(file_path)
-        print(f"file_path = {file_path}")
+        Print(f"file_path = {file_path}")
 
         # Step 2: Get the file size
         file_size = os.path.getsize(file_path)
         if file_size == 0:
             raise ValueError("Cannot upload an empty file.")
-        print("File size = ", file_size)
+        Print("File size = ", file_size)
 
         # Step 3: Initiate the file upload
         file_name = os.path.basename(file_path)
-        print("file_name = ", file_name)
+        Print("file_name = ", file_name)
         file_type = file_name.split(".")[-1]
         data = {
             "name": file_name,
@@ -386,17 +387,17 @@ class CanvasAPI:
             try:
                 upload_response.raise_for_status()
             except requests.HTTPError as e:
-                print(f"HTTPError during file upload: {e}")
-                print(f"Response Status Code: {upload_response.status_code}")
-                print(f"Response Text: {upload_response.text}")
+                Print(f"HTTPError during file upload: {e}")
+                Print(f"Response Status Code: {upload_response.status_code}")
+                Print(f"Response Text: {upload_response.text}")
                 raise
 
         # Step 5: Confirm the file upload and retrieve
         if upload_response.status_code == 201:
-            print(f"File '{file_name}' uploaded successfully!")
+            Print(f"File '{file_name}' uploaded successfully!")
             # The file URI is usually returned as part of the upload_info or can be constructed from the file details
             """
-            print("upload_info", pprint.pformat(upload_info))
+            Print("upload_info", pprint.pformat(upload_info))
             {
                 "file_param": "file",
                 "progress": None,
@@ -405,7 +406,7 @@ class CanvasAPI:
             }
 
 
-            print("upload_reponse", pprint.pformat(upload_response.json()))
+            Print("upload_reponse", pprint.pformat(upload_response.json()))
             {
                 "category": "uncategorized",
                 "content-type": "image/png",
@@ -450,7 +451,7 @@ class CanvasAPI:
         """
         endpoint = "modules"
         modules_dict = self._make_request("GET", endpoint)
-        # print(modules_dict[0])
+        # Print(modules_dict[0])
         modules: List[ModuleSchema] = [ModuleSchema(**module) for module in modules_dict]
         return modules
 
@@ -564,7 +565,7 @@ class CanvasAPI:
             data["wiki_page"]["publish_at"] = publish_at.isoformat()
 
         page = self._make_request("POST", endpoint, json=data)
-        print("new_page = ")
+        Print("new_page = ")
         page = PageSchema(**page)
         pprint.pprint(page.model_dump()["body"])
         return page
@@ -637,7 +638,7 @@ if __name__ == "__main__":
     canvas = CanvasAPI(course_id, api_token)
     # assignment = canvas.get_assignments()
     # for a in assignment:
-    #     print(
+    #     Print(
     #         f"the current assignment is {a.due_at}, with id {a.id}, description {a.description}"
     #     )
     cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -645,33 +646,33 @@ if __name__ == "__main__":
     path = os.path.join(cur_dir, image_path)
     # Call the upload function
     url = canvas.upload_file(path)
-    print(f" URL for the uploaded file: {url}")
+    Print(f" URL for the uploaded file: {url}")
 
     modules = canvas.list_modules()
     a = modules[1].model_dump()
 
     # #  a new module
     newCreate_module = canvas.create_module(name="New Module")
-    print("new_module = ", newCreate_module)
+    Print("new_module = ", newCreate_module)
 
     module_id = modules[0].id
     items = canvas.list_module_items(module_id)
     pages = canvas.get_module_pages(module_id)
-    print("**pages = ", pprint.pformat([page.model_dump() for page in pages]))
+    Print("**pages = ", pprint.pformat([page.model_dump() for page in pages]))
     raise Exception("stop here")
-    print("items = ", pprint.pformat([item.model_dump() for item in items]))
+    Print("items = ", pprint.pformat([item.model_dump() for item in items]))
 
     page = canvas.create_page(
         title="New Page", body="This is a new page"
     )  # TODO: We need to add the body, add the files, link to github, etc
-    print("page = ", pprint.pformat(page.model_dump()))
+    Print("page = ", pprint.pformat(page.model_dump()))
 
     list_pages = canvas.list_pages()
-    print("**list_pages = ", pprint.pformat([page.model_dump() for page in list_pages]), "\n\n")
+    Print("**list_pages = ", pprint.pformat([page.model_dump() for page in list_pages]), "\n\n")
 
     updated_page = canvas.update_page(id=page.page_id, body="This is an updated page")
-    print("updated_page = ", updated_page)
+    Print("updated_page = ", updated_page)
     page.url
     # Create a new module item
     new_item = canvas.create_module_item(title="New Page", module_id=module_id, page_url=page.url)
-    print("new_item = ", new_item)
+    Print("new_item = ", new_item)

@@ -10,7 +10,7 @@ class LogLevel(IntEnum):
     ERROR = 3
 
 
-CURRENT_LOG_LEVEL = LogLevel.INFO
+CURRENT_LOG_LEVEL = LogLevel.DEBUG
 
 
 def set_log_level(level: LogLevel):
@@ -25,7 +25,7 @@ def Print(*args, type: Literal["DEBUG", "INFO", "ERROR", "WARN"] = "DEBUG"):
     if log_levels[type] < CURRENT_LOG_LEVEL:
         return
 
-    colors = {"INFO": "\033[90m", "ERROR": "\033[91m", "DEBUG": "\033[0m", "WARN": "\033[93m"}
+    colors = {"INFO": "\033[90m", "ERROR": "\033[91m", "DEBUG": "\033[37m", "WARN": "\033[93m"}
     reset = "\033[0m"
     timestamp = datetime.datetime.now().strftime("%I:%M:%S %p")
     left_padding = " " * ((9 - len(type)) // 2)
