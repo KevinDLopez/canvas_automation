@@ -184,7 +184,7 @@ class Grader:
             + df_responses["Overall grade to this team's Research topic and (summary) paper content?"].mean()
         ) / 3
         # fmt: on
-        Print("Grade:", grade, type="INFO")
+        Print("Grade:", grade, log_type="INFO")
 
         # Get assignment id based on title
         assignment_id = self.get_assignment_id_by_title(assignment_title)
@@ -193,7 +193,7 @@ class Grader:
         for student in students:
             if student["email"].strip().lower() in emails:
                 self.canvas.update_student_grade(assignment_id, student["id"], grade)
-        Print("Grading complete", type="INFO")
+        Print("Grading complete", log_type="INFO")
 
     def __read_team_info_file(self, path: str, raise_error: bool = True) -> TeamInfo:  # type: ignore
         try:

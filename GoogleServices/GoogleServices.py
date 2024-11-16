@@ -53,7 +53,7 @@ class GoogleServicesManager:
                     else:
                         raise Exception("Invalid credentials")
                 except Exception as e:
-                    Print(f"Error during token refresh: {e}", type="ERROR")
+                    Print(f"Error during token refresh: {e}", log_type="ERROR")
                     if os.path.exists(token_path):
                         os.remove(token_path)
                     flow = InstalledAppFlow.from_client_secrets_file(client_secrets_path, SCOPES)
@@ -121,10 +121,10 @@ class GoogleServicesManager:
 
         # Print the form ID and URL
         # fmt: off
-        Print(f"Form ID: {created_form['formId']}", type="INFO")
-        Print(f"Form URL to edit: https://docs.google.com/forms/d/{created_form['formId']}/edit", type="INFO")
-        Print(f"Form URL to view: {created_form['responderUri']}", type="INFO")
-        Print(f"Title = {created_form['info']['title']}", type="INFO")
+        Print(f"Form ID: {created_form['formId']}", log_type="INFO")
+        Print(f"Form URL to edit: https://docs.google.com/forms/d/{created_form['formId']}/edit", log_type="INFO")
+        Print(f"Form URL to view: {created_form['responderUri']}", log_type="INFO")
+        Print(f"Title = {created_form['info']['title']}", log_type="INFO")
         # fmt: on
         return created_form
 
@@ -164,8 +164,8 @@ class GoogleServicesManager:
         Print("batch_update_response", batch_update_response)
 
         # Print the form ID and URL
-        Print(f"Form ID: {created_form['formId']}", type="INFO")
-        Print(f"Form URL: https://docs.google.com/forms/d/{created_form['formId']}/edit", type="INFO")
+        Print(f"Form ID: {created_form['formId']}", log_type="INFO")
+        Print(f"Form URL: https://docs.google.com/forms/d/{created_form['formId']}/edit", log_type="INFO")
         return batch_update_response
 
     def get_form_responses(self, form_id: str) -> Optional[pd.DataFrame]:
@@ -182,7 +182,7 @@ class GoogleServicesManager:
         data = self.__get_form_responses(form_id)  # Generate pandas dataframe
         rows = []
         if "responses" not in data:
-            Print("No responses yet", type="WARN")
+            Print("No responses yet", log_type="WARN")
             return None
         for response in data["responses"]:
             # Print(response)

@@ -60,12 +60,12 @@ class CanvasAPI:
                 response.raise_for_status()
                 return response.json()
             except requests.HTTPError as http_err:
-                Print(f"HTTP error occurred: {http_err} - {response.status_code} {response.reason}", type="ERROR")
-                Print(f"Response content: {response.content.decode('utf-8')}", type="ERROR")
-                Print(f"Retrying in 1 second (attempt {attempt + 1}/{attempts})...", type="ERROR")
+                Print(f"HTTP error occurred: {http_err} - {response.status_code} {response.reason}", log_type="ERROR")
+                Print(f"Response content: {response.content.decode('utf-8')}", log_type="ERROR")
+                Print(f"Retrying in 1 second (attempt {attempt + 1}/{attempts})...", log_type="ERROR")
                 time.sleep(1)  # Wait for 1 second before retrying
             except Exception as err:
-                Print(f"Other error occurred: {err}", type="ERROR")
+                Print(f"Other error occurred: {err}", log_type="ERROR")
 
         raise requests.HTTPError(f"Failed to make request after {attempts} attempts")
 
@@ -279,7 +279,7 @@ class CanvasAPI:
             if not added_question:
                 raise requests.HTTPError(f"Failed to add question '{question.question_name}' to the quiz.")
 
-        Print(f"Quiz '{validated_quiz.title}' created successfully with all questions added.", type="INFO")
+        Print(f"Quiz '{validated_quiz.title}' created successfully with all questions added.", log_type="INFO")
         return quiz
 
     def create_quiz_from_file(self, file_path: str) -> Dict:

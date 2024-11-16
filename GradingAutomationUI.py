@@ -1,4 +1,5 @@
 import datetime
+from enum import IntEnum
 import os
 import pprint
 from typing import Dict, List, Tuple, TypedDict, Optional, Literal, Union
@@ -35,6 +36,13 @@ from Logging import Print
 from schemas import TeamInfo
 
 
+class LogLevel(IntEnum):
+    DEBUG = 0
+    INFO = 1
+    WARN = 2
+    ERROR = 3
+
+
 # Define valid color strings
 base_path = os.path.dirname(sys.executable) if getattr(sys, "frozen", False) else os.path.abspath(".")
 state_path = os.path.join(base_path, "state.json")
@@ -67,7 +75,7 @@ class GradingAutomationUI(QMainWindow):
         QApplication.setWindowIcon(app_icon)
         self.setWindowTitle("Grading Automation")
         self.setMinimumSize(1200, 800)  # Sets minimum window size to 800x600 pixels
-
+        self.logging_level: LogLevel = LogLevel.INFO
         # Initialize state
         self.state = {}
         self.load_state()
@@ -192,7 +200,7 @@ class GradingAutomationUI(QMainWindow):
 
         except Exception as e:
             error_message = str(e)
-            self.log(error_message, "ERROR")
+            self.log(error_message, log_type="ERROR")
 
     def browse_folder(self):
         if self.folder_path.text():
@@ -271,7 +279,7 @@ class GradingAutomationUI(QMainWindow):
 
             self.verify_progress.setVisible(False)
         except Exception as e:
-            self.log(str(e), "ERROR")
+            self.log(str(e), log_type="ERROR")
 
     def create_pages(self):
         try:
@@ -301,7 +309,7 @@ class GradingAutomationUI(QMainWindow):
                         checkbox_item.setToolTip("Cannot create page: Page already exists")
 
         except Exception as e:
-            self.log(str(e), "ERROR")
+            self.log(str(e), log_type="ERROR")
 
     def add_forms_quizzes(self):
         try:
@@ -335,7 +343,7 @@ class GradingAutomationUI(QMainWindow):
                     page, form = self.grader.add_google_forms_and_create_quiz(page, folder_path)
                     if page is None or form is None:
                         status_item = QTableWidgetItem("Quiz and Feedback added")
-                        status_item.setBackground(Qt.GlobalColor.yellow)
+                        status_item.setBackground(Qt.GlobalColor.blue)
                         self.quizzes_table.setItem(row_index, 3, status_item)
                     else:
                         self.path_to_forms[folder_path] = form
@@ -353,7 +361,7 @@ class GradingAutomationUI(QMainWindow):
                     self.quizzes_table.setItem(row_index, 3, status_item)
 
         except Exception as e:
-            self.log(str(e), "ERROR")
+            self.log(str(e), log_type="ERROR")
 
     def remove_forms_quizzes(self):
         # Implementation for removing forms/quizzes
@@ -368,19 +376,19 @@ class GradingAutomationUI(QMainWindow):
         for local_path, row_index in local_paths_selected:
             team, errors, page = self.local_projects_info[local_path]
             if not team:
-                Print("### not team -  HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
+                self.log("### not team -  HEY YOU NEED TO CREATE THE QUIZ FIRST ####", log_type="WARN")
                 continue
             if not page:
-                Print("### not page - HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
+                self.log("### not page - HEY YOU NEED TO CREATE THE QUIZ FIRST ####", log_type="WARN")
                 continue
             status = self.grader.get_page_status(page)
             if status == "Created":
-                Print("### Created - HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
+                self.log("### Created - HEY YOU NEED TO CREATE THE QUIZ FIRST ####", log_type="WARN")
                 continue
             form: Form = json.load(open(local_path + "/form.json"))
             responses = self.grader.google.get_form_responses(form["formId"])
             if responses is None:
-                Print("### No responses - MAKE SURE PEOPLE HAVE RESPONDED ####")
+                self.log("### No responses - MAKE SURE PEOPLE HAVE RESPONDED ####", log_type="WARN")
                 continue
             page = self.grader.remove_feedback_url_and_quiz(page)
             # add grate and create image
@@ -416,17 +424,20 @@ class GradingAutomationUI(QMainWindow):
         with open(state_path, "w") as f:
             json.dump(self.state, f)
 
-    def log(self, message, log_type: Literal["INFO", "ERROR", "DEBUG", "WARN"]):
-        """Display log message in the UI"""
+    def log(self, *args, log_type: Literal["INFO", "ERROR", "DEBUG", "WARN"] = "DEBUG"):
+        """Display log message in the UI. Multiple arguments will be joined with spaces."""
+        if LogLevel[log_type] < self.logging_level:
+            print("***log_type", log_type)
+            return
+        message = " ".join(str(arg) for arg in args)
         previous_text = self.log_text.text()
-        colors = {"INFO": "gray", "ERROR": "red", "DEBUG": "black", "WARN": "orange"}
-        left_padding = " " * ((9 - len(log_type)) // 2)
-        right_padding = " " * ((8 - len(log_type)) // 2)
-        formatted_message = f'<span style="color: {colors[log_type]};">[{left_padding}{log_type}{right_padding}] - {datetime.datetime.now().strftime("%I:%M:%S %p")} - {message}</span>'
-        Print(formatted_message)
+        colors = {"INFO": "black", "ERROR": "red", "DEBUG": "gray", "WARN": "orange"}
+        left_padding = "-" * ((10 - len(log_type)) // 2)
+        right_padding = "-" * ((9 - len(log_type)) // 2)
+        formatted_message = f'<span style="font-family: Courier New; font-size: 12px; color: {colors[log_type]};">[ {left_padding}{log_type}{right_padding} ] - {datetime.datetime.now().strftime("%I:%M:%S %p")} - {message}</span>'
+        # print(formatted_message)
         new_text = f"{previous_text}<br>{formatted_message}" if previous_text else formatted_message
         self.log_text.setText(new_text)
-        # self.log_text.setTextFormat(Qt.TextFormat.RichText)
         self.log_text.setVisible(True)
         QApplication.processEvents()
         QApplication.processEvents()
@@ -605,6 +616,7 @@ class GradingAutomationUI(QMainWindow):
         for path, (team, errors, page) in self.local_projects_info.items():
             # Print(f"path: {path}, team: {team}, errors: {errors}")
             if not team:
+                self.log("### not team - ? ####", log_type="WARN")
                 continue
             if any(team.team_name == page.title for page in pages_posted_in_module):
                 page = [page for page in pages_posted_in_module if page.title == team.team_name][0]
@@ -617,7 +629,7 @@ class GradingAutomationUI(QMainWindow):
                 # add this to self.local_projects_info
                 self.local_projects_info[path] = (team, errors, page)
             else:
-                Print(f"Page {path} is not posted in the module")
+                self.log(f"Page {path} is not posted in the module", log_type="INFO")
                 self._add_quiz_table_row(
                     {"LocalPath": path, "PageName": team.team_name, "Status": "Not Added", "StatusColor": "white"}
                 )
@@ -678,7 +690,7 @@ class GradingAutomationUI(QMainWindow):
                     self.pages_table.setItem(i, 2, status_item)
 
         except Exception as e:
-            self.log(str(e), "ERROR")
+            self.log(str(e), log_type="ERROR")
 
     def _add_quiz_table_row(self, data: QuizTableRowData) -> None:
         """
@@ -739,4 +751,15 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = GradingAutomationUI()
     window.show()
+    window.logging_level = LogLevel.INFO
+    #################################
+    # running the log function after print
+    original_print = Print
+
+    def Print(*args, **kwargs):  # Overriding the Print function
+        original_print(*args, **kwargs)
+        window.log(*args, **kwargs)
+
+    #################################
+
     sys.exit(app.exec())
