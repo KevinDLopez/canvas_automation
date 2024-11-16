@@ -44,7 +44,7 @@ class QuizTableRowData(TypedDict, total=False):
     LocalPath: str
     PageName: str
     Status: str
-    StatusColor: Optional[Literal["red", "green", "gray", "yellow", "white"]]  # Now accepts string literals
+    StatusColor: Optional[Literal["red", "green", "gray", "yellow", "white", "blue"]]  # Now accepts string literals
 
 
 class GradingAutomationUI(QMainWindow):
