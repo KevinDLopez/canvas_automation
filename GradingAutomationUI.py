@@ -1,3 +1,4 @@
+import datetime
 import os
 import pprint
 from typing import Dict, List, Tuple, TypedDict, Optional, Literal, Union
@@ -19,6 +20,8 @@ from PyQt6.QtWidgets import (
     QTabWidget,
     QGroupBox,
     QHeaderView,
+    QScrollArea,
+    QTextEdit,
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor, QIcon, QKeySequence, QShortcut
@@ -28,6 +31,7 @@ import sys
 from Canvas.schemas import PageSchema
 from GoogleServices.schemas import Form
 from GradingAutomation import Grader
+from Logging import Print
 from schemas import TeamInfo
 
 
@@ -72,22 +76,37 @@ class GradingAutomationUI(QMainWindow):
         self.setCentralWidget(main_widget)
         self.main_layout = QVBoxLayout(main_widget)
 
-        # Error display area at top
-        self.error_label = QLabel("")
-        self.error_label.setStyleSheet("color: red;")
-        self.error_label.setVisible(False)
-        self.main_layout.addWidget(self.error_label)
-
         # Initialize tabs but don't create them yet
         self.tabs = QTabWidget()
         self.pages_created: List[PageSchema] = []
 
         # Check if we need to show course selection or main interface
+        self.create_main_interface()
+        self.create_course_selection()
+
         if not self.is_course_connected():
-            self.show_course_selection()
+            self.course_selection_container.setVisible(True)
+            self.tabs.setVisible(False)
         else:
             self.grader = Grader(self.state["course_id"], self.state["module_title"], self.state["canvas_token"])
-            self.show_main_interface()
+            self.course_selection_container.setVisible(False)
+            self.tabs.setVisible(True)
+
+        # Error display area at bottom
+        self.log_text = QLabel()
+        self.log_text.setVisible(True)
+        self.log_text.setWordWrap(True)  # Enable word wrap for long error messages
+        self.log_text.setAlignment(Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignLeft)  # Align text to top-left
+        self.log_text.setTextFormat(Qt.TextFormat.RichText)  # Enable rich text
+        # Create a scroll area for the error label
+        self.log_scroll_area = QScrollArea()
+        self.log_scroll_area.setWidgetResizable(True)
+        self.log_scroll_area.setMaximumHeight(100)  # Set maximum height to 200 pixels
+        self.log_scroll_area.setWidget(self.log_text)
+        self.log_scroll_area.setVisible(True)
+        self.log_scroll_area.setStyleSheet("QScrollArea { border: 1px solid gray; border-radius: 10px; padding: 5px; }")
+
+        self.main_layout.addWidget(self.log_scroll_area)
 
         # Set up keyboard shortcut for saving state
         save_sequence = QKeySequence("Ctrl+S")
@@ -97,9 +116,9 @@ class GradingAutomationUI(QMainWindow):
     def is_course_connected(self):
         return self.state.get("course_id") and self.state.get("canvas_token") and self.state.get("module_title")
 
-    def show_course_selection(self):
-        widget = QWidget()
-        layout = QVBoxLayout(widget)
+    def create_course_selection(self):
+        self.course_selection_container = QWidget()
+        layout = QVBoxLayout(self.course_selection_container)
 
         group = QGroupBox("Course Connection")
         group_layout = QVBoxLayout()
@@ -135,11 +154,9 @@ class GradingAutomationUI(QMainWindow):
         layout.addWidget(group)
         layout.addStretch()
 
-        # Clear main layout and add course selection
-        self.clear_main_layout()
-        self.main_layout.addWidget(widget)
+        self.main_layout.addWidget(self.course_selection_container)
 
-    def show_main_interface(self):
+    def create_main_interface(self):
         # Create and add tabs
         self.tabs = QTabWidget()
         self.tabs.addTab(self.create_project_verification_tab(), "Project Verification")
@@ -149,18 +166,12 @@ class GradingAutomationUI(QMainWindow):
         # Connect the tab changed signal
         self.tabs.currentChanged.connect(self.on_tab_changed)
 
-        self.clear_main_layout()
         self.main_layout.addWidget(self.tabs)
-
-    def clear_main_layout(self):
-        while self.main_layout.count():
-            item = self.main_layout.takeAt(0)
-            if item.widget():
-                item.widget().deleteLater()
 
     def connect_to_course(self):
         try:
             course_id = int(self.course_id_input.text())
+            self.log(f"Connecting to course {course_id}", "INFO")
             canvas_token = self.token_input.text()
             module_title = self.module_title_input.text()  # Get module title
 
@@ -174,15 +185,13 @@ class GradingAutomationUI(QMainWindow):
             self.save_state()
 
             # Switch to main interface
-            self.show_main_interface()
+            self.course_selection_container.setVisible(False)
+            self.tabs.setVisible(True)
+            self.log("Successfully connected to course", "INFO")
 
         except Exception as e:
             error_message = str(e)
-            # Create new error label since the old one might have been deleted
-            self.error_label = QLabel(error_message)
-            self.error_label.setStyleSheet("color: red;")
-            self.main_layout.insertWidget(0, self.error_label)
-            self.error_label.setVisible(True)
+            self.log(error_message, "ERROR")
 
     def browse_folder(self):
         if self.folder_path.text():
@@ -196,7 +205,9 @@ class GradingAutomationUI(QMainWindow):
     def verify_projects(self):
         try:
             folder = self.folder_path.text()
+            self.log(f"Starting project verification in folder: {folder}", "INFO")
             folders_with_team = self.grader.get_folders_with_team(folder)
+            self.log(f"Found {len(folders_with_team)} folders with teams", "INFO")
 
             # Setup progress bar
             self.verify_progress.setMaximum(len(folders_with_team))
@@ -219,7 +230,7 @@ class GradingAutomationUI(QMainWindow):
                 status = "Failed" if errors else "Passed"
                 # add the projects that did not fail to self.pages_to_create
                 if not errors:
-                    print(f"Adding {folder_path} to pages_to_create")
+                    Print(f"Adding {folder_path} to pages_to_create")
                     # Check if the item has not been added yet
                     if not any(
                         folder_item_.text() == folder_path
@@ -259,7 +270,7 @@ class GradingAutomationUI(QMainWindow):
 
             self.verify_progress.setVisible(False)
         except Exception as e:
-            self.show_error(str(e))
+            self.log(str(e), "ERROR")
 
     def create_pages(self):
         try:
@@ -269,7 +280,7 @@ class GradingAutomationUI(QMainWindow):
                 for i in range(self.pages_table.rowCount())
                 if self.pages_table.item(i, 0).checkState() == Qt.CheckState.Checked
             ]
-            print(f"pages_to_create: {pages_to_create}")
+            Print(f"pages_to_create: {pages_to_create}")
             self.grader.create_multiple_canvas_pages_based_on_folder(pages_to_create)
 
             # Update status in pages table for created pages
@@ -289,7 +300,7 @@ class GradingAutomationUI(QMainWindow):
                         checkbox_item.setToolTip("Cannot create page: Page already exists")
 
         except Exception as e:
-            self.show_error(str(e))
+            self.log(str(e), "ERROR")
 
     def add_forms_quizzes(self):
         try:
@@ -311,10 +322,10 @@ class GradingAutomationUI(QMainWindow):
                 page = self.local_projects_info[folder_path][2]
                 if not page:
                     raise Exception(f"Page {page} not found in local projects")
-                print(f"\n\n1**page = {pprint.pformat(page.model_dump())}\n\n")
+                Print(f"\n\n1**page = {pprint.pformat(page.model_dump())}\n\n")
                 try:
                     status = self.grader.get_page_status(page)
-                    print(f" ****status = {status}")
+                    Print(f" ****status = {status}")
                     if status == "Done":
                         status_item = QTableWidgetItem("Done")
                         status_item.setBackground(Qt.GlobalColor.green)
@@ -330,18 +341,18 @@ class GradingAutomationUI(QMainWindow):
                         # create a form json file and store it under path
                         json.dump(form, open(folder_path + "/form.json", "w"))
                         # TODO: Might need to update the page object in self.local_projects_info
-                        print(f"page = {pprint.pformat(page.model_dump())}")
+                        Print(f"page = {pprint.pformat(page.model_dump())}")
                         status_item = QTableWidgetItem("Quiz and Feedback added")
                         status_item.setBackground(Qt.GlobalColor.yellow)
                         self.quizzes_table.setItem(row_index, 3, status_item)
                 except Exception as inner_e:  # Set "Status" column as an error
-                    print(inner_e)
+                    Print(inner_e)
                     status_item = QTableWidgetItem("Failed")
                     status_item.setBackground(Qt.GlobalColor.red)
                     self.quizzes_table.setItem(row_index, 3, status_item)
 
         except Exception as e:
-            self.show_error(str(e))
+            self.log(str(e), "ERROR")
 
     def remove_forms_quizzes(self):
         # Implementation for removing forms/quizzes
@@ -356,19 +367,19 @@ class GradingAutomationUI(QMainWindow):
         for local_path, row_index in local_paths_selected:
             team, errors, page = self.local_projects_info[local_path]
             if not team:
-                print("### not team -  HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
+                Print("### not team -  HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
                 continue
             if not page:
-                print("### not page - HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
+                Print("### not page - HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
                 continue
             status = self.grader.get_page_status(page)
             if status == "Created":
-                print("### Created - HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
+                Print("### Created - HEY YOU NEED TO CREATE THE QUIZ FIRST ####")
                 continue
             form: Form = json.load(open(local_path + "/form.json"))
             responses = self.grader.google.get_form_responses(form["formId"])
             if responses is None:
-                print("### No responses - MAKE SURE PEOPLE HAVE RESPONDED ####")
+                Print("### No responses - MAKE SURE PEOPLE HAVE RESPONDED ####")
                 continue
             page = self.grader.remove_feedback_url_and_quiz(page)
             # add grate and create image
@@ -386,7 +397,7 @@ class GradingAutomationUI(QMainWindow):
                 status_item.setBackground(Qt.GlobalColor.green)
                 self.quizzes_table.setItem(row_index, 3, status_item)
             except Exception as e:
-                print(f"Error grading project {local_path}: {e}")
+                Print(f"Error grading project {local_path}: {e}")
             page = self.grader.add_images_to_body(page, [image])
 
     def load_state(self):
@@ -404,10 +415,21 @@ class GradingAutomationUI(QMainWindow):
         with open(state_path, "w") as f:
             json.dump(self.state, f)
 
-    def show_error(self, message):
-        """Display error message in the UI"""
-        self.error_label.setText(message)
-        self.error_label.setVisible(True)
+    def log(self, message, log_type: Literal["INFO", "ERROR", "DEBUG", "WARN"]):
+        """Display log message in the UI"""
+        previous_text = self.log_text.text()
+        colors = {"INFO": "gray", "ERROR": "red", "DEBUG": "black", "WARN": "orange"}
+        left_padding = " " * ((9 - len(log_type)) // 2)
+        right_padding = " " * ((8 - len(log_type)) // 2)
+        formatted_message = f'<span style="color: {colors[log_type]};">[{left_padding}{log_type}{right_padding}] - {datetime.datetime.now().strftime("%I:%M:%S %p")} - {message}</span>'
+        Print(formatted_message)
+        new_text = f"{previous_text}<br>{formatted_message}" if previous_text else formatted_message
+        self.log_text.setText(new_text)
+        # self.log_text.setTextFormat(Qt.TextFormat.RichText)
+        self.log_text.setVisible(True)
+        QApplication.processEvents()
+        QApplication.processEvents()
+        self.log_scroll_area.verticalScrollBar().setValue(self.log_scroll_area.verticalScrollBar().maximum())
 
     def create_project_verification_tab(self):
         """Create the project verification tab"""
@@ -547,7 +569,7 @@ class GradingAutomationUI(QMainWindow):
     def save_ui_state(self):
         """Save the current state of UI elements"""
         # Save folder path
-        print("Saving UI state")
+        Print("Saving UI state")
         self.state["last_folder"] = self.folder_path.text()
         self.save_state()
 
@@ -567,7 +589,7 @@ class GradingAutomationUI(QMainWindow):
         # Clear existing rows if they exist
         self.quizzes_table.setRowCount(0)
 
-        print("Switched to Forms and Quizzes Management tab")
+        Print("Switched to Forms and Quizzes Management tab")
         # Update the forms table, all the pages that are created should be added here and get the status of the page using self.grader.get_page_status( page )
         # From all the pages in the module folder
         folder = self.folder_path.text()
@@ -580,13 +602,13 @@ class GradingAutomationUI(QMainWindow):
         pages_posted_in_module = self.grader.get_pages_posted_in_module()  # List[PageSchema]
 
         for path, (team, errors, page) in self.local_projects_info.items():
-            # print(f"path: {path}, team: {team}, errors: {errors}")
+            # Print(f"path: {path}, team: {team}, errors: {errors}")
             if not team:
                 continue
             if any(team.team_name == page.title for page in pages_posted_in_module):
                 page = [page for page in pages_posted_in_module if page.title == team.team_name][0]
                 status = self.grader.get_page_status(page)  # Literal['Created', 'Quiz and Feedback added', 'Done']
-                print(f" ###status = {status}")
+                Print(f" ###status = {status}")
                 color = "green" if status == "Done" else "yellow" if status == "Quiz and Feedback added" else "gray"
                 self._add_quiz_table_row(
                     {"LocalPath": path, "PageName": page.title, "Status": status, "StatusColor": color}
@@ -594,7 +616,7 @@ class GradingAutomationUI(QMainWindow):
                 # add this to self.local_projects_info
                 self.local_projects_info[path] = (team, errors, page)
             else:
-                print(f"Page {path} is not posted in the module")
+                Print(f"Page {path} is not posted in the module")
                 self._add_quiz_table_row(
                     {"LocalPath": path, "PageName": team.team_name, "Status": "Not Added", "StatusColor": "white"}
                 )
@@ -615,7 +637,7 @@ class GradingAutomationUI(QMainWindow):
 
     def on_pages_management_selected(self):
         # Add your logic here for what should happen when switching to Pages Management
-        print("Switched to Pages Management tab")
+        Print("Switched to Pages Management tab")
         # For example, you could refresh the pages table:
         """Update the pages table with available pages"""
         try:
@@ -655,7 +677,7 @@ class GradingAutomationUI(QMainWindow):
                     self.pages_table.setItem(i, 2, status_item)
 
         except Exception as e:
-            self.show_error(str(e))
+            self.log(str(e), "ERROR")
 
     def _add_quiz_table_row(self, data: QuizTableRowData) -> None:
         """

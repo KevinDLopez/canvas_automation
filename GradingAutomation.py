@@ -318,6 +318,31 @@ class Grader:
         return verification_results
 
     def create_canvas_page_based_on_folder(self, folder_path: str) -> PageSchema:
+        """
+        Creates a Canvas page for a team project based on the contents of a folder.
+
+        This function takes a folder path containing project materials (presentation, paper, team info),
+        verifies all required files are present, and creates a formatted Canvas page with the team's
+        information and uploaded materials.
+
+        Args:
+            folder_path (str): Path to the folder containing the team's project materials.
+                             Must contain:
+                             - presentation.pdf
+                             - paper.pdf
+                             - team_info.yml
+                             - quiz.json
+
+        Returns:
+            PageSchema: The created Canvas page object containing the team's information and materials.
+
+        Raises:
+            ValueError: If any required files are missing or invalid, or if team_info cannot be parsed.
+
+        Example:
+            >>> grader = Grader(course_id=12345, module_title="Team Presentations")
+            >>> page = grader.create_canvas_page_based_on_folder("path/to/team1_folder")
+        """
         # Verify project files and get absolute path
         folder_path, team_info, errors = self.verify_project_files(folder_path)
         if errors:
