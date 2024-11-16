@@ -48,6 +48,7 @@ class GradingAutomationUI(QMainWindow):
     _COLOR_MAP = {
         "red": Qt.GlobalColor.red,
         "green": Qt.GlobalColor.green,
+        "blue": QColor(0, 0, 255, 100),
         "gray": Qt.GlobalColor.lightGray,
         "yellow": Qt.GlobalColor.yellow,
         "white": Qt.GlobalColor.white,
@@ -518,7 +519,7 @@ class GradingAutomationUI(QMainWindow):
         header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)  # Status column
 
         self.quizzes_table.setColumnWidth(0, 50)  # Checkbox column
-        self.quizzes_table.setColumnWidth(3, 100)  # Status column
+        self.quizzes_table.setColumnWidth(3, 200)  # Status column
 
         self.quizzes_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
 
@@ -587,7 +588,7 @@ class GradingAutomationUI(QMainWindow):
                 page = [page for page in pages_posted_in_module if page.title == team.team_name][0]
                 status = self.grader.get_page_status(page)  # Literal['Created', 'Quiz and Feedback added', 'Done']
                 print(f" ###status = {status}")
-                color = "green" if status == "Done" else "yellow" if status == "Quiz and Feedback added" else "gray"
+                color = "green" if status == "Done" else "blue" if status == "Quiz and Feedback added" else "gray"
                 self._add_quiz_table_row(
                     {"LocalPath": path, "PageName": page.title, "Status": status, "StatusColor": color}
                 )
