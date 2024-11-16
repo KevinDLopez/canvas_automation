@@ -10,7 +10,7 @@ class LogLevel(IntEnum):
     ERROR = 3
 
 
-CURRENT_LOG_LEVEL = LogLevel.DEBUG
+CURRENT_LOG_LEVEL = LogLevel.INFO
 
 
 def set_log_level(level: LogLevel):
@@ -36,9 +36,10 @@ def Print(*args, type: Literal["DEBUG", "INFO", "ERROR", "WARN"] = "DEBUG"):
     print(formatted_message)
 
 
-Print("This is a debug message", type="DEBUG")
-Print("asd", "asdf", type="INFO")
-arr = [1, 2, 3]
-Print("This is a warning message", arr, type="WARN")
-obj = {"key": "value"}
-Print("This is an error message", obj, type="ERROR")
+if __name__ == "__main__":
+    Print("This is a debug message", type="DEBUG")
+    Print("asd", "asdf", type="INFO")
+    arr = [1, 2, 3]
+    Print("This is a warning message", arr, type="WARN")
+    obj = {"key": "value"}
+    Print("This is an error message", obj, type="ERROR")
