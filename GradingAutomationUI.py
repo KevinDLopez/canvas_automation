@@ -53,17 +53,19 @@ class QuizTableRowData(TypedDict, total=False):
     PageName: str
     Status: str
     StatusColor: Optional[Literal["red", "green", "gray", "yellow", "white", "blue"]]  # Now accepts string literals
+    FontColor: Optional[Literal["white", "black"]]
 
 
 class GradingAutomationUI(QMainWindow):
     # Color mapping dictionary
     _COLOR_MAP = {
         "red": Qt.GlobalColor.red,
-        "green": Qt.GlobalColor.green,
+        "green": QColor(0, 240, 0, 200),
         "blue": QColor(0, 0, 255, 100),
         "gray": Qt.GlobalColor.lightGray,
         "yellow": Qt.GlobalColor.yellow,
         "white": Qt.GlobalColor.white,
+        "black": Qt.GlobalColor.black,
     }
 
     def __init__(self):
@@ -255,7 +257,8 @@ class GradingAutomationUI(QMainWindow):
                         self.pages_table.setItem(i, 1, QTableWidgetItem(folder_path))
                         # Status in column 2
                         status_item = QTableWidgetItem("**")
-                        status_item.setBackground(Qt.GlobalColor.green)
+                        status_item.setBackground(self._COLOR_MAP["green"])
+                        status_item.setForeground(self._COLOR_MAP["white"])
                         self.pages_table.setItem(i, 2, status_item)
                 status_item = QTableWidgetItem(status)
                 error_item = QTableWidgetItem("\n".join(errors) if errors else "")
@@ -264,7 +267,8 @@ class GradingAutomationUI(QMainWindow):
                 error_item.setTextAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
                 # Set background colors
-                status_item.setBackground(Qt.GlobalColor.red if errors else Qt.GlobalColor.green)
+                status_item.setBackground(self._COLOR_MAP["red"] if errors else self._COLOR_MAP["green"])
+                status_item.setForeground(self._COLOR_MAP["white"])
 
                 self.verify_results.setItem(i, 0, folder_item)
                 self.verify_results.setItem(i, 1, status_item)
@@ -298,7 +302,8 @@ class GradingAutomationUI(QMainWindow):
                 if folder_path in pages_to_create:
                     # Update status
                     status_item = QTableWidgetItem("Created")
-                    status_item.setBackground(Qt.GlobalColor.green)
+                    status_item.setBackground(self._COLOR_MAP["green"])
+                    status_item.setForeground(self._COLOR_MAP["white"])
                     self.pages_table.setItem(i, 2, status_item)
 
                     # Update checkbox
@@ -337,13 +342,15 @@ class GradingAutomationUI(QMainWindow):
                     Print(f" ****status = {status}")
                     if status == "Done":
                         status_item = QTableWidgetItem("Done")
-                        status_item.setBackground(Qt.GlobalColor.green)
+                        status_item.setBackground(self._COLOR_MAP["green"])
+                        status_item.setForeground(self._COLOR_MAP["white"])
                         self.quizzes_table.setItem(row_index, 3, status_item)
                         continue
                     page, form = self.grader.add_google_forms_and_create_quiz(page, folder_path)
                     if page is None or form is None:
                         status_item = QTableWidgetItem("Quiz and Feedback added")
-                        status_item.setBackground(Qt.GlobalColor.blue)
+                        status_item.setBackground(self._COLOR_MAP["blue"])
+                        status_item.setForeground(self._COLOR_MAP["white"])
                         self.quizzes_table.setItem(row_index, 3, status_item)
                     else:
                         self.path_to_forms[folder_path] = form
@@ -352,12 +359,14 @@ class GradingAutomationUI(QMainWindow):
                         # TODO: Might need to update the page object in self.local_projects_info
                         Print(f"page = {pprint.pformat(page.model_dump())}")
                         status_item = QTableWidgetItem("Quiz and Feedback added")
-                        status_item.setBackground(Qt.GlobalColor.yellow)
+                        status_item.setBackground(self._COLOR_MAP["blue"])
+                        status_item.setForeground(self._COLOR_MAP["white"])
                         self.quizzes_table.setItem(row_index, 3, status_item)
                 except Exception as inner_e:  # Set "Status" column as an error
                     Print(inner_e)
                     status_item = QTableWidgetItem("Failed")
-                    status_item.setBackground(Qt.GlobalColor.red)
+                    status_item.setBackground(self._COLOR_MAP["red"])
+                    status_item.setForeground(self._COLOR_MAP["white"])
                     self.quizzes_table.setItem(row_index, 3, status_item)
 
         except Exception as e:
@@ -403,7 +412,8 @@ class GradingAutomationUI(QMainWindow):
                     form_id=form["formId"], assignment_title="Presentation Grade", emails=emails, path_image=image
                 )
                 status_item = QTableWidgetItem("Done")
-                status_item.setBackground(Qt.GlobalColor.green)
+                status_item.setBackground(self._COLOR_MAP["green"])
+                status_item.setForeground(self._COLOR_MAP["white"])
                 self.quizzes_table.setItem(row_index, 3, status_item)
             except Exception as e:
                 Print(f"Error grading project {local_path}: {e}")
@@ -624,14 +634,14 @@ class GradingAutomationUI(QMainWindow):
                 Print(f" ###status = {status}")
                 color = "green" if status == "Done" else "blue" if status == "Quiz and Feedback added" else "gray"
                 self._add_quiz_table_row(
-                    {"LocalPath": path, "PageName": page.title, "Status": status, "StatusColor": color}
+                    {"LocalPath": path, "PageName": page.title, "Status": status, "StatusColor": color, "FontColor": "white"}
                 )
                 # add this to self.local_projects_info
                 self.local_projects_info[path] = (team, errors, page)
             else:
                 self.log(f"Page {path} is not posted in the module", log_type="INFO")
                 self._add_quiz_table_row(
-                    {"LocalPath": path, "PageName": team.team_name, "Status": "Not Added", "StatusColor": "white"}
+                    {"LocalPath": path, "PageName": team.team_name, "Status": "Not Added", "StatusColor": "white", "FontColor": "black"}
                 )
                 # disable the checkbox
         # check for pages that are not in the module but in the folder
@@ -645,6 +655,7 @@ class GradingAutomationUI(QMainWindow):
                         "PageName": page.title,
                         "Status": "No Local Files",
                         "StatusColor": "red",
+                        "FontColor": "white"
                     }
                 )
 
@@ -679,7 +690,8 @@ class GradingAutomationUI(QMainWindow):
                     else:
                         # Page is already created
                         status_item = QTableWidgetItem("Created")
-                        status_item.setBackground(Qt.GlobalColor.green)
+                        status_item.setBackground(self._COLOR_MAP["green"])
+                        status_item.setForeground(self._COLOR_MAP["white"])
                         checkbox_item = self.pages_table.item(i, 0)
                         if checkbox_item:
                             checkbox_item.setFlags(Qt.ItemFlag.ItemIsEnabled)  # Remove ItemIsUserCheckable
@@ -706,6 +718,7 @@ class GradingAutomationUI(QMainWindow):
                 "PageName": "Team 1 Quiz",
                 "Status": "Not Added",
                 "StatusColor": "red"  # Optional: "red", "green", "gray", "yellow", "white"
+                "FontColor": "white"
             })
             ```
         """
@@ -735,8 +748,11 @@ class GradingAutomationUI(QMainWindow):
         self.quizzes_table.setItem(row, 2, QTableWidgetItem(str(data.get("PageName", ""))))
 
         status_item = QTableWidgetItem(str(data.get("Status", "")))
-        if "StatusColor" in data and data["StatusColor"] in self._COLOR_MAP:
-            status_item.setBackground(self._COLOR_MAP[data["StatusColor"]])
+
+        if "StatusColor" in data and "FontColor" in data:
+            if data["StatusColor"] in self._COLOR_MAP and data["FontColor"] in self._COLOR_MAP:
+                status_item.setBackground(self._COLOR_MAP[data["StatusColor"]])
+                status_item.setForeground(self._COLOR_MAP[data["FontColor"]])
         self.quizzes_table.setItem(row, 3, status_item)
 
     def onCheckBoxChanged(self, row, column):
