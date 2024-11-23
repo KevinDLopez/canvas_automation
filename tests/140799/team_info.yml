@@ -1,0 +1,12 @@
+# This is not the valid syntax, we still need to work it out
+team_name: SampleTeam_f4
+topic: SampleTopic__f4
+team_members:
+  - name: John Doe
+    email: johnDoe@gmail.com
+  - name: Jane does
+    email: johnDoe@gmail.com # Make this only be a csulb email ( student.csulb.edu )
+github_repo: github.com/username/repo
+presentation_time:
+  start: 2021-01-01T00:00:00Z
+  end: 2021-01-01T00:00:00Z

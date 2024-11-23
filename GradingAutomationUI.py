@@ -2,7 +2,7 @@ import datetime
 from enum import IntEnum
 import os
 import pprint
-from typing import Dict, List, Tuple, TypedDict, Optional, Literal, Union
+from typing import Callable, Dict, List, Tuple, TypedDict, Optional, Literal, Union
 from PyQt6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -372,7 +372,21 @@ class GradingAutomationUI(QMainWindow):
         except Exception as e:
             self.log(str(e), log_type="ERROR")
 
-    def remove_forms_quizzes(self):
+    def remove_forms_quizzes_wrapper(self):
+        def handle_ok(assignment_title: str):
+            Print("assignment_title", assignment_title)
+            self._remove_forms_quizzes(assignment_title)
+            self.state["last_assignment_title_2"] = assignment_title
+            self.save_state()
+
+        self.__make_popup(  # Using a pop up to get the assignment title
+            title="Enter Assignment Title",
+            label_text="Assignment Title:",
+            default_value=self.state.get("last_assignment_title_2", ""),
+            ok_callback=handle_ok,  # Function call is done here
+        )
+
+    def _remove_forms_quizzes(self, assignment_title: str = "Presentation Grade"):
         # Implementation for removing forms/quizzes
         local_paths_selected = []
         for i in range(self.quizzes_table.rowCount()):
@@ -409,7 +423,7 @@ class GradingAutomationUI(QMainWindow):
                 raise Exception(f"Form not found for {local_path}")
             try:
                 self.grader.grade_presentation_project(
-                    form_id=form["formId"], assignment_title="Presentation Grade", emails=emails, path_image=image
+                    form_id=form["formId"], assignment_title=assignment_title, emails=emails, path_image=image
                 )
                 status_item = QTableWidgetItem("Done")
                 status_item.setBackground(self._COLOR_MAP["green"])
@@ -510,20 +524,29 @@ class GradingAutomationUI(QMainWindow):
         layout.addWidget(verify_group)
         return tab
 
-    def download_folder_click(self):
-        # Create a dialog to get the assignment title
+    def __make_popup(
+        self, title: str, label_text: str, default_value: str = "", ok_callback: Optional[Callable[[str], None]] = None
+    ):
+        """Create a reusable popup dialog with input field and OK/Cancel buttons.
+
+        Args:
+            title: Window title for the popup
+            label_text: Label text for the input field
+            default_value: Optional default value for input field
+            ok_callback: Callback function to execute when OK is clicked, receives input text as parameter
+        """
         dialog = QWidget()
-        dialog.setWindowTitle("Enter Assignment Title")
+        dialog.setWindowTitle(title)
         dialog_layout = QVBoxLayout()
 
-        # Add input field with default value from state
-        title_input = QLineEdit()
-        if self.state.get("last_assignment_title"):
-            title_input.setText(self.state["last_assignment_title"])
-        dialog_layout.addWidget(QLabel("Assignment Title:"))
-        dialog_layout.addWidget(title_input)
+        # Add input field
+        input_field = QLineEdit()
+        if default_value:
+            input_field.setText(default_value)
+        dialog_layout.addWidget(QLabel(label_text))
+        dialog_layout.addWidget(input_field)
 
-        # Add OK and Cancel buttons
+        # Add buttons
         button_layout = QHBoxLayout()
         ok_button = QPushButton("OK")
         cancel_button = QPushButton("Cancel")
@@ -535,15 +558,8 @@ class GradingAutomationUI(QMainWindow):
 
         # Handle button clicks
         def on_ok():
-            assignment_title = title_input.text()
-            Print("assignment_title", assignment_title)
-            self.grader.canvas.download_submission_attachments(
-                assignment_id=self.grader.canvas.get_assignment_by_title(assignment_title),
-                download_dir=self.folder_path.text(),
-            )
-            # Save to state
-            self.state["last_assignment_title"] = assignment_title
-            self.save_state()
+            if ok_callback:
+                ok_callback(input_field.text())
             dialog.close()
 
         def on_cancel():
@@ -553,6 +569,24 @@ class GradingAutomationUI(QMainWindow):
         cancel_button.clicked.connect(on_cancel)
 
         dialog.show()
+
+    def download_folder_click(self):
+        def handle_ok(assignment_title: str):
+            Print("assignment_title", assignment_title)
+            self.grader.canvas.download_submission_attachments(
+                assignment_id=self.grader.canvas.get_assignment_by_title(assignment_title),
+                download_dir=self.folder_path.text(),
+            )
+            # Save to state
+            self.state["last_assignment_title"] = assignment_title
+            self.save_state()
+
+        self.__make_popup(
+            title="Enter Assignment Title",
+            label_text="Assignment Title:",
+            default_value=self.state.get("last_assignment_title", ""),
+            ok_callback=handle_ok,
+        )
 
     def create_pages_management_tab(self):
         """pages management"""
@@ -623,7 +657,7 @@ class GradingAutomationUI(QMainWindow):
         remove_forms_button.setToolTip(
             "This will remove the quizzes/feedback form, post a image of the feedback and post grades"
         )
-        remove_forms_button.clicked.connect(self.remove_forms_quizzes)
+        remove_forms_button.clicked.connect(self.remove_forms_quizzes_wrapper)
 
         button_layout.addWidget(add_forms_button)
         button_layout.addWidget(remove_forms_button)
@@ -826,7 +860,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = GradingAutomationUI()
     window.show()
-    window.logging_level = LogLevel.INFO
+    window.logging_level = LogLevel.DEBUG
     #################################
     # running the log function after print
     original_print = Print
