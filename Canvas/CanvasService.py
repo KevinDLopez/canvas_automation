@@ -8,7 +8,8 @@ import json
 
 from Canvas.schemas import *
 import pprint
-from Logging import Print
+from Logging import Print, set_log_level, LogLevel
+from dotenv import load_dotenv
 
 
 class CanvasAPI:
@@ -125,6 +126,54 @@ class CanvasAPI:
         data = {"submission": {"posted_grade": new_grade}}
         updated_submission = self._make_request("PUT", endpoint, json=data)
         return updated_submission.get("grade", "No grade available")
+
+    def get_submissions(self, assignment_id: int) -> List[SubmissionSchema]:
+        """
+        Retrieve all submissions for a specific assignment.
+
+        Args:
+            assignment_id (int): The ID of the assignment.
+
+        Returns:
+            List[Dict]: A list of submission dictionaries.
+        """
+        params = {"include[]": "attachments"}
+        submissions = self._make_request("GET", f"assignments/{assignment_id}/submissions", params=params)
+        return [SubmissionSchema(**submission) for submission in submissions]
+
+    def download_submission_attachments(self, assignment_id: int, download_dir: Optional[str] = None) -> List[str]:
+        """
+        Download all submission files for a specific assignment.
+
+        Args:
+            assignment_id (int): The ID of the assignment.
+            download_dir (str, optional): Directory to save files. Defaults to current directory.
+
+        Returns:
+            List[str]: List of paths to downloaded files.
+        """
+        download_dir = download_dir or os.getcwd()
+        if not os.path.isdir(download_dir):
+            raise ValueError(f"Invalid download directory: {download_dir}")
+
+        downloaded_files = []
+        for submission in self.get_submissions(assignment_id):
+            if not submission.attachments:
+                Print(f"No attachments found for submission {submission.user_id}", log_type="WARN")
+                continue
+            folder_path = os.path.join(download_dir, str(submission.user_id))
+            os.makedirs(folder_path, exist_ok=True)
+            for attachment in submission.attachments:
+                file_url = attachment["url"]
+                filename = attachment["filename"]
+                filepath = os.path.join(folder_path, f"{filename}")
+                response = requests.get(file_url, headers=self.headers)
+                response.raise_for_status()
+                with open(filepath, "wb") as f:
+                    f.write(response.content)
+                downloaded_files.append(filepath)
+                Print(f"Downloaded {filename} to {filepath}", log_type="INFO")
+        return downloaded_files
 
     def get_assignments(self) -> List[AssignmentSchema]:
         """
@@ -633,14 +682,21 @@ class CanvasAPI:
 
 
 if __name__ == "__main__":
-    api_token = os.getenv("API_TOKEN")
+    set_log_level(LogLevel.DEBUG)
+    if load_dotenv():
+        api_token = os.getenv("API_TOKEN")
+        print("API_TOKEN loaded successfully")
+    else:
+        raise ValueError("API_TOKEN not found in .env file")
+
     course_id = 15319
     canvas = CanvasAPI(course_id, api_token)
-    # assignment = canvas.get_assignments()
-    # for a in assignment:
-    #     Print(
-    #         f"the current assignment is {a.due_at}, with id {a.id}, description {a.description}"
-    #     )
+    assignment = canvas.get_submissions(1192803)  # It should at least not raise an error
+    assignments = canvas.download_submission_attachments(
+        1192803
+    )  # IT should not raise an error, and it should download files in the cwd + /student_id folder
+
+    raise Exception("stop here")
     cur_dir = os.path.dirname(os.path.abspath(__file__))
     image_path = "../histogram.png"
     path = os.path.join(cur_dir, image_path)

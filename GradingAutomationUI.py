@@ -450,7 +450,6 @@ class GradingAutomationUI(QMainWindow):
         self.log_text.setText(new_text)
         self.log_text.setVisible(True)
         QApplication.processEvents()
-        QApplication.processEvents()
         self.log_scroll_area.verticalScrollBar().setValue(self.log_scroll_area.verticalScrollBar().maximum())
 
     def create_project_verification_tab(self):
@@ -469,8 +468,12 @@ class GradingAutomationUI(QMainWindow):
         browse_button = QPushButton("Browse")
         browse_button.clicked.connect(self.browse_folder)
 
+        download_button = QPushButton("Download")
+        download_button.clicked.connect(self.download_folder_click)
+
         folder_layout.addWidget(self.folder_path)
         folder_layout.addWidget(browse_button)
+        folder_layout.addWidget(download_button)
         folder_group.setLayout(folder_layout)
         layout.addWidget(folder_group)
 
@@ -506,6 +509,50 @@ class GradingAutomationUI(QMainWindow):
         verify_group.setLayout(verify_layout)
         layout.addWidget(verify_group)
         return tab
+
+    def download_folder_click(self):
+        # Create a dialog to get the assignment title
+        dialog = QWidget()
+        dialog.setWindowTitle("Enter Assignment Title")
+        dialog_layout = QVBoxLayout()
+
+        # Add input field with default value from state
+        title_input = QLineEdit()
+        if self.state.get("last_assignment_title"):
+            title_input.setText(self.state["last_assignment_title"])
+        dialog_layout.addWidget(QLabel("Assignment Title:"))
+        dialog_layout.addWidget(title_input)
+
+        # Add OK and Cancel buttons
+        button_layout = QHBoxLayout()
+        ok_button = QPushButton("OK")
+        cancel_button = QPushButton("Cancel")
+        button_layout.addWidget(ok_button)
+        button_layout.addWidget(cancel_button)
+        dialog_layout.addLayout(button_layout)
+
+        dialog.setLayout(dialog_layout)
+
+        # Handle button clicks
+        def on_ok():
+            assignment_title = title_input.text()
+            Print("assignment_title", assignment_title)
+            self.grader.canvas.download_submission_attachments(
+                assignment_id=self.grader.canvas.get_assignment_by_title(assignment_title),
+                download_dir=self.folder_path.text(),
+            )
+            # Save to state
+            self.state["last_assignment_title"] = assignment_title
+            self.save_state()
+            dialog.close()
+
+        def on_cancel():
+            dialog.close()
+
+        ok_button.clicked.connect(on_ok)
+        cancel_button.clicked.connect(on_cancel)
+
+        dialog.show()
 
     def create_pages_management_tab(self):
         """pages management"""
@@ -634,14 +681,26 @@ class GradingAutomationUI(QMainWindow):
                 Print(f" ###status = {status}")
                 color = "green" if status == "Done" else "blue" if status == "Quiz and Feedback added" else "gray"
                 self._add_quiz_table_row(
-                    {"LocalPath": path, "PageName": page.title, "Status": status, "StatusColor": color, "FontColor": "white"}
+                    {
+                        "LocalPath": path,
+                        "PageName": page.title,
+                        "Status": status,
+                        "StatusColor": color,
+                        "FontColor": "white",
+                    }
                 )
                 # add this to self.local_projects_info
                 self.local_projects_info[path] = (team, errors, page)
             else:
                 self.log(f"Page {path} is not posted in the module", log_type="INFO")
                 self._add_quiz_table_row(
-                    {"LocalPath": path, "PageName": team.team_name, "Status": "Not Added", "StatusColor": "white", "FontColor": "black"}
+                    {
+                        "LocalPath": path,
+                        "PageName": team.team_name,
+                        "Status": "Not Added",
+                        "StatusColor": "white",
+                        "FontColor": "black",
+                    }
                 )
                 # disable the checkbox
         # check for pages that are not in the module but in the folder
@@ -655,7 +714,7 @@ class GradingAutomationUI(QMainWindow):
                         "PageName": page.title,
                         "Status": "No Local Files",
                         "StatusColor": "red",
-                        "FontColor": "white"
+                        "FontColor": "white",
                     }
                 )
 

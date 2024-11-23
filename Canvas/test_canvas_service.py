@@ -2,9 +2,12 @@ import json
 import os
 import pprint
 import unittest
-from CanvasService import CanvasAPI
+from Canvas.CanvasService import CanvasAPI
 
 import sys
+import shutil
+
+from Logging import Print
 
 # Ensure the Canvas directory is in the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "Canvas")))
@@ -173,6 +176,35 @@ class TestCanvasAPI(unittest.TestCase):
         updated_page = self.canvas.update_page(id=page.page_id, body="This is an updated page")
         self.assertIsNotNone(updated_page, "Page should be updated successfully")
         print("updated_page = ", updated_page)
+
+    def test_get_submissions(self):
+        """Testing get_submissions method"""
+        # Get submissions for a specific assignment
+        submissions = self.canvas.get_submissions(1192803)
+
+        # Assertions
+        self.assertIsNotNone(submissions, "Submissions should not be None")
+        self.assertIsInstance(submissions, list, "Submissions should be a list")
+        print(f"Retrieved {len(submissions)} submissions for assignment {1192803}")
+
+    def test_download_submission_attachments(self):
+        """Testing download_submission_attachments method"""
+        # Download submission attachments
+        downloads = self.canvas.download_submission_attachments(1192803)
+
+        # Assertions
+        self.assertIsNotNone(downloads, "Download path should not be None")
+        for submission_download_path in downloads:
+            self.assertTrue(os.path.exists(submission_download_path), "Submission directory should exist")
+
+        print(f"Downloaded submissions to {downloads}")
+
+        # Cleanup downloaded files
+        if downloads:
+            parent_dir = os.path.dirname(downloads[0])
+            Print("parent_dir = ", parent_dir, log_type="INFO")
+            if os.path.exists(parent_dir):
+                shutil.rmtree(parent_dir)
 
 
 if __name__ == "__main__":

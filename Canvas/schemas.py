@@ -4,6 +4,67 @@ import pytest
 from datetime import datetime, timezone
 
 
+class MediaComment(BaseModel):
+    content_type: str
+    display_name: str
+    media_id: str
+    media_type: str
+    url: HttpUrl
+
+
+class SubmissionComment(BaseModel):
+    id: int
+    author_id: int
+    author_name: str
+    author: Optional[Dict[str, Any]]
+    comment: str
+    created_at: datetime
+    edited_at: datetime
+    media_comment: Optional[MediaComment] = None
+
+
+class SubmissionSchema(BaseModel):
+    class Config:
+        extra = "allow"  # Allow extra fields and can retrieve them without throwing an error
+
+    assignment_id: int
+    assignment: Optional[Dict[str, Any]] = None
+    course: Optional[Dict[str, Any]] = None
+    attempt: Optional[int] = None
+    body: Optional[str] = None
+    grade: Optional[str] = None
+    grade_matches_current_submission: Optional[bool] = None
+    html_url: Optional[HttpUrl] = None
+    preview_url: Optional[HttpUrl] = None
+    score: Optional[float] = None
+    submission_comments: Optional[List[SubmissionComment]] = None
+    submission_type: Optional[
+        Literal[
+            "online_text_entry", "online_url", "online_upload", "online_quiz", "media_recording", "student_annotation"
+        ]
+    ] = None
+    submitted_at: Optional[datetime] = None
+    url: Optional[HttpUrl] = None
+    user_id: int
+    grader_id: Optional[int] = None
+    graded_at: Optional[datetime] = None
+    user: Optional[Dict[str, Any]] = None
+    late: bool = False
+    assignment_visible: bool = True
+    missing: bool = False
+    excused: Optional[bool] = None
+    late_policy_status: Optional[Literal["late", "missing", "extended", "none"]] = None
+    points_deducted: Optional[float] = None
+    seconds_late: Optional[int] = None
+    workflow_state: str
+    extra_attempts: Optional[int] = None
+    anonymous_id: Optional[str] = None
+    posted_at: Optional[datetime] = None
+    read_status: Optional[str] = None
+    redo_request: bool
+    attachments: Optional[List[Dict[str, Any]]] = None
+
+
 class Answer(BaseModel):
     answer_text: str
     answer_weight: int
