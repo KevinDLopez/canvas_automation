@@ -25,7 +25,7 @@ from PyQt6.QtWidgets import (
     QTextEdit,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor, QIcon, QKeySequence, QShortcut
+from PyQt6.QtGui import QColor, QIcon, QKeySequence, QShortcut, QPalette
 from pathlib import Path
 import json
 import sys
@@ -70,6 +70,36 @@ class GradingAutomationUI(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.setStyleSheet(
+            """
+            QPushButton {
+                background-color: #2d89ef;
+                border: none;
+                padding: 5px 10px;
+                color: white;
+                border-radius: 3px;
+            }
+            QPushButton:hover {
+                background-color: #1e5fb4;
+            }
+            QScrollBar:vertical, QScrollBar:horizontal {
+                background: #2b2b2b;
+                width: 12px;
+                margin: 0px;
+            }
+            QScrollBar::handle {
+                background: #606060;
+                border-radius: 6px;
+            }
+            QScrollBar::handle:hover {
+                background: #787878;
+            }
+            QScrollBar::add-line, QScrollBar::sub-line {
+                background: none;
+            }
+        """
+        )
+
         # Set application icon
         icon_path = str(Path(__file__).parent / "assets" / "app_icon.png")
         app_icon = QIcon(icon_path)
@@ -279,7 +309,7 @@ class GradingAutomationUI(QMainWindow):
 
             # Enable text wrapping for the error column
             self.verify_results.setWordWrap(True)
-            self.verify_results.resizeColumnsToContents()
+            # self.verify_results.resizeColumnsToContents()
 
             self.verify_progress.setVisible(False)
         except Exception as e:
