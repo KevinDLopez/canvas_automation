@@ -93,8 +93,36 @@ jobs:
           path: GradingAutomation-${{ matrix.platform-name }}.zip
           if-no-files-found: error
 
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install sphinx sphinx-rtd-theme
+
+      - name: Generate Documentation
+        run: |
+          cd docs
+          make html
+
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sphinx-docs
+          path: docs/_build/html
+          if-no-files-found: error
+
   release:
-    needs: build
+    needs: [build, docs]
     runs-on: ubuntu-latest
     steps:
       - name: Download all artifacts
