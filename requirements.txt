@@ -103,6 +103,7 @@ rsa==4.9
 Send2Trash==1.8.3
 sniffio==1.3.1
 soupsieve==2.6
+sphinx-rtd-theme==3.0.2
 terminado==0.18.1
 tinycss2==1.3.0
 types-python-dateutil==2.9.0.20241003
