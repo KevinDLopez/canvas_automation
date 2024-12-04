@@ -828,22 +828,26 @@ class GradingAutomationUI(QMainWindow):
             self.log(str(e), log_type="ERROR")
 
     def _add_quiz_table_row(self, data: QuizTableRowData) -> None:
-        """
-        Protected method to add a row to the quizzes table.
+        """Add a row to the quizzes table.
 
         Args:
-            data: Dictionary containing the row data with predefined types
+            data: Dictionary containing the row data with predefined types.
+                Must include:
+                - LocalPath (str): Path to the quiz files
+                - PageName (str): Name of the page
+                - Status (str): Current status
+                Optional:
+                - StatusColor (str): Color for status ("red", "green", "gray", "yellow", "white")
+                - FontColor (str): Color for text ("white", "black")
 
         Example:
-            ```python
-            self._add_quiz_table_row({
-                "LocalPath": "/path/to/quiz",
-                "PageName": "Team 1 Quiz",
-                "Status": "Not Added",
-                "StatusColor": "red"  # Optional: "red", "green", "gray", "yellow", "white"
-                "FontColor": "white"
-            })
-            ```
+            >>> self._add_quiz_table_row({
+            ...     "LocalPath": "/path/to/quiz",
+            ...     "PageName": "Team 1 Quiz",
+            ...     "Status": "Not Added",
+            ...     "StatusColor": "red",
+            ...     "FontColor": "white"
+            ... })
         """
         row = self.quizzes_table.rowCount()
         self.quizzes_table.insertRow(row)
