@@ -292,9 +292,8 @@ class GradingAutomationUI(QMainWindow):
         self.log(f"Found {len(folders_with_team)} folders with teams", log_type="INFO")
 
         # Get failed projects (those with errors)
-        self.local_projects_info: dict[str, tuple[TeamInfo | None, List[str], PageSchema | None]] = {
-            folder_path: (team, errors, None)
-            for folder_path, team, errors in self.grader.verify_all_projects(folders_with_team)
+        self.local_projects_info: dict[str, tuple[List[str], PageSchema | None]] = {
+            folder_path: (errors, None) for folder_path, errors in self.grader.verify_all_projects(folders_with_team)
         }  # Dict[dict[str, tuple[TeamInfo | None, List[str]]]. PATH, (team, errors)
 
         # Update results table with all folders
@@ -302,7 +301,7 @@ class GradingAutomationUI(QMainWindow):
         for i, folder_path in enumerate(folders_with_team):
 
             folder_item = QTableWidgetItem(folder_path)
-            errors = self.local_projects_info[folder_path][1]
+            errors = self.local_projects_info[folder_path][0]
             status = "Failed" if errors else "Passed"
             # add the projects that did not fail to self.pages_to_create
             if not errors:
@@ -394,7 +393,7 @@ class GradingAutomationUI(QMainWindow):
             # Add forms and quizzes to each page
             for folder_path, row_index in form_quizzes_to_create:
                 # Get page schema
-                page = self.local_projects_info[folder_path][2]
+                page = self.local_projects_info[folder_path][1]
                 if not page:
                     raise Exception(f"Page {page} not found in local projects")
                 Print(f"\n\n1**page = {pprint.pformat(page.model_dump())}\n\n")
@@ -458,7 +457,8 @@ class GradingAutomationUI(QMainWindow):
                     local_paths_selected.append((local_path_item.text(), i))
 
         for local_path, row_index in local_paths_selected:
-            team, errors, page = self.local_projects_info[local_path]
+            errors, page = self.local_projects_info[local_path]
+            team = self.grader.convert_student_record_sheets_to_team_info(self.grader.student_records, local_path)
             if not team:
                 self.log("### not team -  HEY YOU NEED TO CREATE THE QUIZ FIRST ####", log_type="WARN")
                 continue
@@ -761,15 +761,17 @@ class GradingAutomationUI(QMainWindow):
         # From all the pages in the module folder
         folder = self.folder_path.text()
         folders_with_team = self.grader.get_folders_with_team(folder)
-        self.local_projects_info: dict[str, tuple[TeamInfo | None, List[str], PageSchema | None]] = {
-            folder_path: (team, errors, None)
-            for folder_path, team, errors in self.grader.verify_all_projects(folders_with_team)
+        self.local_projects_info: dict[str, tuple[List[str], PageSchema | None]] = {
+            folder_path: (errors, None) for folder_path, errors in self.grader.verify_all_projects(folders_with_team)
         }  # Dict[dict[str, tuple[TeamInfo | None, List[str]]]. PATH, (team, errors)
 
         pages_posted_in_module = self.grader.get_pages_posted_in_module()  # List[PageSchema]
 
-        for path, (team, errors, page) in self.local_projects_info.items():
+        for path, (errors, page) in self.local_projects_info.items():
             # Print(f"path: {path}, team: {team}, errors: {errors}")
+            team = self.grader.convert_student_record_sheets_to_team_info(
+                self.grader.student_records, path
+            )  # TODO: Test this
             if not team:
                 self.log("### not team - ? ####", log_type="WARN")
                 continue
@@ -788,7 +790,7 @@ class GradingAutomationUI(QMainWindow):
                     }
                 )
                 # add this to self.local_projects_info
-                self.local_projects_info[path] = (team, errors, page)
+                self.local_projects_info[path] = (errors, page)
             else:
                 self.log(f"Page {path} is not posted in the module", log_type="INFO")
                 self._add_quiz_table_row(
@@ -802,7 +804,9 @@ class GradingAutomationUI(QMainWindow):
                 )
                 # disable the checkbox
         # check for pages that are not in the module but in the folder
-        local_team_names = {team.team_name for _, (team, _, _) in self.local_projects_info.items() if team}
+        # local_team_names = {team.team_name for _, (team, _, _) in self.local_projects_info.items() if team}
+        # get local team names from spreadsheet self.grader.student_records ["File_Path"]
+        local_team_names = {record["Team_Name"] for record in self.grader.student_records}
         # Find pages that exist in Canvas but not locally
         for page in pages_posted_in_module:
             if page.title not in local_team_names:

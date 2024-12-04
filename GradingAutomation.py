@@ -277,7 +277,7 @@ class Grader:
         # Return list of created Canvas pages
         return pages
 
-    def verify_project_files(self, folder_path: str) -> Tuple[str, Union[TeamInfo, None], List[str]]:
+    def verify_project_files(self, folder_path: str) -> Tuple[str, List[str]]:
         """Verify all required project files exist and return the absolute folder path, team info, and any errors
 
         Args:
@@ -287,7 +287,7 @@ class Grader:
             Tuple[str, TeamInfo, List[str]]: Tuple containing (absolute_path, team_info, list_of_errors)
         """
         errors: List[str] = []
-        team_info: Union[TeamInfo, None] = None
+        # team_info: Union[TeamInfo, None] = None
 
         # Get absolute folder path
         cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -296,14 +296,14 @@ class Grader:
 
         if not os.path.exists(abs_folder_path):
             errors.append("Folder path does not exist")
-            return abs_folder_path, None, errors
+            return abs_folder_path, errors
 
         # Check required files exist
         required_files = {
             "presentation.pdf": "Presentation file is missing",
             "paper.pdf": "Paper file is missing",
             "quiz.json": "Quiz file is missing",
-            "team_info.yml": "Team info file is missing",
+            # "team_info.yml": "Team info file is missing",
         }
 
         for file, error_msg in required_files.items():
@@ -311,21 +311,21 @@ class Grader:
             if not os.path.exists(file_path):
                 errors.append(error_msg)
 
-        # Try to load and verify team info if yml exists
-        team_info_path = os.path.join(abs_folder_path, "team_info.yml")
-        if os.path.exists(team_info_path):
-            try:
-                team_info = self.__read_team_info_file(team_info_path)
-            except ValidationError as e:
-                error_details = []
-                for err in e.errors():
-                    field_path = " -> ".join(str(x) for x in err["loc"])
-                    error_details.append(f"\tField '{field_path}': {err['msg']}")
-                errors.append(f"Invalid team_info.yml:\n" + "\n".join(error_details))
-            except yaml.YAMLError as e:
-                errors.append(f"Invalid YAML syntax in team_info.yml: {str(e)}")
-            except Exception as e:
-                errors.append(f"Unexpected error reading team_info.yml: {str(e)}")
+        # # Try to load and verify team info if yml exists
+        # team_info_path = os.path.join(abs_folder_path, "team_info.yml")
+        # if os.path.exists(team_info_path):
+        #     try:
+        #         team_info = self.__read_team_info_file(team_info_path)
+        #     except ValidationError as e:
+        #         error_details = []
+        #         for err in e.errors():
+        #             field_path = " -> ".join(str(x) for x in err["loc"])
+        #             error_details.append(f"\tField '{field_path}': {err['msg']}")
+        #         errors.append(f"Invalid team_info.yml:\n" + "\n".join(error_details))
+        #     except yaml.YAMLError as e:
+        #         errors.append(f"Invalid YAML syntax in team_info.yml: {str(e)}")
+        #     except Exception as e:
+        #         errors.append(f"Unexpected error reading team_info.yml: {str(e)}")
 
         # Try to load and verify quiz if json exists
         quiz_path = os.path.join(abs_folder_path, "quiz.json")
@@ -348,17 +348,17 @@ class Grader:
             except Exception as e:
                 errors.append(f"Unexpected error reading quiz.json: {str(e)}")
 
-        return abs_folder_path, team_info, errors
+        return abs_folder_path, errors
 
-    def verify_all_projects(self, folders: List[str]) -> List[Tuple[str, Union[TeamInfo, None], List[str]]]:
+    def verify_all_projects(self, folders: List[str]) -> List[Tuple[str, List[str]]]:
         """Verify all projects in the given folders and return verification results for all folders.
 
         Args:
             folders (List[str]): List of folder paths to verify
 
         Returns:
-            List[Tuple[str, Union[TeamInfo, None], List[str]]]: List of tuples containing
-                (folder_path, team_info, list_of_errors) for all folders
+            List[Tuple[str,  List[str]]]: List of tuples containing
+                (folder_path, list_of_errors) for all folders
         """
         verification_results = []
 
@@ -395,12 +395,11 @@ class Grader:
             >>> page = grader.create_canvas_page_based_on_folder("path/to/team1_folder")
         """
         # Verify project files and get absolute path
-        folder_path, team_info, errors = self.verify_project_files(folder_path)
+        folder_path, errors = self.verify_project_files(folder_path)
         if errors:
             raise ValueError(f"Project verification failed:\n" + "\n".join(f"- {error}" for error in errors))
 
-        if team_info is None:
-            raise ValueError("Team info is None")
+        team_info = self.convert_student_record_sheets_to_team_info(self.student_records, folder_path)
 
         # Upload the presentation and paper
         presentation_url = self.canvas.upload_file(folder_path + "/presentation.pdf")
