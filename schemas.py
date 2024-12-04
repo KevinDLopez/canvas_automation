@@ -2,6 +2,7 @@ from pydantic import BaseModel, EmailStr, Field, HttpUrl, ValidationError, field
 from typing import Any, Dict, List, Literal, Optional
 import pytest
 from datetime import datetime, timezone
+from typing import TypedDict, Optional, List
 
 
 ############### TEAM FORMS ###############
@@ -20,7 +21,7 @@ class TeamInfo(BaseModel):
     topic: str
     team_members: List[TeamMember]
     github_repo: str
-    presentation_time: PresentationTime
+    # presentation_time: PresentationTime
 
 
 ######## CLASS INFO ########
@@ -29,3 +30,19 @@ class TeamInfo(BaseModel):
 class ClassInfoSchema(BaseModel):
     course_id: int
     presentation_module_title: str
+
+
+class StudentRecord(TypedDict, total=True):
+    Canvas_ID: str | Literal[""]
+    Canvas_Team_Page_State: Literal["", "Created", "Quiz and Feedback added", "Done"]
+    Email: str
+    Google_Form_ID: str | Literal[""]
+    Names: str
+    Student_ID: str
+    Team_Name: str
+    File_Path: str
+    Topic: str
+    Github_Repo: str
+
+
+StudentRecords = List[StudentRecord]

@@ -21,17 +21,18 @@ def test_open_spreadsheet_by_id(google_services, test_spreadsheet_id):
     assert spreadsheet.id == test_spreadsheet_id
 
 
-def test_read_worksheet(google_services, test_spreadsheet_id):
+def test_read_worksheet(google_services: GoogleServicesManager, test_spreadsheet_id: str):
     """Test reading worksheet data"""
     spreadsheet = google_services.open_spreadsheet_by_id(test_spreadsheet_id)
-    worksheet_data = google_services.read_worksheet(spreadsheet, "Sheet1")
+    worksheet_data = google_services.read_worksheet(spreadsheet.get_worksheet(1))
     assert isinstance(worksheet_data, list)
     # Verify the worksheet has the expected structure
     if worksheet_data:
         assert isinstance(worksheet_data[0], dict)
 
 
-def test_update_worksheet_from_records(google_services, test_spreadsheet_id):
+@pytest.mark.skip(reason="This test will erase all data in the worksheet")
+def test_update_worksheet_from_records(google_services: GoogleServicesManager, test_spreadsheet_id: str):
     """Test updating worksheet with new records"""
     test_records = [
         {
@@ -44,34 +45,33 @@ def test_update_worksheet_from_records(google_services, test_spreadsheet_id):
     ]
 
     # Update the worksheet
-    google_services.update_worksheet_from_records(test_spreadsheet_id, "Sheet1", test_records, append_only=False)
-
-    # Verify the update
     spreadsheet = google_services.open_spreadsheet_by_id(test_spreadsheet_id)
-    updated_data = google_services.read_worksheet(spreadsheet, "Sheet1")
+    google_services.update_worksheet_from_records(spreadsheet.get_worksheet(1), test_records, append_only=False)
+
+    updated_data = google_services.read_worksheet(spreadsheet.get_worksheet(1))
     assert len(updated_data) == 1
-    assert updated_data[0]["Student Name"] == "Test Student"
-    assert updated_data[0]["Team Name"] == "Test Team"
+    assert updated_data[0]["Names"] == "Test Student"
+    assert updated_data[0]["Team_Name"] == "Test Team"
 
 
-def test_append_records(google_services, test_spreadsheet_id):
+def test_append_records(google_services: GoogleServicesManager, test_spreadsheet_id: str):
     """Test appending records to worksheet"""
     append_record = [
         {
-            "Student Name": "Append Student",
-            "Team Name": "Append Team",
-            "Student Email": "append@student.csulb.edu",
-            "ID": 1000,
-            "FormID": "append123",
+            "Team_Name": "Append Team",
+            "Names": "Append Student",
+            "Email": "append@student.csulb.edu",
+            "Student_ID": 1000,
+            "Google_Form_ID": "append123",
         }
     ]
+    spreadsheet = google_services.open_spreadsheet_by_id(test_spreadsheet_id)
 
     # Append the record
-    google_services.update_worksheet_from_records(test_spreadsheet_id, "Sheet1", append_record, append_only=True)
+    google_services.update_worksheet_from_records(spreadsheet.get_worksheet(1), append_record, append_only=True)
 
     # Verify the append
-    spreadsheet = google_services.open_spreadsheet_by_id(test_spreadsheet_id)
-    updated_data = google_services.read_worksheet(spreadsheet, "Sheet1")
+    updated_data = google_services.read_worksheet(spreadsheet.get_worksheet(1))
     assert len(updated_data) > 1
     # The appended record should be the last one
-    assert any(record["Student Name"] == "Append Student" for record in updated_data)
+    assert any(record["Names"] == "Append Student" for record in updated_data)

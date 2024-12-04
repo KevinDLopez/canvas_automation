@@ -30,6 +30,7 @@ from pathlib import Path
 import json
 import sys
 from Canvas.schemas import PageSchema
+from GoogleServices.GoogleServices import get_id_from_url
 from GoogleServices.schemas import Form
 from GradingAutomation import Grader
 from Logging import Print
@@ -244,76 +245,106 @@ class GradingAutomationUI(QMainWindow):
             self.folder_path.setText(folder)
 
     def verify_projects(self):
-        try:
-            folder = self.folder_path.text()
-            self.log(f"Starting project verification in folder: {folder}", "INFO")
-            folders_with_team = self.grader.get_folders_with_team(folder)
-            self.log(f"Found {len(folders_with_team)} folders with teams", "INFO")
+        """Now it should verify the spreadsheet, make sure that the emails, and student ids are correct"""
+        Print("Verifying projects")
 
-            # Setup progress bar
-            self.verify_progress.setMaximum(len(folders_with_team))
-            self.verify_progress.setValue(0)
-            self.verify_progress.setVisible(True)
+        # get the worksheet id from the state
+        def handle_ok(worksheet_url: str):
 
-            # Get failed projects (those with errors)
-            self.local_projects_info: dict[str, tuple[TeamInfo | None, List[str], PageSchema | None]] = {
-                folder_path: (team, errors, None)
-                for folder_path, team, errors in self.grader.verify_all_projects(folders_with_team)
-            }  # Dict[dict[str, tuple[TeamInfo | None, List[str]]]. PATH, (team, errors)
+            worksheet_id = get_id_from_url(worksheet_url)
+            self.grader.set_worksheet(worksheet_id)
+            self.grader.read_worksheet()
+            Print(f"Worksheet ID set to {worksheet_id}", "INFO")
+            # Continue with the rest of verify_projects
+            self._continue_verify_projects()
 
-            # Update results table with all folders
-            self.verify_results.setRowCount(len(folders_with_team))
-            for i, folder_path in enumerate(folders_with_team):
-                self.verify_progress.setValue(i + 1)
+            self.state["worksheet_url"] = worksheet_url
+            self.save_state()
 
-                folder_item = QTableWidgetItem(folder_path)
-                errors = self.local_projects_info[folder_path][1]
-                status = "Failed" if errors else "Passed"
-                # add the projects that did not fail to self.pages_to_create
-                if not errors:
-                    Print(f"Adding {folder_path} to pages_to_create")
-                    # Check if the item has not been added yet
-                    if not any(
-                        folder_item_.text() == folder_path
-                        for folder_item_ in self.pages_table.findItems(folder_path, Qt.MatchFlag.MatchExactly)
-                    ):
-                        self.pages_table.insertRow(i)
-                        # Add checkbox in column 0
-                        checkbox = QTableWidgetItem()
-                        checkbox.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
-                        checkbox.setCheckState(Qt.CheckState.Checked)
-                        self.pages_table.setItem(i, 0, checkbox)
-                        # Move folder path to column 1
-                        self.pages_table.setItem(i, 1, QTableWidgetItem(folder_path))
-                        # Status in column 2
-                        status_item = QTableWidgetItem("**")
-                        status_item.setBackground(self._COLOR_MAP["green"])
-                        status_item.setForeground(self._COLOR_MAP["white"])
-                        self.pages_table.setItem(i, 2, status_item)
-                status_item = QTableWidgetItem(status)
-                error_item = QTableWidgetItem("\n".join(errors) if errors else "")
+        worksheet_url_state: str = self.state.get("worksheet_url", "")
+        # Store dialog as instance variable
+        self.__make_popup(
+            title="Enter Worksheet URL",
+            label_text="Worksheet URL:",
+            default_value=worksheet_url_state,
+            ok_callback=handle_ok,
+            initial_size=(1000, 150),
+        )
 
-                # Make error text wrap and expand row height as needed
-                error_item.setTextAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+    def _continue_verify_projects(self):
+        """Continues the verification process after worksheet ID is entered"""
+        folder = self.folder_path.text()
+        self.log(f"Starting project verification in folder: {folder}", "INFO")
+        # folders_with_team = self.grader.get_folders_with_team(folder)
+        folders_with_team = []
+        print(f"student_records = {self.grader.student_records}")
+        seen_path = set()
+        for record in self.grader.student_records:
+            path = record["File_Path"]
+            if path in seen_path:
+                continue
+            seen_path.add(path)
+            if not self.grader.is_a_project_folder(path):
+                print("warnning ")
+                Print(f"**** Folder {path} is not a project folder", log_type="WARN")
+            else:
+                folders_with_team.append(path)
+        self.log(f"Found {len(folders_with_team)} folders with teams", log_type="INFO")
 
-                # Set background colors
-                status_item.setBackground(self._COLOR_MAP["red"] if errors else self._COLOR_MAP["green"])
-                status_item.setForeground(self._COLOR_MAP["white"])
+        # Get failed projects (those with errors)
+        self.local_projects_info: dict[str, tuple[TeamInfo | None, List[str], PageSchema | None]] = {
+            folder_path: (team, errors, None)
+            for folder_path, team, errors in self.grader.verify_all_projects(folders_with_team)
+        }  # Dict[dict[str, tuple[TeamInfo | None, List[str]]]. PATH, (team, errors)
 
-                self.verify_results.setItem(i, 0, folder_item)
-                self.verify_results.setItem(i, 1, status_item)
-                self.verify_results.setItem(i, 2, error_item)
+        # Update results table with all folders
+        self.verify_results.setRowCount(len(folders_with_team))
+        for i, folder_path in enumerate(folders_with_team):
 
-                # Adjust row height to fit content
-                self.verify_results.resizeRowToContents(i)
+            folder_item = QTableWidgetItem(folder_path)
+            errors = self.local_projects_info[folder_path][1]
+            status = "Failed" if errors else "Passed"
+            # add the projects that did not fail to self.pages_to_create
+            if not errors:
+                Print(f"Adding {folder_path} to pages_to_create")
+                # Check if the item has not been added yet
+                if not any(
+                    folder_item_.text() == folder_path
+                    for folder_item_ in self.pages_table.findItems(folder_path, Qt.MatchFlag.MatchExactly)
+                ):
+                    self.pages_table.insertRow(i)
+                    # Add checkbox in column 0
+                    checkbox = QTableWidgetItem()
+                    checkbox.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+                    checkbox.setCheckState(Qt.CheckState.Checked)
+                    self.pages_table.setItem(i, 0, checkbox)
+                    # Move folder path to column 1
+                    self.pages_table.setItem(i, 1, QTableWidgetItem(folder_path))
+                    # Status in column 2
+                    status_item = QTableWidgetItem("**")
+                    status_item.setBackground(self._COLOR_MAP["green"])
+                    status_item.setForeground(self._COLOR_MAP["white"])
+                    self.pages_table.setItem(i, 2, status_item)
+            status_item = QTableWidgetItem(status)
+            error_item = QTableWidgetItem("\n".join(errors) if errors else "")
 
-            # Enable text wrapping for the error column
-            self.verify_results.setWordWrap(True)
-            # self.verify_results.resizeColumnsToContents()
+            # Make error text wrap and expand row height as needed
+            error_item.setTextAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
-            self.verify_progress.setVisible(False)
-        except Exception as e:
-            self.log(str(e), log_type="ERROR")
+            # Set background colors
+            status_item.setBackground(self._COLOR_MAP["red"] if errors else self._COLOR_MAP["green"])
+            status_item.setForeground(self._COLOR_MAP["white"])
+
+            self.verify_results.setItem(i, 0, folder_item)
+            self.verify_results.setItem(i, 1, status_item)
+            self.verify_results.setItem(i, 2, error_item)
+
+            # Adjust row height to fit content
+            self.verify_results.resizeRowToContents(i)
+
+        # Enable text wrapping for the error column
+        self.verify_results.setWordWrap(True)
+        # self.verify_results.resizeColumnsToContents()
 
     def create_pages(self):
         try:
@@ -528,9 +559,6 @@ class GradingAutomationUI(QMainWindow):
         verify_button = QPushButton("Verify Selected Projects")
         verify_button.clicked.connect(self.verify_projects)
 
-        self.verify_progress = QProgressBar()
-        self.verify_progress.setVisible(False)
-
         self.verify_results = QTableWidget()
         self.verify_results.setColumnCount(3)  # Changed from 2 to 3
         self.verify_results.setHorizontalHeaderLabels(["Folder", "Status", "Errors"])
@@ -548,14 +576,18 @@ class GradingAutomationUI(QMainWindow):
         self.verify_results.setColumnWidth(2, 150)  # Minimum width for Errors column
 
         verify_layout.addWidget(verify_button)
-        verify_layout.addWidget(self.verify_progress)
         verify_layout.addWidget(self.verify_results)
         verify_group.setLayout(verify_layout)
         layout.addWidget(verify_group)
         return tab
 
     def __make_popup(
-        self, title: str, label_text: str, default_value: str = "", ok_callback: Optional[Callable[[str], None]] = None
+        self,
+        title: str,
+        label_text: str,
+        default_value: str = "",
+        ok_callback: Optional[Callable[[str], None]] = None,
+        initial_size=(400, 150),
     ):
         """Create a reusable popup dialog with input field and OK/Cancel buttons.
 
@@ -565,9 +597,11 @@ class GradingAutomationUI(QMainWindow):
             default_value: Optional default value for input field
             ok_callback: Callback function to execute when OK is clicked, receives input text as parameter
         """
+        Print(f"Creating popup with title: {title}, label_text: {label_text}, default_value: {default_value}")
         dialog = QWidget()
         dialog.setWindowTitle(title)
         dialog_layout = QVBoxLayout()
+        dialog.resize(*initial_size)  # Set initial size for popup
 
         # Add input field
         input_field = QLineEdit()

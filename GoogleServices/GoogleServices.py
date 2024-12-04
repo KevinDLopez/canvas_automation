@@ -35,6 +35,28 @@ client_secrets_path = os.path.join(base_path, "client_secrets.json")
 token_path = os.path.join(base_path, "token.json")
 
 
+def get_id_from_url(url: str) -> str:
+    """Extract the spreadsheet ID from a Google Sheets URL.
+
+    Args:
+        url (str): Google Sheets URL
+
+    Returns:
+        str: Spreadsheet ID
+
+    Example:
+        >>> url = "https://docs.google.com/spreadsheets/d/1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ/edit?gid=407629335"
+        >>> get_id_from_url(url)
+        '1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ'
+    """
+    # Split on /d/ and take the second part
+    parts = url.split("/d/")
+
+    # Split on first / after the ID and take the first part
+    id_part = parts[1].split("/")[0]
+    return id_part
+
+
 class GoogleServicesManager:
     """A manager class for interacting with various Google services including Forms, Sheets and Drive.
 
@@ -74,18 +96,16 @@ class GoogleServicesManager:
         """
         return self.gspread_client.open(spreadsheet_name)
 
-    def read_worksheet(self, spreadsheet: Spreadsheet, worksheet_name: str):
+    def read_worksheet(self, worksheet: Worksheet):
         """
         Read all values from a worksheet
 
         Args:
-            spreadsheet (gspread.Spreadsheet): Spreadsheet object
-            worksheet_name (str): Name of the worksheet
+            worksheet (gspread.Worksheet): Worksheet object to read from
 
         Returns:
             list: List of rows containing worksheet data
         """
-        worksheet = spreadsheet.worksheet(worksheet_name)
         return worksheet.get_all_records()
 
     def get_spreadsheets(self):
@@ -377,45 +397,26 @@ class GoogleServicesManager:
         response.raise_for_status()
         return response.json()
 
-    def append_rows(self, spreadsheet, worksheet_name, rows):
-        """
-        Append rows to the end of a worksheet
-
-        Args:
-            spreadsheet (gspread.Spreadsheet): Spreadsheet object
-            worksheet_name (str): Name of the worksheet
-            rows (list): List of rows to append
-        """
-        worksheet = spreadsheet.worksheet(worksheet_name)
-        worksheet.append_rows(rows)
-
-    def update_worksheet(
-        self, spreadsheet: Spreadsheet, worksheet_name: str, data: list, range_name: Optional[str] = None
-    ):
+    def update_worksheet(self, worksheet: Worksheet, data: list, range_name: Optional[str] = None):
         """
         Update values in a worksheet
 
         Args:
-            spreadsheet (gspread.Spreadsheet): Spreadsheet object
-            worksheet_name (str): Name of the worksheet
+            worksheet (gspread.Worksheet): Worksheet object to update
             data (list): List of rows to update
             range_name (str, optional): A1 notation range to update. If None, updates from A1
         """
-        worksheet = spreadsheet.worksheet(worksheet_name)
         if range_name:
             worksheet.update(range_name=range_name, values=data)
         else:
             worksheet.update(values=data)
 
-    def update_worksheet_from_records(
-        self, spreadsheet_id: str, worksheet_name: str, records: list[dict], append_only: bool = False
-    ):
+    def update_worksheet_from_records(self, worksheet: Worksheet, records: list[dict], append_only: bool = False):
         """
         Update or append records to a worksheet, clearing existing content when not appending
 
         Args:
-            spreadsheet_id (str): The ID of the spreadsheet
-            worksheet_name (str): Name of the worksheet
+            worksheet (gspread.Worksheet): The worksheet to update
             records (list[dict]): List of dictionary records to update/append
             append_only (bool): If True, only appends new records. If False, clears and rewrites worksheet
 
@@ -433,18 +434,14 @@ class GoogleServicesManager:
         for record in records:
             rows.append([record[key] for key in headers])
 
-        # Open spreadsheet
-        spreadsheet = self.open_spreadsheet_by_id(spreadsheet_id)
-        worksheet = spreadsheet.worksheet(worksheet_name)
-
         if not append_only:
             # Clear the existing content before updating
             worksheet.clear()
 
         if append_only:
-            self.append_rows(spreadsheet, worksheet_name, rows)
+            worksheet.append_rows(rows)
         else:
-            self.update_worksheet(spreadsheet, worksheet_name, rows)
+            worksheet.update(values=rows)
 
 
 if __name__ == "__main__":
@@ -452,17 +449,5 @@ if __name__ == "__main__":
     manager = GoogleServicesManager()
 
     spreadsheet = manager.open_spreadsheet_by_id("1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ")
-    worksheet = manager.read_worksheet(spreadsheet, "Sheet1")
-    worksheet = [
-        {
-            "STudent name ": "asdf",
-            "Team Name": "Team 234",
-            "Student Email ": "1@csulb.edu",
-            "ID ": 11,
-            "FormID": "11",
-        }
-    ]
-    manager.update_worksheet_from_records(
-        "1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ", "Sheet1", worksheet, append_only=False
-    )
-    Print(pprint.pformat(worksheet))
+    worksheet = spreadsheet.get_worksheet(1)
+    worksheet_records = manager.read_worksheet(worksheet)

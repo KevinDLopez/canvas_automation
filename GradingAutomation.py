@@ -11,9 +11,11 @@ from GoogleServices.GoogleServices import GoogleServicesManager
 from Logging import Print
 from schemas import *
 import json
+from gspread.worksheet import Worksheet
 
 
 def read_json_file(file_path: str) -> Dict[str, Any]:
+    """Read a JSON file and return its contents as a dictionary"""
     assert file_path.endswith(".json"), "File must be a JSON file"
     assert os.path.exists(file_path), "File does not exist"
     with open(file_path, "r") as file:
@@ -22,6 +24,7 @@ def read_json_file(file_path: str) -> Dict[str, Any]:
 
 
 def read_yml_file(file_path: str) -> Dict[str, Any]:
+    """Read a YAML file and return its contents as a dictionary"""
     assert file_path.endswith(".yml"), "File must be a YAML file"
     assert os.path.exists(file_path), "File does not exist"
     with open(file_path, "r") as file:
@@ -101,12 +104,59 @@ class Grader:
         self.canvas = CanvasAPI(course_id=course_id, api_token=api_token)
         self.google = GoogleServicesManager()
         self.module_id_with_presentations = self.canvas.get_module_by_title(module_title)
+        self.student_records: StudentRecords = []
+        self.worksheet: Worksheet
+
+    def set_worksheet(self, sheet_id: str, worksheet_index: int = 1):
+        self.worksheet = self.google.open_spreadsheet_by_id(sheet_id).get_worksheet(worksheet_index)
+
+    def read_worksheet(self) -> StudentRecords:
+        self.student_records: StudentRecords = []
+        worksheet_records = self.google.read_worksheet(self.worksheet)
+        for record in worksheet_records:
+            self.student_records.append(StudentRecord(**record))  # type: ignore
+        return self.student_records
+
+    def convert_student_record_sheets_to_team_info(self, student_records: StudentRecords, File_Path: str) -> TeamInfo:
+        # get the team that hast the project_path
+        team_name = os.path.basename(File_Path)
+        team_record = [record for record in student_records if record["File_Path"] == File_Path]
+        if not team_record:
+            raise ValueError(f"Team info not found for team: {File_Path}")
+
+        team_name = team_record[0]["Team_Name"]
+        topic = team_record[0]["Topic"]
+        team_members: List[TeamMember] = []  # name and email
+        for record in team_record:
+            team_members.append(TeamMember(name=record["Names"], email=record["Email"]))
+        github_repo = team_record[0]["Github_Repo"]
+
+        return TeamInfo(
+            team_name=team_name,
+            topic=topic,
+            team_members=team_members,
+            github_repo=github_repo,
+        )
+
+    def convert_team_info_to_student_record(self, team_info: TeamInfo, File_Path: str) -> StudentRecord:
+        """TODO: Don't know if is necessary - Not fully implemented"""
+        return StudentRecord(
+            File_Path=File_Path, Team_Name=team_info.team_name, Topic=team_info.topic, **team_info.model_dump()
+        )
+
+    def is_a_project_folder(self, path: str) -> bool:
+        return (
+            os.path.exists(path)
+            and os.path.isdir(path)
+            and "paper.pdf" in os.listdir(path)
+            and ("presentation.pdf" in os.listdir(path) or "presentation.pptx" in os.listdir(path))
+        )
 
     def get_folders_with_team(self, path: str) -> List[str]:
         # Get the folders that contain the team_info.yml file
         folders = []
         for root, dirs, files in os.walk(path):
-            if "team_info.yml" in files:
+            if self.is_a_project_folder(root):
                 folders.append(root)
         # Print("folders = ", folders)
         return folders
@@ -358,18 +408,6 @@ class Grader:
 
         # Create a Canvas page
         team_members_html = "".join([f"<li>{member.name} - {member.email} </li>" for member in team_info.team_members])
-        presentation_start_date = team_info.presentation_time.start.strftime("%b %d")
-        presentation_start_time = team_info.presentation_time.start.strftime("%I:%M%p")
-        presentation_end_time = team_info.presentation_time.end.strftime("%I:%M%p")
-        # Add the appropriate suffix to the day
-        day = team_info.presentation_time.start.strftime("%d")
-        day_int = int(day)
-        if 4 <= day_int <= 20 or 24 <= day_int <= 30:
-            suffix = "th"
-        else:
-            suffix = ["st", "nd", "rd"][day_int % 10 - 1]
-
-        presentation_start_date = presentation_start_date.replace(f" {day}", f" {day_int}{suffix}")
 
         body = f"""
                 <h2 style="color: #2c3e50;">Team Information</h2>
@@ -380,7 +418,6 @@ class Grader:
                     {team_members_html}
                 </ul>
                 <p><strong>Github Repo:</strong> <a href="{team_info.github_repo}" style="color: #3498db;">{team_info.github_repo}</a></p>
-                <p><strong>Presentation Time:</strong> {presentation_start_date} at {presentation_start_time} - {presentation_end_time}</p>
                 <p><strong>Presentation:</strong> <a href="{presentation_url}" style="color: #3498db;">presentation</a></p>
                 <p><strong>Paper:</strong> <a href="{paper_url}" style="color: #3498db;">paper</a></p>
         """
@@ -482,63 +519,14 @@ class Grader:
 
 
 if __name__ == "__main__":
-    # UI Requirements:
-
-    # 0. Persistent State
-    # Save all the information of the UI and the state in a file (state.json)
-    #         - Checkboxes, textboxes, etc
-    # save the file every time there is a change in the state
-
-    # 1. Course Selection Screen
-    #    -  Screen Only shows whenever a course ID, canvas API token is not saved ( it is saved in state.json )
-    #    - Input field for course ID, Canvas API Token ( if not saved )
-    #    - "Connect" button to initialize grader ( if not saved )
-    #    - If connected has been done before, prefill the course ID ( saved in state.json )
-
-    # 2. Project Verification Panel
-    #    - File browser to select root folder containing team projects
-    #    - "Verify selected Projects" button
-    #    - Results display showing:
-    #      * Progress bar during verification
-    #      * Table of verification results with folder paths and errors
-    #      * Color coding for pass/fail status
-
-    # After verification
-    #   It shows all the pages  get_pages_to_create
-    #    - Checkboxes to select which pages to create
-    #    - Status indicators for page creation progress
-    # After creating pages
-    #    - Table of all pages with toggles for:
-    #      * Adding feedback forms and quizzes
-    # After adding feedback forms and quizzes
-    #      * Removing feedback forms and quizzes ( remove_feedback_url_and_quiz) , then grading automation ( grade_presentation_project)
-
     # Sample Implementation
     grader = Grader(course_id=15319, module_title="Fall 2024 - Presentation")
-    folders = grader.get_folders_with_team(".")
-
-    # Project Verification Step
-    verification_results = grader.verify_all_projects(folders)
-    #     if verification_results:
-    #         # UI would display this in a formatted table rather than console
-    #         Print("\nProject Verification Failures:")
-    #         for folder, errors in verification_results:
-    #             Print(f"\nFolder: {folder}")
-    #             for error in errors:
-    #                 Print(f"  - {error}")
-    #         raise SystemExit("Please fix the above errors before continuing.")
-    #
-    # Page Creation Step
-    # UI would show this as a table with checkboxes
-    pages_to_create = grader.get_pages_to_create(folders)
-    pages = grader.create_multiple_canvas_pages_based_on_folder(pages_to_create)
-
-    # Forms & Quiz Management
-    # UI would show a table with toggles for each action
-    for page, folder_path in zip(pages, pages_to_create):
-        grader.add_google_forms_and_create_quiz(page, folder_path=folder_path)
-
-    # Cleanup Step
-    # UI would have batch operations and individual toggles
-    for page in pages:
-        grader.remove_feedback_url_and_quiz(page)
+    grader.set_worksheet("1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ")
+    # pprint.pprint(grader.worksheet.get_values())
+    student_records = grader.read_worksheet()
+    pprint.pprint(student_records)
+    team_info = grader.convert_student_record_sheets_to_team_info(
+        student_records, "/Users/kevin/Repositories/School/Semester4/CECS_574/canvas_automation/tests/SampleTeam"
+    )
+    print("\n\n******  team info ****** ")
+    print(team_info)
