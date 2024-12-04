@@ -10,7 +10,7 @@ class LogLevel(IntEnum):
     ERROR = 3
 
 
-CURRENT_LOG_LEVEL = LogLevel.INFO
+CURRENT_LOG_LEVEL = LogLevel.DEBUG
 
 
 def set_log_level(level: LogLevel):

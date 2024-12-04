@@ -8,6 +8,8 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 import pandas as pd
 import requests
+import gspread
+from gspread.spreadsheet import Spreadsheet
 
 from GoogleServices.schemas import (
     BatchUpdateFormResponse,
@@ -38,6 +40,55 @@ class GoogleServicesManager:
         self.__authenticate()
         self.form_service = discovery.build("forms", "v1", credentials=self.__creds)
         self.sheets_service = discovery.build("sheets", "v4", credentials=self.__creds)
+        self.gspread_client = gspread.authorize(self.__creds)  # type: ignore
+
+    # Add these new methods for gspread functionality
+    def open_spreadsheet(self, spreadsheet_name):
+        """
+        Open a spreadsheet by name
+
+        Args:
+            spreadsheet_name (str): Name of the spreadsheet
+
+        Returns:
+            gspread.Spreadsheet: Spreadsheet object
+        """
+        return self.gspread_client.open(spreadsheet_name)
+
+    def read_worksheet(self, spreadsheet: Spreadsheet, worksheet_name: str):
+        """
+        Read all values from a worksheet
+
+        Args:
+            spreadsheet (gspread.Spreadsheet): Spreadsheet object
+            worksheet_name (str): Name of the worksheet
+
+        Returns:
+            list: List of rows containing worksheet data
+        """
+        worksheet = spreadsheet.worksheet(worksheet_name)
+        return worksheet.get_all_records()
+
+    def get_spreadsheets(self):
+        """
+        Get all spreadsheets from Google Drive
+
+        Returns:
+            list: List of spreadsheets
+        """
+        return self.gspread_client.list_spreadsheet_files()
+
+    def open_spreadsheet_by_id(self, spreadsheet_id):
+        """
+        Open a spreadsheet by its ID
+
+        Args:
+            spreadsheet_id (str): The ID of the spreadsheet (can be extracted from the URL)
+
+        Returns:
+            gspread.Spreadsheet: Spreadsheet object
+        """
+        return self.gspread_client.open_by_key(spreadsheet_id)
 
     def __authenticate(self):
         # The file token.json stores the user's access and refresh tokens, and is
@@ -226,15 +277,92 @@ class GoogleServicesManager:
         response.raise_for_status()
         return response.json()
 
+    def append_rows(self, spreadsheet, worksheet_name, rows):
+        """
+        Append rows to the end of a worksheet
+
+        Args:
+            spreadsheet (gspread.Spreadsheet): Spreadsheet object
+            worksheet_name (str): Name of the worksheet
+            rows (list): List of rows to append
+        """
+        worksheet = spreadsheet.worksheet(worksheet_name)
+        worksheet.append_rows(rows)
+
+    def update_worksheet(
+        self, spreadsheet: Spreadsheet, worksheet_name: str, data: list, range_name: Optional[str] = None
+    ):
+        """
+        Update values in a worksheet
+
+        Args:
+            spreadsheet (gspread.Spreadsheet): Spreadsheet object
+            worksheet_name (str): Name of the worksheet
+            data (list): List of rows to update
+            range_name (str, optional): A1 notation range to update. If None, updates from A1
+        """
+        worksheet = spreadsheet.worksheet(worksheet_name)
+        if range_name:
+            worksheet.update(range_name, data)
+        else:
+            worksheet.update(data)
+
+    def update_worksheet_from_records(
+        self, spreadsheet_id: str, worksheet_name: str, records: list[dict], append_only: bool = False
+    ):
+        """
+        Update or append records to a worksheet, clearing existing content when not appending
+
+        Args:
+            spreadsheet_id (str): The ID of the spreadsheet
+            worksheet_name (str): Name of the worksheet
+            records (list[dict]): List of dictionary records to update/append
+            append_only (bool): If True, only appends new records. If False, clears and rewrites worksheet
+
+        Returns:
+            None
+        """
+        if not records:
+            return
+
+        # Get headers from the first record
+        headers = list(records[0].keys())
+
+        # Convert records to rows format
+        rows = [headers] if not append_only else []
+        for record in records:
+            rows.append([record[key] for key in headers])
+
+        # Open spreadsheet
+        spreadsheet = self.open_spreadsheet_by_id(spreadsheet_id)
+        worksheet = spreadsheet.worksheet(worksheet_name)
+
+        if not append_only:
+            # Clear the existing content before updating
+            worksheet.clear()
+
+        if append_only:
+            self.append_rows(spreadsheet, worksheet_name, rows)
+        else:
+            self.update_worksheet(spreadsheet, worksheet_name, rows)
+
 
 if __name__ == "__main__":
 
     manager = GoogleServicesManager()
 
-    # Get form details
-    form_id = "14vM9XQp7BgHLA6JjtasZoxlFlGfRJdlqrRZqhcw9XHs"
-    result = manager.get_form(form_id)
-    Print(result)
-
-    # Get form responses
-    df = manager.get_form_responses(form_id)
+    spreadsheet = manager.open_spreadsheet_by_id("1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ")
+    worksheet = manager.read_worksheet(spreadsheet, "Sheet1")
+    worksheet = [
+        {
+            "STudent name ": "asdf",
+            "Team Name": "Team 234",
+            "Student Email ": "1@csulb.edu",
+            "ID ": 11,
+            "FormID": "11",
+        }
+    ]
+    manager.update_worksheet_from_records(
+        "1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ", "Sheet1", worksheet, append_only=False
+    )
+    Print(pprint.pformat(worksheet))
