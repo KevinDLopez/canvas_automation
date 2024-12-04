@@ -10,6 +10,7 @@ import pandas as pd
 import requests
 import gspread
 from gspread.spreadsheet import Spreadsheet
+from gspread.worksheet import Worksheet
 
 from GoogleServices.schemas import (
     BatchUpdateFormResponse,
@@ -35,6 +36,24 @@ token_path = os.path.join(base_path, "token.json")
 
 
 class GoogleServicesManager:
+    """A manager class for interacting with various Google services including Forms, Sheets and Drive.
+
+    This class provides methods to:
+    - Authenticate with Google services using OAuth2
+    - Work with Google Forms (create, copy, get responses)
+    - Work with Google Sheets (read, write, update worksheets)
+    - Access Google Drive files
+
+    The manager handles authentication automatically on initialization and maintains
+    credentials for subsequent API calls.
+
+    Attributes:
+        form_service: Google Forms API service instance
+        sheets_service: Google Sheets API service instance
+        gspread_client: Authorized gspread client for spreadsheet operations
+
+    """
+
     def __init__(self):
         self.__creds = None
         self.__authenticate()
@@ -120,7 +139,27 @@ class GoogleServicesManager:
                 token.write(self.__creds.to_json())
 
     def get_form(self, form_id: str) -> Form:
-        """Get the details of a form using its ID."""
+        """Get the details of a Google Form using its ID.
+
+        Args:
+            form_id (str): The ID of the form to retrieve
+
+        Returns:
+            Form: A Form object containing the form details including:
+                - formId: The unique identifier of the form
+                - info: Basic form information like title
+                - items: List of form items/questions
+                - linkedSheetId: ID of linked response spreadsheet
+                - responderUri: URL for form respondents
+                - revisionId: Form revision identifier
+                - settings: Form settings configuration
+
+        Example:
+            >>> google_service = GoogleServices()
+            >>> form = google_service.get_form("abc123xyz")
+            >>> print(form["info"]["title"])
+            "My Survey Form"
+        """
         result = self.form_service.forms().get(formId=form_id).execute()
         return result
 
@@ -131,7 +170,32 @@ class GoogleServicesManager:
         return responses
 
     def make_copy_of_form(self, form_id: str, new_title: str, add_email: bool) -> Form:
-        """Make a copy of a form with the given form ID."""
+        """Make a copy of a Google Form with the given form ID and customize it.
+
+        This method creates a copy of an existing form template and optionally adds an email field
+        at the beginning. All other questions from the template form are copied over.
+
+        Args:
+            form_id (str): The ID of the template form to copy
+            new_title (str): The title for the new form copy
+            add_email (bool): Whether to add an email field at the start of the form
+
+        Returns:
+            Form: The created form object containing details like formId, title and URLs
+
+        Example:
+            >>> google_service = GoogleServices()
+            >>> template_id = "1234abcd..."
+            >>> new_form = google_service.make_copy_of_form(
+            ...     form_id=template_id,
+            ...     new_title="Student Survey 2024",
+            ...     add_email=True
+            ... )
+            >>> print(f"Created form with ID: {new_form['formId']}")
+            Created form with ID: 5678efgh...
+            >>> print(f"Form URL: {new_form['responderUri']}")
+            Form URL: https://docs.google.com/forms/d/5678efgh.../viewform
+        """
         template_form = self.get_form(form_id)  # Get the details from the template
 
         new_form = {"info": {"title": new_title}}
@@ -180,7 +244,43 @@ class GoogleServicesManager:
         return created_form
 
     def create_form_with_questions(self, title: str, questions: List[dict]):
-        """Create a form with a title and a list of questions."""
+        """Create a form with a title and a list of questions.
+
+        Args:
+            title (str): The title of the form to create
+            questions (List[dict]): List of question dictionaries, where each dict contains:
+                - title (str): The question text
+                - required (bool): Whether the question is required
+                - type (str): The question type (e.g. 'textQuestion', 'choiceQuestion')
+                - options (dict): Type-specific configuration for the question
+
+        Returns:
+            BatchUpdateFormResponse: Response from the form creation API containing details
+                about the created form and questions
+
+        Example:
+            >>> questions = [
+            ...     {
+            ...         "title": "What is your name?",
+            ...         "required": True,
+            ...         "type": "textQuestion",
+            ...         "options": {"paragraph": False}
+            ...     },
+            ...     {
+            ...         "title": "Select your favorite color",
+            ...         "required": False,
+            ...         "type": "choiceQuestion",
+            ...         "options": {
+            ...             "choices": [
+            ...                 {"value": "Red"},
+            ...                 {"value": "Blue"},
+            ...                 {"value": "Green"}
+            ...             ]
+            ...         }
+            ...     }
+            ... ]
+            >>> form = google_services.create_form_with_questions("Survey Form", questions)
+        """
         # Create the form with just the title
         form = {"info": {"title": title}}
 
@@ -303,9 +403,9 @@ class GoogleServicesManager:
         """
         worksheet = spreadsheet.worksheet(worksheet_name)
         if range_name:
-            worksheet.update(range_name, data)
+            worksheet.update(range_name=range_name, values=data)
         else:
-            worksheet.update(data)
+            worksheet.update(values=data)
 
     def update_worksheet_from_records(
         self, spreadsheet_id: str, worksheet_name: str, records: list[dict], append_only: bool = False
