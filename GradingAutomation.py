@@ -239,6 +239,8 @@ class Grader:
 
         # Drop rows with any NaN values
         group_avg = group_avg.dropna()
+        group_avg.reset_index(drop=True, inplace=True)
+        group_avg['Team'] = range(1, len(group_avg) + 1)
 
         return group_avg
 
@@ -267,6 +269,7 @@ class Grader:
                 "Overall grade to this team's Research topic and (summary) paper content?"
             ], ascending=False
         ).head(3)
+        Print(top_3)
         return top_3
 
     def process_form_responses(self, spreadsheet_file: str):

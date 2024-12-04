@@ -881,27 +881,24 @@ class GradingAutomationUI(QMainWindow):
 
         # Set number of rows and columns dynamically based on data
         num_rows = len(data)
-        Print(num_rows)
         num_columns = data.shape[1]
+        row_position = 0
 
-        self.analysis_table.setRowCount(num_rows)
         self.analysis_table.setColumnCount(num_columns)
 
         # Set the header labels
         headers = list(data.columns)
         self.analysis_table.setHorizontalHeaderLabels(headers)
 
-        # Populate the table with data
-        for row_index, row in data.iterrows():
-            for col_index, (col_name, value) in enumerate(row.items()):
-                # Format "Group Number" as a whole number
-                if col_name == "Group Number":
-                    table_item = QTableWidgetItem(f"{int(value)}")
-                elif col_name == "Email Address":
-                    table_item = QTableWidgetItem(value)
-                else:
-                    table_item = QTableWidgetItem(f"{value:.2f}")
-                self.analysis_table.setItem(row_index, col_index, table_item)
+        # Convert DataFrame rows to table rows
+        for _, row in data.iterrows():
+            self.analysis_table.insertRow(row_position)  # Insert a new row
+            # For each column in the row, create a QTableWidgetItem and insert into the table
+            for col_index, value in enumerate(row):
+                value = str(value) if isinstance(value, str) else f"{value:.2f}"
+                table_item = QTableWidgetItem(str(value))
+                self.analysis_table.setItem(row_position, col_index, table_item)
+            row_position += 1
 
         # Update the table to show the contents
         self.analysis_table.resizeColumnsToContents()
