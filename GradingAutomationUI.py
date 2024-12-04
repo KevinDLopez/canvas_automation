@@ -2,6 +2,7 @@ import datetime
 from enum import IntEnum
 import os
 import pprint
+import pandas as pd
 from typing import Callable, Dict, List, Tuple, TypedDict, Optional, Literal, Union
 from PyQt6.QtWidgets import (
     QApplication,
@@ -204,6 +205,7 @@ class GradingAutomationUI(QMainWindow):
         self.tabs.addTab(self.create_project_verification_tab(), "Project Verification")
         self.tabs.addTab(self.create_pages_management_tab(), "Pages Management")
         self.tabs.addTab(self.create_forms_management_tab(), "Forms and Quizzes")
+        self.tabs.addTab(self.create_form_analysis_tab(), "Form Analysis")
 
         # Connect the tab changed signal
         self.tabs.currentChanged.connect(self.on_tab_changed)
@@ -718,6 +720,103 @@ class GradingAutomationUI(QMainWindow):
         layout.addWidget(forms_group)
 
         return tab
+
+    def create_form_analysis_tab(self):
+        "Create the form analysis tab"
+        tab = QWidget()
+        layout = QVBoxLayout(tab)
+
+        # Form Analysis group
+        forms_analysis_group = QGroupBox("Analyze Responses")
+        forms_analysis_layout = QVBoxLayout()
+
+        # Horizontal layout for buttons
+        button_layout = QHBoxLayout()
+        aggregate_responses_btn = QPushButton("Aggregate Responses")
+        aggregate_responses_btn.clicked.connect(self.aggregate_form_responses)
+        analyze_form_response_btn = QPushButton("Analyze Google Responses")
+        # analyze_form_response_btn.clicked.connect(self.analyze_responses)
+
+        button_layout.addWidget(aggregate_responses_btn)
+        button_layout.addWidget(analyze_form_response_btn)
+        forms_analysis_layout.addLayout(button_layout)
+        forms_analysis_group.setLayout(forms_analysis_layout)
+
+        # Dropdown group
+        dropdown_group = QGroupBox("Form Analysis")
+        dropdown_layout = QVBoxLayout()
+        dropdown_menu = QComboBox()
+        dropdown_menu.addItem("Grade Distribution for all presentations")
+        dropdown_menu.addItem("Each student average grading")
+        dropdown_menu.addItem("Top 3 Presentations")
+        dropdown_menu.addItem("Student Outliers")
+        dropdown_layout.addWidget(dropdown_menu)
+
+        # Table group
+        self.analysis_table = QTableWidget()
+        self.analysis_table.setRowCount(0)
+        self.analysis_table.setColumnCount(0)  # Start with 0 columns
+        self.analysis_table.setHorizontalHeaderLabels([])  # No headers initially
+        dropdown_layout.addWidget(self.analysis_table)
+
+        dropdown_group.setLayout(dropdown_layout)
+        layout.addWidget(forms_analysis_group)
+        layout.addWidget(dropdown_group)
+        return tab
+
+    def aggregate_form_responses(self):
+        "Aggregate all form responses for all groups into a single spreadsheet"
+
+        output_folder = "grading"
+        output_file = os.path.join(output_folder, "all_form_responses.xlsx")
+
+        # Check if the output file already exists
+        if os.path.exists(output_file):
+            self.log(f"{output_file} already exists. Exiting function.", log_type="INFO")
+            return  # Exit the function early if the file already exists
+
+        # Get spreadsheet containing general info using form_id in state.json.
+        try:
+            with open(state_path, "r") as f:
+                spreadsheet = json.load(state_path)
+        except FileNotFoundError:
+            self.log("File not found.", log_type="ERROR")
+        except json.JSONDecodeError:
+            self.log("JSON Parse Error.", log_type="ERROR")
+
+        spreadsheet_id = spreadsheet.get("form_id")
+
+        if spreadsheet_id:
+            spreadsheet = self.grader.get_spreadsheet_by_id(spreadsheet_id)
+
+            # Might need to change implementation if the active worksheet is not in the first tab
+            sheet = spreadsheet.sheet1
+            form_ids = list(set(sheet.col_values(sheet.find("form_id").col)[1:])) # Skip header row
+
+            # Retrieve all form responses from form_ids
+            all_responses = []
+            for form_id in form_ids:
+                try:
+                    # Get responses from google forms
+                    responses = self.grader.get_google_form_responses(form_id) # DataFrame
+                    all_responses.append(responses)
+
+                    # Append an empty row as a separator
+                    all_responses.append(pd.DataFrame({"": []}))
+                except Exception as e:
+                    self.log(f"Error processing form ID {form_id}: {e}", log_type="ERROR")
+
+            # Create Excel file containing all responses
+            if all_responses:
+                dataframe = pd.concat(all_responses, ignore_index=True)
+                output_folder = "grading"
+                os.makedirs(output_folder, exist_ok=False)
+                output_file = os.path.join(output_folder, "all_form_responses.xlsx")
+                dataframe.to_excel(output_file, index=False)
+            else:
+                self.log("No responses found.", log_type="ERROR")
+        else:
+            self.log("Can't find spreadsheet_id", log_type="ERROR")
 
     def save_ui_state(self):
         """Save the current state of UI elements"""

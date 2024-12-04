@@ -187,6 +187,18 @@ class Grader:
             raise Exception("Can't find assignment id with assignment title.")
         return assignment_id
 
+    def get_spreadsheet_by_id(self, spreadsheet_id):
+        spreadsheet = self.google.open_spreadsheet_by_id(spreadsheet_id)
+        if spreadsheet is None:
+            raise Exception("Can't find spreadsheet with id")
+        return spreadsheet
+
+    def get_google_form_responses(self, form_id):
+        responses = self.google.get_form_responses(form_id) # DataFrame
+        if responses.empty:
+            raise ValueError("No responses found in Google Form.")
+        return responses
+
     def grade_presentation_project(
         self,
         form_id: str,
