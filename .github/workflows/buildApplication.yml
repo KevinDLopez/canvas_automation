@@ -114,12 +114,12 @@ jobs:
           cd docs
           make html
 
-      - name: Upload documentation artifact
-        uses: actions/upload-artifact@v3
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: sphinx-docs
-          path: docs/build/html
-          if-no-files-found: error
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build/html
+          force_orphan: true
 
   release:
     needs: [build, docs]
@@ -134,6 +134,12 @@ jobs:
           files: |
             */GradingAutomation-*.zip
           name: Release ${{ github.ref_name }}
+          body: |
+            ## Documentation
+            📚 [View the documentation](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }})
+
+            ## Downloads
+            🔗 [View all releases](https://github.com/${{ github.repository }}/releases)
           draft: false
           prerelease: false
           generate_release_notes: true
