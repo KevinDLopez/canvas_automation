@@ -735,7 +735,7 @@ class GradingAutomationUI(QMainWindow):
         aggregate_responses_btn = QPushButton("Aggregate Responses")
         aggregate_responses_btn.clicked.connect(self.aggregate_form_responses)
         analyze_form_response_btn = QPushButton("Analyze Google Responses")
-        # analyze_form_response_btn.clicked.connect(self.analyze_responses)
+        analyze_form_response_btn.clicked.connect(self.analyze_responses)
 
         button_layout.addWidget(aggregate_responses_btn)
         button_layout.addWidget(analyze_form_response_btn)
@@ -745,12 +745,15 @@ class GradingAutomationUI(QMainWindow):
         # Dropdown group
         dropdown_group = QGroupBox("Form Analysis")
         dropdown_layout = QVBoxLayout()
-        dropdown_menu = QComboBox()
-        dropdown_menu.addItem("Grade Distribution for all presentations")
-        dropdown_menu.addItem("Each student average grading")
-        dropdown_menu.addItem("Top 3 Presentations")
-        dropdown_menu.addItem("Student Outliers")
-        dropdown_layout.addWidget(dropdown_menu)
+        self.dropdown_menu = QComboBox()
+        self.dropdown_menu.addItem("Grade Distribution for all presentations")
+        self.dropdown_menu.addItem("Each student average grading for others")
+        self.dropdown_menu.addItem("Top 3 Presentations")
+        self.dropdown_menu.addItem("Student Outliers")
+
+        # Connect dropdown selection change to handler
+        self.dropdown_menu.currentIndexChanged.connect(self.handle_dropdown_change)
+        dropdown_layout.addWidget(self.dropdown_menu)
 
         # Table group
         self.analysis_table = QTableWidget()
@@ -817,6 +820,91 @@ class GradingAutomationUI(QMainWindow):
                 self.log("No responses found.", log_type="ERROR")
         else:
             self.log("Can't find spreadsheet_id", log_type="ERROR")
+
+    def analyze_responses(self):
+        output_folder = "grading"
+        spreadsheet_file = os.path.join(output_folder, "all_form_responses.xlsx")
+
+        # Check if the file exists
+        # if not os.path.exists(spreadsheet_file):
+        #     self.log(f"Error: The file {spreadsheet_file} does not exist.", log_type="ERROR")
+        #     return
+
+        # Testing purpose (remove later)
+        project_dir = os.getcwd()
+        spreadsheet_file = os.path.join(project_dir, "S24-574-all-responses.xlsx")
+
+        try:
+            # Retrieve group averages, student averages, and top 3 presentations
+            group_avg, student_avg, top_3_presentations = self.grader.process_form_responses(spreadsheet_file)
+
+            # Store the DataFrames for reuse
+            self.group_avg = group_avg
+            self.student_avg = student_avg
+            self.top_3_presentations = top_3_presentations
+
+            # Update table based on dropdown selection
+            self.handle_dropdown_change()  # Update table immediately
+        except (FileNotFoundError, ValueError) as e:
+            self.log(str(e), log_type="ERROR")
+            return
+
+    def handle_dropdown_change(self):
+        dropdown_selection = self.dropdown_menu.currentText()
+
+        # Check if DataFrames are already loaded
+        if not hasattr(self, 'group_avg') or not hasattr(self, 'student_avg') or not hasattr(self, 'top_3_presentations'):
+            self.log("Data not loaded. Please analyze responses first.", log_type="ERROR")
+            return
+
+        try:
+            # Update the table based on the dropdown selection
+            if dropdown_selection == "Grade Distribution for all presentations":
+                self.update_analysis_table(self.group_avg)
+            elif dropdown_selection == "Each student average grading for others":
+                self.update_analysis_table(self.student_avg)
+            elif dropdown_selection == "Top 3 Presentations":
+                self.update_analysis_table(self.top_3_presentations)
+            elif dropdown_selection == "Student Outliers":
+                # Placeholder for Student Outliers analysis
+                self.update_analysis_table(pd.DataFrame())  # Replace with actual data
+        except Exception as e:
+            self.log(str(e), log_type="ERROR")
+
+    def update_analysis_table(self, data: pd.DataFrame):
+        # Clear existing rows if they exist
+        self.analysis_table.setRowCount(0)
+
+        # Check if data is empty
+        if data.empty:
+            return
+
+        # Set number of rows and columns dynamically based on data
+        num_rows = len(data)
+        Print(num_rows)
+        num_columns = data.shape[1]
+
+        self.analysis_table.setRowCount(num_rows)
+        self.analysis_table.setColumnCount(num_columns)
+
+        # Set the header labels
+        headers = list(data.columns)
+        self.analysis_table.setHorizontalHeaderLabels(headers)
+
+        # Populate the table with data
+        for row_index, row in data.iterrows():
+            for col_index, (col_name, value) in enumerate(row.items()):
+                # Format "Group Number" as a whole number
+                if col_name == "Group Number":
+                    table_item = QTableWidgetItem(f"{int(value)}")
+                elif col_name == "Email Address":
+                    table_item = QTableWidgetItem(value)
+                else:
+                    table_item = QTableWidgetItem(f"{value:.2f}")
+                self.analysis_table.setItem(row_index, col_index, table_item)
+
+        # Update the table to show the contents
+        self.analysis_table.resizeColumnsToContents()
 
     def save_ui_state(self):
         """Save the current state of UI elements"""

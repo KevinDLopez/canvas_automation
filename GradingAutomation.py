@@ -187,17 +187,102 @@ class Grader:
             raise Exception("Can't find assignment id with assignment title.")
         return assignment_id
 
-    def get_spreadsheet_by_id(self, spreadsheet_id):
+    def get_spreadsheet_by_id(self, spreadsheet_id: str):
         spreadsheet = self.google.open_spreadsheet_by_id(spreadsheet_id)
         if spreadsheet is None:
             raise Exception("Can't find spreadsheet with id")
         return spreadsheet
 
-    def get_google_form_responses(self, form_id):
+    def get_google_form_responses(self, form_id) -> pd.DataFrame:
         responses = self.google.get_form_responses(form_id) # DataFrame
         if responses.empty:
             raise ValueError("No responses found in Google Form.")
         return responses
+
+    def load_data_from_spreadsheet(self, spreadsheet_file: str) -> pd.DataFrame:
+        """Loads form responses using column names"""
+
+        # Will need to adjust for actual column names
+        columns_to_read = [
+            "Email Address",
+            "Overall grade to this team's Slide deck?",
+            "Overall grade to this team's Presentation skills?",
+            "Overall grade to this team's Research topic and (summary) paper content?"
+        ]
+        data = pd.read_excel(spreadsheet_file, usecols=columns_to_read)
+
+        if data.empty:
+            raise ValueError("Error: The file is empty or the columns do not match.")
+        return data
+
+    def calculate_group_averages(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Calculates the average grade for each team on their slide deck, presentation skills, and research topic and paper content"""
+
+        # Column to store group numbers (subject to change for team names)
+        group_numbers = []
+        current_group = 1
+
+        for idx, row in data.iterrows():
+            if pd.isna(row["Email Address"]):
+                current_group += 1
+            group_numbers.append(current_group)
+
+        # Subject to change to include team names instead
+        data.loc[:, "Team"] = group_numbers
+
+        # Group by 'Team' and calculate average for each grade category
+        group_avg = data.groupby('Team').agg({
+            "Overall grade to this team's Slide deck?": 'mean',
+            "Overall grade to this team's Presentation skills?": 'mean',
+            "Overall grade to this team's Research topic and (summary) paper content?": 'mean'
+        }).reset_index()
+
+        # Drop rows with any NaN values
+        group_avg = group_avg.dropna()
+
+        return group_avg
+
+    def calculate_student_averages(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Calculates the averages students gave for each team based on each category"""
+        student_avg = data.groupby("Email Address").agg({
+            "Overall grade to this team's Slide deck?": 'mean',
+            "Overall grade to this team's Presentation skills?": 'mean',
+            "Overall grade to this team's Research topic and (summary) paper content?": 'mean'
+        }).reset_index()
+
+        student_avg.rename(columns={
+            "Overall grade to this team's Slide deck?": "Average grade given for Slide decks",
+            "Overall grade to this team's Presentation skills?": "Average grade given for Presentation skills",
+            "Overall grade to this team's Research topic and (summary) paper content?": "Average grade given for Research topic and (summary) paper content"
+        }, inplace=True)
+
+        return student_avg
+
+    def get_top_three_presentations(self, group_averages: pd.DataFrame) -> pd.DataFrame:
+        # Sort by the grades for each category (descending order)
+        top_3 = group_averages.sort_values(
+            by=[
+                "Overall grade to this team's Slide deck?",
+                "Overall grade to this team's Presentation skills?",
+                "Overall grade to this team's Research topic and (summary) paper content?"
+            ], ascending=False
+        ).head(3)
+        return top_3
+
+    def process_form_responses(self, spreadsheet_file: str):
+
+        data = self.load_data_from_spreadsheet(spreadsheet_file)
+
+        # Calculate each group average grades
+        group_averages = self.calculate_group_averages(data)
+
+        # Calculate student averages given for each team
+        student_averages = self.calculate_student_averages(data)
+
+        # Get the top 3 presentations
+        top_3_presentations = self.get_top_three_presentations(group_averages)
+
+        return group_averages, student_averages, top_3_presentations
 
     def grade_presentation_project(
         self,
