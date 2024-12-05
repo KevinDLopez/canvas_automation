@@ -99,8 +99,9 @@ class Grader:
         "email": "Email Address",
         "slide_deck": "Overall grade to this team's Slide deck?",
         "presentation_skills": "Overall grade to this team's Presentation skills?",
-        "research_topic": "Overall grade to this team's Research topic and (summary) paper content?"
+        "research_topic": "Overall grade to this team's Research topic and (summary) paper content?",
     }
+
     def __init__(
         self,
         course_id: int,
@@ -200,8 +201,8 @@ class Grader:
         return spreadsheet
 
     def get_google_form_responses(self, form_id) -> pd.DataFrame:
-        responses = self.google.get_form_responses(form_id) # DataFrame
-        if responses.empty:
+        responses = self.google.get_form_responses(form_id)  # DataFrame
+        if responses is None:
             raise ValueError("No responses found in Google Form.")
         return responses
 
@@ -213,7 +214,7 @@ class Grader:
             self.SPREADSHEET_COLUMN_NAMES["email"],
             self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
             self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
-            self.SPREADSHEET_COLUMN_NAMES["research_topic"]
+            self.SPREADSHEET_COLUMN_NAMES["research_topic"],
         ]
         data = pd.read_excel(spreadsheet_file, usecols=columns_to_read)
 
@@ -241,32 +242,49 @@ class Grader:
         data.loc[:, "Team"] = group_numbers
 
         # Group by 'Team' and calculate average for each grade category
-        group_avg = data.groupby('Team').agg({
-            self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: 'mean',
-            self.SPREADSHEET_COLUMN_NAMES["presentation_skills"]: 'mean',
-            self.SPREADSHEET_COLUMN_NAMES["research_topic"]: 'mean'
-        }).reset_index()
+        group_avg = (
+            data.groupby("Team")
+            .agg(
+                {
+                    self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "mean",
+                    self.SPREADSHEET_COLUMN_NAMES["presentation_skills"]: "mean",
+                    self.SPREADSHEET_COLUMN_NAMES["research_topic"]: "mean",
+                }
+            )
+            .reset_index()
+        )
 
         # Drop rows with any NaN values
         group_avg = group_avg.dropna()
         group_avg.reset_index(drop=True, inplace=True)
-        group_avg['Team'] = range(1, len(group_avg) + 1)
+        group_avg["Team"] = range(1, len(group_avg) + 1)
 
         return group_avg
 
     def calculate_student_averages(self, data: pd.DataFrame) -> pd.DataFrame:
         """Calculates the averages students gave for each team based on each category"""
-        student_avg = data.groupby("Email Address").agg({
-            self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: 'mean',
-            self.SPREADSHEET_COLUMN_NAMES["presentation_skills"]: 'mean',
-            self.SPREADSHEET_COLUMN_NAMES["research_topic"]: 'mean'
-        }).reset_index()
+        student_avg = (
+            data.groupby("Email Address")
+            .agg(
+                {
+                    self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "mean",
+                    self.SPREADSHEET_COLUMN_NAMES["presentation_skills"]: "mean",
+                    self.SPREADSHEET_COLUMN_NAMES["research_topic"]: "mean",
+                }
+            )
+            .reset_index()
+        )
 
-        student_avg.rename(columns={
-            self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "Average grade given for Slide decks",
-            self.SPREADSHEET_COLUMN_NAMES["presentation_skills"]: "Average grade given for Presentation skills",
-            self.SPREADSHEET_COLUMN_NAMES["research_topic"]: "Average grade given for Research topic and (summary) paper content"
-        }, inplace=True)
+        student_avg.rename(
+            columns={
+                self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "Average grade given for Slide decks",
+                self.SPREADSHEET_COLUMN_NAMES["presentation_skills"]: "Average grade given for Presentation skills",
+                self.SPREADSHEET_COLUMN_NAMES[
+                    "research_topic"
+                ]: "Average grade given for Research topic and (summary) paper content",
+            },
+            inplace=True,
+        )
 
         return student_avg
 
@@ -276,8 +294,9 @@ class Grader:
             by=[
                 self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
                 self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
-                self.SPREADSHEET_COLUMN_NAMES["research_topic"]
-            ], ascending=False
+                self.SPREADSHEET_COLUMN_NAMES["research_topic"],
+            ],
+            ascending=False,
         ).head(3)
         return top_3
 
