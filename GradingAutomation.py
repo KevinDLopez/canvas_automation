@@ -138,13 +138,11 @@ class Grader:
         team_members: List[TeamMember] = []  # name and email
         for record in team_record:
             team_members.append(TeamMember(name=record["Names"], email=record["Email"]))
-        github_repo = team_record[0]["Github_Repo"]
 
         return TeamInfo(
             team_name=team_name,
             topic=topic,
             team_members=team_members,
-            github_repo=github_repo,
         )
 
     def convert_team_info_to_student_record(self, team_info: TeamInfo, Team_Name: str) -> StudentRecord:
@@ -157,6 +155,7 @@ class Grader:
             and os.path.isdir(path)
             and "paper.pdf" in os.listdir(path)
             and ("presentation.pdf" in os.listdir(path) or "presentation.pptx" in os.listdir(path))
+            and "github.txt" in os.listdir(path)
         )
 
     def get_folders_with_team(self, path: str) -> List[str]:
@@ -448,6 +447,7 @@ class Grader:
             "paper.pdf": "Paper file is missing",
             "quiz.json": "Quiz file is missing",
             # "team_info.yml": "Team info file is missing",
+            "github.txt": "Github file is missing",
         }
 
         for file, error_msg in required_files.items():
@@ -525,9 +525,8 @@ class Grader:
                              Must contain:
                              - presentation.pdf
                              - paper.pdf
-                             - team_info.yml
                              - quiz.json
-
+                             - github.txt
         Returns:
             PageSchema: The created Canvas page object containing the team's information and materials.
 
@@ -548,7 +547,7 @@ class Grader:
         # Upload the presentation and paper
         presentation_url = self.canvas.upload_file(folder_path + "/presentation.pdf")
         paper_url = self.canvas.upload_file(folder_path + "/paper.pdf")
-
+        github_url = self.canvas.upload_file(folder_path + "/github.txt")
         # Create a Canvas page
         team_members_html = "".join([f"<li>{member.name} - {member.email} </li>" for member in team_info.team_members])
 
@@ -560,7 +559,7 @@ class Grader:
                 <ul style="list-style-type: disc; padding-left: 20px;">
                     {team_members_html}
                 </ul>
-                <p><strong>Github Repo:</strong> <a href="{team_info.github_repo}" style="color: #3498db;">{team_info.github_repo}</a></p>
+                <p><strong>Github Repo:</strong> <a href="{github_url}" style="color: #3498db;">github</a></p>
                 <p><strong>Presentation:</strong> <a href="{presentation_url}" style="color: #3498db;">presentation</a></p>
                 <p><strong>Paper:</strong> <a href="{paper_url}" style="color: #3498db;">paper</a></p>
         """

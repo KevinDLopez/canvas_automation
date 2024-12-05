@@ -20,7 +20,7 @@ class TeamInfo(BaseModel):
     team_name: str
     topic: str
     team_members: List[TeamMember]
-    github_repo: str
+    # github_repo: str
     # presentation_time: PresentationTime
 
 
@@ -41,7 +41,6 @@ class StudentRecord(TypedDict, total=True):
     Student_ID: str
     Team_Name: str
     Topic: str
-    Github_Repo: str
 
 
 StudentRecords = List[StudentRecord]

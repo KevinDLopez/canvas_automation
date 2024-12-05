@@ -276,11 +276,11 @@ class GradingAutomationUI(QMainWindow):
                 )
                 Print(f"This is the student_records = {self.grader.student_records}")
                 projects_to_download.append((record["Team_Name"], path))
-            elif not self.grader.is_a_project_folder(path):
-                Print(
-                    f" Folder {path} does not contain all files. If you would like to re-download it remove it from your files",
-                    log_type="WARN",
-                )
+            # elif not self.grader.is_a_project_folder(path):
+            #     Print(
+            #         f" Folder {path} does not contain all files. If you would like to re-download it remove it from your files",
+            #         log_type="WARN",
+            #     )
             else:
                 folders_with_team.append(path)
         self.log(f"Found {len(folders_with_team)} folders with teams", log_type="INFO")
