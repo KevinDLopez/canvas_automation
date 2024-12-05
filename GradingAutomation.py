@@ -124,6 +124,9 @@ class Grader:
             self.student_records.append(StudentRecord(**record))  # type: ignore
         return self.student_records
 
+    def update_worksheet(self):
+        self.google.update_worksheet_from_records(self.worksheet, self.student_records)  # type: ignore
+
     def convert_student_record_sheets_to_team_info(self, Team_Name: str) -> TeamInfo:
         # get the team that hast the project_path
         team_record = [record for record in self.student_records if record["Team_Name"] == Team_Name]
