@@ -188,9 +188,9 @@ class TestCanvasAPI(unittest.TestCase):
         print(f"Retrieved {len(submissions)} submissions for assignment {1192803}")
 
     def test_download_submission_attachments(self):
-        """Testing download_submission_attachments method"""
+        """Testing download_all_submission_attachments method"""
         # Download submission attachments
-        downloads = self.canvas.download_submission_attachments(1192803)
+        downloads = self.canvas.download_all_submission_attachments(1192803)
 
         # Assertions
         self.assertIsNotNone(downloads, "Download path should not be None")

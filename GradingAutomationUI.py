@@ -156,6 +156,10 @@ class GradingAutomationUI(QMainWindow):
         save_shortcut = QShortcut(save_sequence, self)
         save_shortcut.activated.connect(self.save_ui_state)
 
+        # Functions to call at start up
+        QApplication.processEvents()
+        self.verify_projects()
+
     def is_course_connected(self):
         return self.state.get("course_id") and self.state.get("canvas_token") and self.state.get("module_title")
 
@@ -247,42 +251,54 @@ class GradingAutomationUI(QMainWindow):
             self.folder_path.setText(folder)
 
     def verify_projects(self):
-        """Now it should verify the spreadsheet, make sure that the emails, and student ids are correct"""
-        Print("Verifying projects")
-
-        # get the worksheet id from the state
-        def handle_ok(worksheet_url: str):
-
-            worksheet_id = get_id_from_url(worksheet_url)
-            self.grader.set_worksheet(worksheet_id)
-            self.grader.read_worksheet()
-            Print(f"Worksheet ID set to {worksheet_id}", "INFO")
-            # Continue with the rest of verify_projects
-            self._continue_verify_projects()
-
-            self.state["worksheet_url"] = worksheet_url
-            self.save_state()
-
-        worksheet_url_state: str = self.state.get("worksheet_url", "")
-        # Store dialog as instance variable
-        self.__make_popup(
-            title="Enter Worksheet URL",
-            label_text="Worksheet URL:",
-            default_value=worksheet_url_state,
-            ok_callback=handle_ok,
-            initial_size=(1000, 150),
-        )
-
-    def _continue_verify_projects(self):
         """Continues the verification process after worksheet ID is entered"""
+        worksheet_id = get_id_from_url(self.worksheet_url.text())
+        self.grader.set_worksheet(worksheet_id)
+        self.grader.read_worksheet()
+        Print(f"Worksheet ID set to {worksheet_id}", "INFO")
         folder = self.folder_path.text()
         self.log(f"Starting project verification in folder: {folder}", "INFO")
-        folders_with_team = self.grader.get_folders_with_team(folder)
+        # folders_with_team = self.grader.get_folders_with_team(folder)
+        folders_with_team = []
+        print(f"student_records = {self.grader.student_records}")
+        seen_path = set()
+        projects_to_download = []
+        for record in self.grader.student_records:
+            path = self.folder_path.text() + "/" + record["Team_Name"]
+            if path in seen_path:
+                print(f"skipping {path} because it was already seen")
+                continue
+            seen_path.add(path)
+            if not os.path.exists(path):
+                Print(
+                    f"  Folder {path} does not exist, it would be downloaded, once download button is clicked",
+                    log_type="INFO",
+                )
+                Print(f"This is the student_records = {self.grader.student_records}")
+                projects_to_download.append((record["Team_Name"], path))
+            elif not self.grader.is_a_project_folder(path):
+                Print(
+                    f" Folder {path} does not contain all files. If you would like to re-download it remove it from your files",
+                    log_type="WARN",
+                )
+            else:
+                folders_with_team.append(path)
+        self.log(f"Found {len(folders_with_team)} folders with teams", log_type="INFO")
+        self.log(f"Found {len(projects_to_download)} folders to download", log_type="INFO")
+
+        self.file_to_download_group.setVisible(len(projects_to_download) > 0)
+        self.file_to_download.setRowCount(len(projects_to_download))
+        for i, (team_name, folder_path) in enumerate(projects_to_download):
+            checkbox = QTableWidgetItem()
+            checkbox.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+            checkbox.setCheckState(Qt.CheckState.Checked)
+            self.file_to_download.setItem(i, 0, checkbox)
+            self.file_to_download.setItem(i, 1, QTableWidgetItem(team_name))
+            # self.file_to_download.setItem(i, 2, QTableWidgetItem(folder_path))
 
         # Get failed projects (those with errors)
-        self.local_projects_info: dict[str, tuple[TeamInfo | None, List[str], PageSchema | None]] = {
-            folder_path: (team, errors, None)
-            for folder_path, team, errors in self.grader.verify_all_projects(folders_with_team)
+        self.local_projects_info: dict[str, tuple[List[str], PageSchema | None]] = {
+            folder_path: (errors, None) for folder_path, errors in self.grader.verify_all_projects(folders_with_team)
         }  # Dict[dict[str, tuple[TeamInfo | None, List[str]]]. PATH, (team, errors)
 
         # Update results table with all folders
@@ -290,7 +306,7 @@ class GradingAutomationUI(QMainWindow):
         for i, folder_path in enumerate(folders_with_team):
 
             folder_item = QTableWidgetItem(folder_path)
-            errors = self.local_projects_info[folder_path][1]
+            errors = self.local_projects_info[folder_path][0]
             status = "Failed" if errors else "Passed"
             # add the projects that did not fail to self.pages_to_create
             if not errors:
@@ -382,7 +398,7 @@ class GradingAutomationUI(QMainWindow):
             # Add forms and quizzes to each page
             for folder_path, row_index in form_quizzes_to_create:
                 # Get page schema
-                page = self.local_projects_info[folder_path][2]
+                page = self.local_projects_info[folder_path][1]
                 if not page:
                     raise Exception(f"Page {page} not found in local projects")
                 Print(f"\n\n1**page = {pprint.pformat(page.model_dump())}\n\n")
@@ -404,7 +420,13 @@ class GradingAutomationUI(QMainWindow):
                     else:
                         self.path_to_forms[folder_path] = form
                         # create a form json file and store it under path
-                        json.dump(form, open(folder_path + "/form.json", "w"))
+                        # json.dump(form, open(folder_path + "/form.json", "w"))
+                        team_name = os.path.basename(folder_path)
+                        # update the google.student_record_sheets to include the new form
+                        for record in self.grader.student_records:
+                            if record["Team_Name"] == team_name:
+                                record["Google_Form_ID"] = form["formId"]
+                        self.grader.update_worksheet()
                         # TODO: Might need to update the page object in self.local_projects_info
                         Print(f"page = {pprint.pformat(page.model_dump())}")
                         status_item = QTableWidgetItem("Quiz and Feedback added")
@@ -446,7 +468,9 @@ class GradingAutomationUI(QMainWindow):
                     local_paths_selected.append((local_path_item.text(), i))
 
         for local_path, row_index in local_paths_selected:
-            team, errors, page = self.local_projects_info[local_path]
+            errors, page = self.local_projects_info[local_path]
+            team_name = os.path.basename(local_path)
+            team = self.grader.convert_student_record_sheets_to_team_info(team_name)
             if not team:
                 self.log("### not team -  HEY YOU NEED TO CREATE THE QUIZ FIRST ####", log_type="WARN")
                 continue
@@ -457,8 +481,12 @@ class GradingAutomationUI(QMainWindow):
             if status == "Created":
                 self.log("### Created - HEY YOU NEED TO CREATE THE QUIZ FIRST ####", log_type="WARN")
                 continue
-            form: Form = json.load(open(local_path + "/form.json"))
-            responses = self.grader.google.get_form_responses(form["formId"])
+            # form: Form = json.load(open(local_path + "/form.json"))
+            # Read the form id from the google.student_record_sheets
+            form_id = [
+                record["Google_Form_ID"] for record in self.grader.student_records if record["Team_Name"] == team_name
+            ][0]
+            responses = self.grader.google.get_form_responses(form_id)
             if responses is None:
                 self.log("### No responses - MAKE SURE PEOPLE HAVE RESPONDED ####", log_type="WARN")
                 continue
@@ -466,20 +494,16 @@ class GradingAutomationUI(QMainWindow):
             # add grate and create image
             emails = [team_member.email for team_member in team.team_members]
             image = local_path + "/" + team.team_name + ".png"
-            # form = self.path_to_forms[local_path]  # Get the form object
-            # read the                     json.dump(form, open(folder_path + "/form.json", "w"))
-            if not form:
-                raise Exception(f"Form not found for {local_path}")
             try:
                 self.grader.grade_presentation_project(
-                    form_id=form["formId"], assignment_title=assignment_title, emails=emails, path_image=image
+                    form_id=form_id, assignment_title=assignment_title, emails=emails, path_image=image
                 )
                 status_item = QTableWidgetItem("Done")
                 status_item.setBackground(self._COLOR_MAP["green"])
                 status_item.setForeground(self._COLOR_MAP["white"])
                 self.quizzes_table.setItem(row_index, 3, status_item)
             except Exception as e:
-                Print(f"Error grading project {local_path}: {e}")
+                Print(f"Error grading project {local_path}: {e}", log_type="ERROR")
             page = self.grader.add_images_to_body(page, [image])
 
     def load_state(self):
@@ -531,13 +555,18 @@ class GradingAutomationUI(QMainWindow):
         browse_button = QPushButton("Browse")
         browse_button.clicked.connect(self.browse_folder)
 
-        download_button = QPushButton("Download")
-        download_button.clicked.connect(self.download_folder_click)
-
         folder_layout.addWidget(self.folder_path)
         folder_layout.addWidget(browse_button)
-        folder_layout.addWidget(download_button)
         folder_group.setLayout(folder_layout)
+
+        worksheet_url_group = QGroupBox("Spreadsheet URL")
+        worksheet_url_layout = QHBoxLayout()
+        self.worksheet_url = QLineEdit()
+        if self.state.get("worksheet_url"):
+            self.worksheet_url.setText(self.state["worksheet_url"])
+        worksheet_url_layout.addWidget(self.worksheet_url)
+        worksheet_url_group.setLayout(worksheet_url_layout)
+        layout.addWidget(worksheet_url_group)
         layout.addWidget(folder_group)
 
         # Verification group
@@ -548,9 +577,24 @@ class GradingAutomationUI(QMainWindow):
         verify_button.clicked.connect(self.verify_projects)
 
         self.verify_results = QTableWidget()
-        self.verify_results.setColumnCount(3)  # Changed from 2 to 3
+        self.verify_results.setColumnCount(3)
         self.verify_results.setHorizontalHeaderLabels(["Folder", "Status", "Errors"])
         self.verify_results.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)  # Make table read-only
+
+        self.file_to_download_group = QGroupBox("Files to Download")
+        self.file_to_download_layout = QVBoxLayout()
+        self.file_to_download = QTableWidget()
+        self.file_to_download.setColumnCount(2)  # Checkbox and team_name
+        self.file_to_download.setHorizontalHeaderLabels(["Select", "Folder"])
+        self.file_to_download.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)  # Make table read-only
+
+        download_button = QPushButton("Download")
+        download_button.clicked.connect(self.download_folder_click)
+
+        self.file_to_download_group.setLayout(self.file_to_download_layout)
+        self.file_to_download_layout.addWidget(download_button)
+        self.file_to_download_layout.addWidget(self.file_to_download)
+        self.file_to_download_group.setVisible(False)
 
         # Set column widths
         header = self.verify_results.horizontalHeader()
@@ -566,6 +610,7 @@ class GradingAutomationUI(QMainWindow):
         verify_layout.addWidget(verify_button)
         verify_layout.addWidget(self.verify_results)
         verify_group.setLayout(verify_layout)
+        layout.addWidget(self.file_to_download_group)
         layout.addWidget(verify_group)
         return tab
 
@@ -625,10 +670,25 @@ class GradingAutomationUI(QMainWindow):
     def download_folder_click(self):
         def handle_ok(assignment_title: str):
             Print("assignment_title", assignment_title)
-            self.grader.canvas.download_submission_attachments(
-                assignment_id=self.grader.canvas.get_assignment_by_title(assignment_title),
-                download_dir=self.folder_path.text(),
-            )
+            for checked_row in range(self.file_to_download.rowCount()):
+                if self.file_to_download.item(checked_row, 0).checkState() == Qt.CheckState.Checked:
+                    # Get the students emails from the self.grader.google.get_student_emails(student_id)
+                    team_name = self.file_to_download.item(checked_row, 1).text()
+                    for student_record in self.grader.student_records:
+                        if student_record["Team_Name"] == self.file_to_download.item(checked_row, 1).text():
+                            student_email = student_record["Email"]
+                            student_id = self.grader.canvas.get_student_id_by_email(student_email)
+                            if not student_id:
+                                Print(f"Student ID not found for {student_email}", log_type="ERROR")
+                                continue
+                            files_downloaded = self.grader.canvas.download_student_submission_attachments(
+                                assignment_id=self.grader.canvas.get_assignment_by_title(assignment_title),
+                                download_dir=self.folder_path.text() + "/" + team_name,
+                                user_id=student_id,
+                            )
+                            if files_downloaded:
+                                self.log(f"Downloaded {len(files_downloaded)} files for {team_name}", log_type="INFO")
+                                break  # No need to continue if any files for the team
             # Save to state
             self.state["last_assignment_title"] = assignment_title
             self.save_state()
@@ -686,7 +746,7 @@ class GradingAutomationUI(QMainWindow):
 
         self.quizzes_table = QTableWidget()
         self.quizzes_table.setColumnCount(4)  # Changed to 4 columns
-        self.quizzes_table.setHorizontalHeaderLabels(["Select", "Local Path", "Page Name", "Status"])
+        self.quizzes_table.setHorizontalHeaderLabels(["Select", "Local Path", "Team_Name", "Status"])
 
         header = self.quizzes_table.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)  # Checkbox column
@@ -779,7 +839,7 @@ class GradingAutomationUI(QMainWindow):
         # Get spreadsheet containing general info using form_id in state.json.
         try:
             with open(state_path, "r") as f:
-                spreadsheet = json.load(state_path)
+                spreadsheet = json.load(f)
         except FileNotFoundError:
             self.log("File not found.", log_type="ERROR")
             return
@@ -794,14 +854,14 @@ class GradingAutomationUI(QMainWindow):
 
             # Might need to change implementation if the active worksheet is not in the first tab
             sheet = spreadsheet.sheet1
-            form_ids = list(set(sheet.col_values(sheet.find("form_id").col)[1:])) # Skip header row
+            form_ids = list(set(sheet.col_values(sheet.find("form_id").col)[1:]))  # type: ignore # Skip header row
 
             # Retrieve all form responses from form_ids
             all_responses = []
             for form_id in form_ids:
                 try:
                     # Get responses from google forms
-                    responses = self.grader.get_google_form_responses(form_id) # DataFrame
+                    responses = self.grader.get_google_form_responses(form_id)  # DataFrame
                     all_responses.append(responses)
 
                     # Append an empty row as a separator
@@ -851,7 +911,11 @@ class GradingAutomationUI(QMainWindow):
         dropdown_selection = self.dropdown_menu.currentText()
 
         # Check if DataFrames are already loaded
-        if not hasattr(self, 'group_avg') or not hasattr(self, 'student_avg') or not hasattr(self, 'top_3_presentations'):
+        if (
+            not hasattr(self, "group_avg")
+            or not hasattr(self, "student_avg")
+            or not hasattr(self, "top_3_presentations")
+        ):
             self.log("Data not loaded. Please analyze responses first.", log_type="ERROR")
             return
 
@@ -906,6 +970,7 @@ class GradingAutomationUI(QMainWindow):
         # Save folder path
         Print("Saving UI state")
         self.state["last_folder"] = self.folder_path.text()
+        self.state["worksheet_url"] = self.worksheet_url.text()
         self.save_state()
 
     def closeEvent(self, event):
@@ -929,15 +994,16 @@ class GradingAutomationUI(QMainWindow):
         # From all the pages in the module folder
         folder = self.folder_path.text()
         folders_with_team = self.grader.get_folders_with_team(folder)
-        self.local_projects_info: dict[str, tuple[TeamInfo | None, List[str], PageSchema | None]] = {
-            folder_path: (team, errors, None)
-            for folder_path, team, errors in self.grader.verify_all_projects(folders_with_team)
+        self.local_projects_info: dict[str, tuple[List[str], PageSchema | None]] = {
+            folder_path: (errors, None) for folder_path, errors in self.grader.verify_all_projects(folders_with_team)
         }  # Dict[dict[str, tuple[TeamInfo | None, List[str]]]. PATH, (team, errors)
 
         pages_posted_in_module = self.grader.get_pages_posted_in_module()  # List[PageSchema]
 
-        for path, (team, errors, page) in self.local_projects_info.items():
+        for path, (errors, page) in self.local_projects_info.items():
             # Print(f"path: {path}, team: {team}, errors: {errors}")
+            team_name = os.path.basename(path)
+            team = self.grader.convert_student_record_sheets_to_team_info(team_name)  # TODO: Test this
             if not team:
                 self.log("### not team - ? ####", log_type="WARN")
                 continue
@@ -956,7 +1022,7 @@ class GradingAutomationUI(QMainWindow):
                     }
                 )
                 # add this to self.local_projects_info
-                self.local_projects_info[path] = (team, errors, page)
+                self.local_projects_info[path] = (errors, page)
             else:
                 self.log(f"Page {path} is not posted in the module", log_type="INFO")
                 self._add_quiz_table_row(
@@ -970,7 +1036,9 @@ class GradingAutomationUI(QMainWindow):
                 )
                 # disable the checkbox
         # check for pages that are not in the module but in the folder
-        local_team_names = {team.team_name for _, (team, _, _) in self.local_projects_info.items() if team}
+        # local_team_names = {team.team_name for _, (team, _, _) in self.local_projects_info.items() if team}
+        # get local team names from spreadsheet self.grader.student_records ["Team_Name"]
+        local_team_names = {record["Team_Name"] for record in self.grader.student_records}
         # Find pages that exist in Canvas but not locally
         for page in pages_posted_in_module:
             if page.title not in local_team_names:

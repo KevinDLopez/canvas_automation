@@ -1,7 +1,7 @@
 import os.path
 import pprint
 import sys
-from typing import Literal, Optional, TypedDict, List, Dict, Union
+from typing import Any, Literal, Optional, TypedDict, List, Dict, Union
 from googleapiclient import discovery
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -79,8 +79,8 @@ class GoogleServicesManager:
     def __init__(self):
         self.__creds = None
         self.__authenticate()
-        self.form_service = discovery.build("forms", "v1", credentials=self.__creds)
-        self.sheets_service = discovery.build("sheets", "v4", credentials=self.__creds)
+        self.form_service: Any = discovery.build("forms", "v1", credentials=self.__creds)
+        self.sheets_service: Any = discovery.build("sheets", "v4", credentials=self.__creds)
         self.gspread_client = gspread.authorize(self.__creds)  # type: ignore
 
     # Add these new methods for gspread functionality

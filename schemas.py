@@ -40,7 +40,6 @@ class StudentRecord(TypedDict, total=True):
     Names: str
     Student_ID: str
     Team_Name: str
-    File_Path: str
     Topic: str
     Github_Repo: str
 

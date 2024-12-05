@@ -17,7 +17,7 @@ from gspread.worksheet import Worksheet
 def read_json_file(file_path: str) -> Dict[str, Any]:
     """Read a JSON file and return its contents as a dictionary"""
     assert file_path.endswith(".json"), "File must be a JSON file"
-    assert os.path.exists(file_path), "File does not exist"
+    assert os.path.exists(file_path), f"File does not exist, {file_path}"
     with open(file_path, "r") as file:
         data = json.load(file)
     return data
@@ -26,7 +26,7 @@ def read_json_file(file_path: str) -> Dict[str, Any]:
 def read_yml_file(file_path: str) -> Dict[str, Any]:
     """Read a YAML file and return its contents as a dictionary"""
     assert file_path.endswith(".yml"), "File must be a YAML file"
-    assert os.path.exists(file_path), "File does not exist"
+    assert os.path.exists(file_path), "File does not exist, YML"
     with open(file_path, "r") as file:
         data = yaml.load(file, Loader=yaml.FullLoader)
     return data
@@ -124,12 +124,14 @@ class Grader:
             self.student_records.append(StudentRecord(**record))  # type: ignore
         return self.student_records
 
-    def convert_student_record_sheets_to_team_info(self, student_records: StudentRecords, File_Path: str) -> TeamInfo:
+    def update_worksheet(self):
+        self.google.update_worksheet_from_records(self.worksheet, self.student_records)  # type: ignore
+
+    def convert_student_record_sheets_to_team_info(self, Team_Name: str) -> TeamInfo:
         # get the team that hast the project_path
-        team_name = os.path.basename(File_Path)
-        team_record = [record for record in student_records if record["File_Path"] == File_Path]
+        team_record = [record for record in self.student_records if record["Team_Name"] == Team_Name]
         if not team_record:
-            raise ValueError(f"Team info not found for team: {File_Path}")
+            raise ValueError(f"Team info not found for team: {Team_Name}")
 
         team_name = team_record[0]["Team_Name"]
         topic = team_record[0]["Topic"]
@@ -145,11 +147,9 @@ class Grader:
             github_repo=github_repo,
         )
 
-    def convert_team_info_to_student_record(self, team_info: TeamInfo, File_Path: str) -> StudentRecord:
+    def convert_team_info_to_student_record(self, team_info: TeamInfo, Team_Name: str) -> StudentRecord:
         """TODO: Don't know if is necessary - Not fully implemented"""
-        return StudentRecord(
-            File_Path=File_Path, Team_Name=team_info.team_name, Topic=team_info.topic, **team_info.model_dump()
-        )
+        return StudentRecord(Team_Name=team_info.team_name, Topic=team_info.topic, **team_info.model_dump())
 
     def is_a_project_folder(self, path: str) -> bool:
         return (
@@ -172,17 +172,33 @@ class Grader:
         self.module_id_with_presentations = self.canvas.get_module_by_title(module_title)
 
     def get_pages_to_create(self, folders: List[str]) -> List[str]:
-        # Get the folders that do not have a page in Canvas inside the module self.module_id_with_presentations[id]
+        """Get a list of folders that do not have a Canvas pages in the presentations module.
 
+        This method checks each folder against existing Canvas pages to determine which folders
+        need new pages created. It uses the team name from the folder path to match against
+        Canvas page titles.
+
+        Args:
+            folders: List of folder paths to check for existing Canvas pages.
+
+        Returns:
+            List[str]: List of folder paths that need Canvas pages created.
+
+        Example:
+            >>> grader = Grader(...)
+            >>> folders = ['/path/to/team1', '/path/to/team2']
+            >>> pages_to_create = grader.get_pages_to_create(folders)
+            >>> print(pages_to_create)
+            ['/path/to/team2']  # Only team2 needs a page created
+        """
         # Get the pages in the module
         pages_created = self.canvas.list_module_items(self.module_id_with_presentations.id)
         Print("pages already created = ", pages_created)
         pages_to_create: List[str] = []
         for folder in folders:
-            team_info = self.__read_team_info_file(folder + "/team_info.yml")
-            team_name = team_info.team_name
+            team_name = os.path.basename(folder)
             # Check if the page already exists
-            page_exists = any([team_name in page.title for page in pages_created])
+            page_exists = any([team_name == page.title for page in pages_created])
             if not page_exists:
                 pages_to_create.append(folder)
         Print("pages to create = ", pages_to_create)
@@ -405,7 +421,7 @@ class Grader:
         # Return list of created Canvas pages
         return pages
 
-    def verify_project_files(self, folder_path: str) -> Tuple[str, Union[TeamInfo, None], List[str]]:
+    def verify_project_files(self, folder_path: str) -> Tuple[str, List[str]]:
         """Verify all required project files exist and return the absolute folder path, team info, and any errors
 
         Args:
@@ -415,7 +431,7 @@ class Grader:
             Tuple[str, TeamInfo, List[str]]: Tuple containing (absolute_path, team_info, list_of_errors)
         """
         errors: List[str] = []
-        team_info: Union[TeamInfo, None] = None
+        # team_info: Union[TeamInfo, None] = None
 
         # Get absolute folder path
         cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -424,14 +440,14 @@ class Grader:
 
         if not os.path.exists(abs_folder_path):
             errors.append("Folder path does not exist")
-            return abs_folder_path, None, errors
+            return abs_folder_path, errors
 
         # Check required files exist
         required_files = {
             "presentation.pdf": "Presentation file is missing",
             "paper.pdf": "Paper file is missing",
             "quiz.json": "Quiz file is missing",
-            "team_info.yml": "Team info file is missing",
+            # "team_info.yml": "Team info file is missing",
         }
 
         for file, error_msg in required_files.items():
@@ -439,21 +455,21 @@ class Grader:
             if not os.path.exists(file_path):
                 errors.append(error_msg)
 
-        # Try to load and verify team info if yml exists
-        team_info_path = os.path.join(abs_folder_path, "team_info.yml")
-        if os.path.exists(team_info_path):
-            try:
-                team_info = self.__read_team_info_file(team_info_path)
-            except ValidationError as e:
-                error_details = []
-                for err in e.errors():
-                    field_path = " -> ".join(str(x) for x in err["loc"])
-                    error_details.append(f"\tField '{field_path}': {err['msg']}")
-                errors.append(f"Invalid team_info.yml:\n" + "\n".join(error_details))
-            except yaml.YAMLError as e:
-                errors.append(f"Invalid YAML syntax in team_info.yml: {str(e)}")
-            except Exception as e:
-                errors.append(f"Unexpected error reading team_info.yml: {str(e)}")
+        # # Try to load and verify team info if yml exists
+        # team_info_path = os.path.join(abs_folder_path, "team_info.yml")
+        # if os.path.exists(team_info_path):
+        #     try:
+        #         team_info = self.__read_team_info_file(team_info_path)
+        #     except ValidationError as e:
+        #         error_details = []
+        #         for err in e.errors():
+        #             field_path = " -> ".join(str(x) for x in err["loc"])
+        #             error_details.append(f"\tField '{field_path}': {err['msg']}")
+        #         errors.append(f"Invalid team_info.yml:\n" + "\n".join(error_details))
+        #     except yaml.YAMLError as e:
+        #         errors.append(f"Invalid YAML syntax in team_info.yml: {str(e)}")
+        #     except Exception as e:
+        #         errors.append(f"Unexpected error reading team_info.yml: {str(e)}")
 
         # Try to load and verify quiz if json exists
         quiz_path = os.path.join(abs_folder_path, "quiz.json")
@@ -476,17 +492,17 @@ class Grader:
             except Exception as e:
                 errors.append(f"Unexpected error reading quiz.json: {str(e)}")
 
-        return abs_folder_path, team_info, errors
+        return abs_folder_path, errors
 
-    def verify_all_projects(self, folders: List[str]) -> List[Tuple[str, Union[TeamInfo, None], List[str]]]:
+    def verify_all_projects(self, folders: List[str]) -> List[Tuple[str, List[str]]]:
         """Verify all projects in the given folders and return verification results for all folders.
 
         Args:
             folders (List[str]): List of folder paths to verify
 
         Returns:
-            List[Tuple[str, Union[TeamInfo, None], List[str]]]: List of tuples containing
-                (folder_path, team_info, list_of_errors) for all folders
+            List[Tuple[str,  List[str]]]: List of tuples containing
+                (folder_path, list_of_errors) for all folders
         """
         verification_results = []
 
@@ -523,12 +539,11 @@ class Grader:
             >>> page = grader.create_canvas_page_based_on_folder("path/to/team1_folder")
         """
         # Verify project files and get absolute path
-        folder_path, team_info, errors = self.verify_project_files(folder_path)
+        folder_path, errors = self.verify_project_files(folder_path)
         if errors:
             raise ValueError(f"Project verification failed:\n" + "\n".join(f"- {error}" for error in errors))
-
-        if team_info is None:
-            raise ValueError("Team info is None")
+        team_name = os.path.basename(folder_path)
+        team_info = self.convert_student_record_sheets_to_team_info(team_name)
 
         # Upload the presentation and paper
         presentation_url = self.canvas.upload_file(folder_path + "/presentation.pdf")
@@ -577,13 +592,12 @@ class Grader:
         quiz_path = folder_path + "/quiz.json"
         assert os.path.exists(quiz_path), "Quiz file does not exist"
         # Verify that schema for quiz is good
-        team_info_path = folder_path + "/team_info.yml"
-        team_info = self.__read_team_info_file(team_info_path)
+        team_name = os.path.basename(folder_path)
 
         # Create a create a google forms for feedback to open at start time and close at end time + 20minutes
         form = self.google.make_copy_of_form(
             "1XykFAgYiZgMLGq7qZTlVwwacGaA_hhMDsNqAN43M8IU",  # TODO: Need to create a shared form for everyone
-            f"Feedback for {team_info.team_name}",
+            f"Feedback for {team_name}",
             True,
         )
 
@@ -653,8 +667,6 @@ if __name__ == "__main__":
     # pprint.pprint(grader.worksheet.get_values())
     student_records = grader.read_worksheet()
     pprint.pprint(student_records)
-    team_info = grader.convert_student_record_sheets_to_team_info(
-        student_records, "/Users/kevin/Repositories/School/Semester4/CECS_574/canvas_automation/tests/SampleTeam"
-    )
+    team_info = grader.convert_student_record_sheets_to_team_info("SampleTeam")
     print("\n\n******  team info ****** ")
     print(team_info)
