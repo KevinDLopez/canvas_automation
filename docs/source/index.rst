@@ -38,8 +38,9 @@ The professor (user of the application) would need to follow the steps below:
 All of the steps above will be done through the application. 
 
 Now, we will go into more detail on each step. 
-
 #. Download the submission from canvas: 
+   To download the submission from Canvas, the professor would need to go to the assignment in Canvas and download the submissions as a zip file. 
+   To automate this we added a button to download all the submissions and unzip them in the folder of the user id. 
    Since only the  students presenting the application will download the files for all students. 
 
 Prerequisites
