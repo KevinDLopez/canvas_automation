@@ -773,10 +773,8 @@ class GradingAutomationUI(QMainWindow):
         output_folder = "grading"
         output_file = os.path.join(output_folder, "all_form_responses.xlsx")
 
-        # Check if the output file already exists
-        if os.path.exists(output_file):
-            self.log(f"{output_file} already exists. Exiting function.", log_type="INFO")
-            return  # Exit the function early if the file already exists
+        # Create the output folder if it doesn't exist
+        os.makedirs(output_folder, exist_ok=True)
 
         # Get spreadsheet containing general info using form_id in state.json.
         try:
@@ -784,8 +782,10 @@ class GradingAutomationUI(QMainWindow):
                 spreadsheet = json.load(state_path)
         except FileNotFoundError:
             self.log("File not found.", log_type="ERROR")
+            return
         except json.JSONDecodeError:
             self.log("JSON Parse Error.", log_type="ERROR")
+            return
 
         spreadsheet_id = spreadsheet.get("form_id")
 
@@ -812,10 +812,8 @@ class GradingAutomationUI(QMainWindow):
             # Create Excel file containing all responses
             if all_responses:
                 dataframe = pd.concat(all_responses, ignore_index=True)
-                output_folder = "grading"
-                os.makedirs(output_folder, exist_ok=False)
-                output_file = os.path.join(output_folder, "all_form_responses.xlsx")
                 dataframe.to_excel(output_file, index=False)
+                self.log(f"Form responses successfully aggregated to {output_file}.", log_type="INFO")
             else:
                 self.log("No responses found.", log_type="ERROR")
         else:
