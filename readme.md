@@ -18,32 +18,39 @@ Before running the script, please complete the **Python environment setup** to e
    
    For this demo, the class id is `15319` and the presentation module title is `Fall 2024 - Presentation`
    
-    <img width="1186" alt="Screenshot 2024-11-01 at 4 29 14 PM" src="https://github.com/user-attachments/assets/d814e957-45bf-4f06-8d14-9b09df544b76">
+    <img width="1186" alt="Screenshot 2024-11-01 at 4 29 14 PM" src="docs/source/_static/canvas_config.png">
+3. Download student submissions:
+ - Simpliy downwnload the student submissions by clicking on the download button of the project verification tab. 
+ - A pop up will show to ask which title is the assignment is given. In the sample class we were testing was `Presentation` so that is what we tested with. 
+    <div style="display: flex; justify-content: space-between;">
+    <img src="docs/source/_static/click_download.png" alt="First image" width="48%"/>
+    <img src="docs/source/_static/popup.png" alt="Second image" width="48%"/>
+    </div>
 
-3. Locate the path for this git repository/tests/ ( or any location where students projects are located) and Click on "Verify Selected Projects".
+4. Locate the path for this git repository/tests/ ( or any location where students projects are located) and Click on "Verify Selected Projects".
 
    A sample output would look like this:
 
-   <img width="1153" alt="Screenshot 2024-11-01 at 4 38 02 PM" src="https://github.com/user-attachments/assets/3068a5fe-341c-4c09-9b07-00bb542dbddb">
+   <img width="1153" alt="Screenshot 2024-11-01 at 4 38 02 PM" src="docs/source/_static/verify_projects.png">
 
-4. Navigate to "Page Management" and Select rows to create pages from the group folders in the repository.
+5. Navigate to "Page Management" and Select rows to create pages from the group folders in the repository.
 
    A sample output of creating pages for three test projects would look like this:
 
-   <img width="1172" alt="Screenshot 2024-11-01 at 4 44 15 PM" src="https://github.com/user-attachments/assets/93837ea9-9423-408c-b500-f397830db12f">
+   <img width="1172" alt="Screenshot 2024-11-01 at 4 44 15 PM" src="docs/source/_static/page_management.png">
 
 
 5. In the "Forms and Quizzes Tab", you can select created pages to add feedback forms and quizzes.
 
    Sample output for adding feedback form and quiz for the "SampleTeam_f4" page:
 
-   <img width="1178" alt="Screenshot 2024-11-01 at 4 46 17 PM" src="https://github.com/user-attachments/assets/0f2e9b56-cc19-4d88-97d9-e35c7462b33f">
+   <img width="1178" alt="Screenshot 2024-11-01 at 4 46 17 PM" src="docs/source/_static/forms_quizzes.png">
 
 6. Clicking on the "Close and Grade" button would remove the feedback form on the team page, update the page with a grade distribution from the feedback forms, and post the grade for the team members.
 
     Sample page output on Canvas after retrieving grade distribution from feedback forms:
 
-   <img width="967" alt="Screenshot 2024-11-01 at 5 00 23 PM" src="https://github.com/user-attachments/assets/57b3ded5-5b4e-46fa-af93-ca84b56ad265">
+   <img width="967" alt="Screenshot 2024-11-01 at 5 00 23 PM" src="docs/source/_static/grade_distribution.png">
 
 ---
 ## Setting up python 
