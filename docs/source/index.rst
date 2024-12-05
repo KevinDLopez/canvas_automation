@@ -61,19 +61,15 @@ How to use the application:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The professor (user of the application) would need to follow the steps below:
 
-#. Download the submission from Canvas
-#. Verify that the files are present and correct
-#. Create the pages on Canvas for the team
-#. Create the feedback forms and quizzes on Canvas.
-#. Remove the feedback forms and quizzes then grade the assignment based on the feedback forms.
+#. Download the submission from Canvas ( This is Tab 1)
+#. Verify that the files are present and correct ( This is Tab 1)
+#. Create the pages on Canvas for the team ( This is Tab 2)
+#. Create the feedback forms and quizzes on Canvas. ( This is Tab 3)
+#. Remove the feedback forms and quizzes then grade the assignment based on the feedback forms. ( This is Tab 3 )
 
 All of the steps above will be done through the application.
 
-Now, we will go into more detail on each step.
-#. Download the submission from canvas:
-   To download the submission from Canvas, the professor would need to go to the assignment in Canvas and download the submissions as a zip file.
-   To automate this we added a button to download all the submissions and unzip them in the folder of the user id.
-   Since only the  students presenting the application will download the files for all students.
+
 
 Prerequisites
 ~~~~~~~~~~~~~
@@ -139,31 +135,43 @@ Running the Application
       :width: 800
       :alt: Canvas Configuration Screenshot
 
-2. Download the submissions from Canvas:
 
-   .. image:: _static/download_submissions.png
-      :width: 800
-      :alt: Download Submissions Screenshot
+3. Download student submissions:
+   
+   * Simply download the student submissions by clicking on the download button of the project verification tab
+   * A pop up will show to ask which title is the assignment is given. In the sample class, we used ``Presentation`` as the assignment title
 
-3. Verify selected projects:
+   .. image:: _static/click_download.png
+      :width: 300
+      :alt: Click Download Button Screenshot
+      :align: left
+
+   .. image:: _static/popup.png
+      :width: 300
+      :alt: Assignment Title Popup Screenshot
+      :align: right
+
+   |
+
+4. Verify selected projects:
 
    .. image:: _static/verify_projects.png
       :width: 800
       :alt: Verify Projects Screenshot
 
-4. Navigate to "Page Management" to create pages from group folders:
+5. Navigate to "Page Management" to create pages from group folders:
 
    .. image:: _static/page_management.png
       :width: 800
       :alt: Page Management Screenshot
 
-5. Use the "Forms and Quizzes Tab" to add feedback forms and quizzes:
+6. Use the "Forms and Quizzes Tab" to add feedback forms and quizzes:
 
    .. image:: _static/forms_quizzes.png
       :width: 800
       :alt: Forms and Quizzes Screenshot
 
-6. After grading, view the grade distribution on Canvas:
+7. After grading, view the grade distribution on Canvas:
 
    .. image:: _static/grade_distribution.png
       :width: 800
