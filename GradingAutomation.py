@@ -95,6 +95,12 @@ def create_image(responses: pd.DataFrame, output_path: str):
 
 
 class Grader:
+    SPREADSHEET_COLUMN_NAMES = {
+        "email": "Email Address",
+        "slide_deck": "Overall grade to this team's Slide deck?",
+        "presentation_skills": "Overall grade to this team's Presentation skills?",
+        "research_topic": "Overall grade to this team's Research topic and (summary) paper content?"
+    }
     def __init__(
         self,
         course_id: int,
@@ -204,15 +210,19 @@ class Grader:
 
         # Will need to adjust for actual column names
         columns_to_read = [
-            "Email Address",
-            "Overall grade to this team's Slide deck?",
-            "Overall grade to this team's Presentation skills?",
-            "Overall grade to this team's Research topic and (summary) paper content?"
+            self.SPREADSHEET_COLUMN_NAMES["email"],
+            self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
+            self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
+            self.SPREADSHEET_COLUMN_NAMES["research_topic"]
         ]
         data = pd.read_excel(spreadsheet_file, usecols=columns_to_read)
 
         if data.empty:
             raise ValueError("Error: The file is empty or the columns do not match.")
+
+        # Normalize email addresses to lowercase
+        data[self.SPREADSHEET_COLUMN_NAMES["email"]] = data[self.SPREADSHEET_COLUMN_NAMES["email"]].str.lower()
+
         return data
 
     def calculate_group_averages(self, data: pd.DataFrame) -> pd.DataFrame:
@@ -232,9 +242,9 @@ class Grader:
 
         # Group by 'Team' and calculate average for each grade category
         group_avg = data.groupby('Team').agg({
-            "Overall grade to this team's Slide deck?": 'mean',
-            "Overall grade to this team's Presentation skills?": 'mean',
-            "Overall grade to this team's Research topic and (summary) paper content?": 'mean'
+            self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: 'mean',
+            self.SPREADSHEET_COLUMN_NAMES["presentation_skills"]: 'mean',
+            self.SPREADSHEET_COLUMN_NAMES["research_topic"]: 'mean'
         }).reset_index()
 
         # Drop rows with any NaN values
@@ -247,15 +257,15 @@ class Grader:
     def calculate_student_averages(self, data: pd.DataFrame) -> pd.DataFrame:
         """Calculates the averages students gave for each team based on each category"""
         student_avg = data.groupby("Email Address").agg({
-            "Overall grade to this team's Slide deck?": 'mean',
-            "Overall grade to this team's Presentation skills?": 'mean',
-            "Overall grade to this team's Research topic and (summary) paper content?": 'mean'
+            self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: 'mean',
+            self.SPREADSHEET_COLUMN_NAMES["presentation_skills"]: 'mean',
+            self.SPREADSHEET_COLUMN_NAMES["research_topic"]: 'mean'
         }).reset_index()
 
         student_avg.rename(columns={
-            "Overall grade to this team's Slide deck?": "Average grade given for Slide decks",
-            "Overall grade to this team's Presentation skills?": "Average grade given for Presentation skills",
-            "Overall grade to this team's Research topic and (summary) paper content?": "Average grade given for Research topic and (summary) paper content"
+            self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "Average grade given for Slide decks",
+            self.SPREADSHEET_COLUMN_NAMES["presentation_skills"]: "Average grade given for Presentation skills",
+            self.SPREADSHEET_COLUMN_NAMES["research_topic"]: "Average grade given for Research topic and (summary) paper content"
         }, inplace=True)
 
         return student_avg
@@ -264,12 +274,11 @@ class Grader:
         # Sort by the grades for each category (descending order)
         top_3 = group_averages.sort_values(
             by=[
-                "Overall grade to this team's Slide deck?",
-                "Overall grade to this team's Presentation skills?",
-                "Overall grade to this team's Research topic and (summary) paper content?"
+                self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
+                self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
+                self.SPREADSHEET_COLUMN_NAMES["research_topic"]
             ], ascending=False
         ).head(3)
-        Print(top_3)
         return top_3
 
     def process_form_responses(self, spreadsheet_file: str):
