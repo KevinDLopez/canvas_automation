@@ -2,6 +2,7 @@ import datetime
 from enum import IntEnum
 import os
 import pprint
+import pandas as pd
 from typing import Callable, Dict, List, Tuple, TypedDict, Optional, Literal, Union
 from PyQt6.QtWidgets import (
     QApplication,
@@ -204,6 +205,7 @@ class GradingAutomationUI(QMainWindow):
         self.tabs.addTab(self.create_project_verification_tab(), "Project Verification")
         self.tabs.addTab(self.create_pages_management_tab(), "Pages Management")
         self.tabs.addTab(self.create_forms_management_tab(), "Forms and Quizzes")
+        self.tabs.addTab(self.create_form_analysis_tab(), "Form Analysis")
 
         # Connect the tab changed signal
         self.tabs.currentChanged.connect(self.on_tab_changed)
@@ -718,6 +720,186 @@ class GradingAutomationUI(QMainWindow):
         layout.addWidget(forms_group)
 
         return tab
+
+    def create_form_analysis_tab(self):
+        "Create the form analysis tab"
+        tab = QWidget()
+        layout = QVBoxLayout(tab)
+
+        # Form Analysis group
+        forms_analysis_group = QGroupBox("Analyze Responses")
+        forms_analysis_layout = QVBoxLayout()
+
+        # Horizontal layout for buttons
+        button_layout = QHBoxLayout()
+        aggregate_responses_btn = QPushButton("Aggregate Responses")
+        aggregate_responses_btn.clicked.connect(self.aggregate_form_responses)
+        analyze_form_response_btn = QPushButton("Analyze Google Responses")
+        analyze_form_response_btn.clicked.connect(self.analyze_responses)
+
+        button_layout.addWidget(aggregate_responses_btn)
+        button_layout.addWidget(analyze_form_response_btn)
+        forms_analysis_layout.addLayout(button_layout)
+        forms_analysis_group.setLayout(forms_analysis_layout)
+
+        # Dropdown group
+        dropdown_group = QGroupBox("Form Analysis")
+        dropdown_layout = QVBoxLayout()
+        self.dropdown_menu = QComboBox()
+        self.dropdown_menu.addItem("Grade Distribution for all presentations")
+        self.dropdown_menu.addItem("Each student average grading for others")
+        self.dropdown_menu.addItem("Top 3 Presentations")
+        self.dropdown_menu.addItem("Student Outliers")
+
+        # Connect dropdown selection change to handler
+        self.dropdown_menu.currentIndexChanged.connect(self.handle_dropdown_change)
+        dropdown_layout.addWidget(self.dropdown_menu)
+
+        # Table group
+        self.analysis_table = QTableWidget()
+        self.analysis_table.setRowCount(0)
+        self.analysis_table.setColumnCount(0)  # Start with 0 columns
+        self.analysis_table.setHorizontalHeaderLabels([])  # No headers initially
+        dropdown_layout.addWidget(self.analysis_table)
+
+        dropdown_group.setLayout(dropdown_layout)
+        layout.addWidget(forms_analysis_group)
+        layout.addWidget(dropdown_group)
+        return tab
+
+    def aggregate_form_responses(self):
+        "Aggregate all form responses for all groups into a single spreadsheet"
+
+        output_folder = "grading"
+        output_file = os.path.join(output_folder, "all_form_responses.xlsx")
+
+        # Create the output folder if it doesn't exist
+        os.makedirs(output_folder, exist_ok=True)
+
+        # Get spreadsheet containing general info using form_id in state.json.
+        try:
+            with open(state_path, "r") as f:
+                spreadsheet = json.load(state_path)
+        except FileNotFoundError:
+            self.log("File not found.", log_type="ERROR")
+            return
+        except json.JSONDecodeError:
+            self.log("JSON Parse Error.", log_type="ERROR")
+            return
+
+        spreadsheet_id = spreadsheet.get("form_id")
+
+        if spreadsheet_id:
+            spreadsheet = self.grader.get_spreadsheet_by_id(spreadsheet_id)
+
+            # Might need to change implementation if the active worksheet is not in the first tab
+            sheet = spreadsheet.sheet1
+            form_ids = list(set(sheet.col_values(sheet.find("form_id").col)[1:])) # Skip header row
+
+            # Retrieve all form responses from form_ids
+            all_responses = []
+            for form_id in form_ids:
+                try:
+                    # Get responses from google forms
+                    responses = self.grader.get_google_form_responses(form_id) # DataFrame
+                    all_responses.append(responses)
+
+                    # Append an empty row as a separator
+                    all_responses.append(pd.DataFrame({"": []}))
+                except Exception as e:
+                    self.log(f"Error processing form ID {form_id}: {e}", log_type="ERROR")
+
+            # Create Excel file containing all responses
+            if all_responses:
+                dataframe = pd.concat(all_responses, ignore_index=True)
+                dataframe.to_excel(output_file, index=False)
+                self.log(f"Form responses successfully aggregated to {output_file}.", log_type="INFO")
+            else:
+                self.log("No responses found.", log_type="ERROR")
+        else:
+            self.log("Can't find spreadsheet_id", log_type="ERROR")
+
+    def analyze_responses(self):
+        output_folder = "grading"
+        spreadsheet_file = os.path.join(output_folder, "all_form_responses.xlsx")
+
+        # Check if the file exists
+        # if not os.path.exists(spreadsheet_file):
+        #     self.log(f"Error: The file {spreadsheet_file} does not exist.", log_type="ERROR")
+        #     return
+
+        # Testing purpose (remove later)
+        project_dir = os.getcwd()
+        spreadsheet_file = os.path.join(project_dir, "S24-574-all-responses.xlsx")
+
+        try:
+            # Retrieve group averages, student averages, and top 3 presentations
+            group_avg, student_avg, top_3_presentations = self.grader.process_form_responses(spreadsheet_file)
+
+            # Store the DataFrames for reuse
+            self.group_avg = group_avg
+            self.student_avg = student_avg
+            self.top_3_presentations = top_3_presentations
+
+            # Update table based on dropdown selection
+            self.handle_dropdown_change()  # Update table immediately
+        except (FileNotFoundError, ValueError) as e:
+            self.log(str(e), log_type="ERROR")
+            return
+
+    def handle_dropdown_change(self):
+        dropdown_selection = self.dropdown_menu.currentText()
+
+        # Check if DataFrames are already loaded
+        if not hasattr(self, 'group_avg') or not hasattr(self, 'student_avg') or not hasattr(self, 'top_3_presentations'):
+            self.log("Data not loaded. Please analyze responses first.", log_type="ERROR")
+            return
+
+        try:
+            # Update the table based on the dropdown selection
+            if dropdown_selection == "Grade Distribution for all presentations":
+                self.update_analysis_table(self.group_avg)
+            elif dropdown_selection == "Each student average grading for others":
+                self.update_analysis_table(self.student_avg)
+            elif dropdown_selection == "Top 3 Presentations":
+                self.update_analysis_table(self.top_3_presentations)
+            elif dropdown_selection == "Student Outliers":
+                # Placeholder for Student Outliers analysis
+                self.update_analysis_table(pd.DataFrame())  # Replace with actual data
+        except Exception as e:
+            self.log(str(e), log_type="ERROR")
+
+    def update_analysis_table(self, data: pd.DataFrame):
+        # Clear existing rows if they exist
+        self.analysis_table.setRowCount(0)
+
+        # Check if data is empty
+        if data.empty:
+            return
+
+        # Set number of rows and columns dynamically based on data
+        num_rows = len(data)
+        num_columns = data.shape[1]
+        row_position = 0
+
+        self.analysis_table.setColumnCount(num_columns)
+
+        # Set the header labels
+        headers = list(data.columns)
+        self.analysis_table.setHorizontalHeaderLabels(headers)
+
+        # Convert DataFrame rows to table rows
+        for _, row in data.iterrows():
+            self.analysis_table.insertRow(row_position)  # Insert a new row
+            # For each column in the row, create a QTableWidgetItem and insert into the table
+            for col_index, value in enumerate(row):
+                value = str(value) if isinstance(value, str) else f"{value:.2f}"
+                table_item = QTableWidgetItem(str(value))
+                self.analysis_table.setItem(row_position, col_index, table_item)
+            row_position += 1
+
+        # Update the table to show the contents
+        self.analysis_table.resizeColumnsToContents()
 
     def save_ui_state(self):
         """Save the current state of UI elements"""
