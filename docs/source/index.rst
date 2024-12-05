@@ -13,6 +13,8 @@ This project is made by Jerry Wu and Kevin Lopez.
 With the use of Canvas API, Google Forms API, and Python.
 
 The goal of this project is to automate the grading process for the presentation done in this class.
+
+
 The students need to submit the following files to their assignment:
 
 #. A PDF of their presentation named ``presentation.pdf``
@@ -25,7 +27,8 @@ Getting Started
 
 How to use the application: 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-The professor( user of the application) would need to follow the steps below: 
+The professor (user of the application) would need to follow the steps below: 
+
 #. Download the submission from Canvas
 #. Verify that the files are present and correct
 #. Create the pages on Canvas for the team 
