@@ -93,6 +93,21 @@ def create_image(responses: pd.DataFrame, output_path: str):
 
     plt.savefig(output_path)
 
+def apply_iqr(data: pd.Series, return_outliers=True) -> pd.Series:
+    """Identifies student outliers using the IQR method"""
+
+    # Calculate Q1, Q3, IQR, lower and upper whiskers
+    Q1 = data.quantile(0.25) # 25th percentile
+    Q3 = data.quantile(0.75) # 75th percentile
+    IQR = Q3 - Q1
+    lower_whisker = Q1 - 1.5 * IQR
+    upper_whisker = Q3 + 1.5 * IQR
+
+    outliers = data[(data < lower_whisker) | (data > upper_whisker)]
+    filtered_data = data[(data >= lower_whisker) & (data <= upper_whisker)]
+
+    print(f"*q1 = {Q1}, q3 = {Q3}, IQR = {IQR}, lower_whisker = {lower_whisker}, upper_whisker = {upper_whisker}")
+    return filtered_data if not return_outliers else outliers
 
 class Grader:
     SPREADSHEET_COLUMN_NAMES = {
@@ -315,6 +330,24 @@ class Grader:
         ).head(3)
         return top_3
 
+    def get_student_outliers(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Identifies students who provided outlier grades for any category"""
+        outliers_df = pd.DataFrame()
+
+        for category in [
+            self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
+            self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
+            self.SPREADSHEET_COLUMN_NAMES["research_topic"]
+        ]:
+            outliers = apply_iqr(data[category])
+            if not outliers.empty:
+                category_outliers = data.loc[outliers.index, ["Email Address", category]].copy()
+                category_outliers.rename(columns={category: f"Outliers in {category}"}, inplace=True)
+                outliers_df = pd.concat([outliers_df, category_outliers], ignore_index=True)
+
+        outliers_df.drop_duplicates(inplace=True)
+        return outliers_df
+
     def process_form_responses(self, spreadsheet_file: str):
 
         data = self.load_data_from_spreadsheet(spreadsheet_file)
@@ -328,7 +361,10 @@ class Grader:
         # Get the top 3 presentations
         top_3_presentations = self.get_top_three_presentations(group_averages)
 
-        return group_averages, student_averages, top_3_presentations
+        # Get student outliers
+        student_outliers = self.get_student_outliers(data)
+
+        return group_averages, student_averages, top_3_presentations, student_outliers
 
     def grade_presentation_project(
         self,

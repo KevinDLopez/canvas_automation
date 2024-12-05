@@ -894,15 +894,16 @@ class GradingAutomationUI(QMainWindow):
 
         try:
             # Retrieve group averages, student averages, and top 3 presentations
-            group_avg, student_avg, top_3_presentations = self.grader.process_form_responses(spreadsheet_file)
+            group_avg, student_avg, top_3_presentations, student_outliers = self.grader.process_form_responses(spreadsheet_file)
 
             # Store the DataFrames for reuse
             self.group_avg = group_avg
             self.student_avg = student_avg
             self.top_3_presentations = top_3_presentations
+            self.student_outliers = student_outliers
 
             # Update table based on dropdown selection
-            self.handle_dropdown_change()  # Update table immediately
+            self.handle_dropdown_change()
         except (FileNotFoundError, ValueError) as e:
             self.log(str(e), log_type="ERROR")
             return
@@ -915,6 +916,7 @@ class GradingAutomationUI(QMainWindow):
             not hasattr(self, "group_avg")
             or not hasattr(self, "student_avg")
             or not hasattr(self, "top_3_presentations")
+            or not hasattr(self, "student_outliers")
         ):
             self.log("Data not loaded. Please analyze responses first.", log_type="ERROR")
             return
@@ -928,8 +930,7 @@ class GradingAutomationUI(QMainWindow):
             elif dropdown_selection == "Top 3 Presentations":
                 self.update_analysis_table(self.top_3_presentations)
             elif dropdown_selection == "Student Outliers":
-                # Placeholder for Student Outliers analysis
-                self.update_analysis_table(pd.DataFrame())  # Replace with actual data
+                self.update_analysis_table(self.student_outliers)
         except Exception as e:
             self.log(str(e), log_type="ERROR")
 
