@@ -282,8 +282,9 @@ class GradingAutomationUI(QMainWindow):
         print(f"student_records = {self.grader.student_records}")
         seen_path = set()
         for record in self.grader.student_records:
-            path = record["File_Path"]
+            path = self.folder_path.text() + "/" + record["Team_Name"]
             if path in seen_path:
+                print(f"skipping {path} because it was already seen")
                 continue
             seen_path.add(path)
             if not self.grader.is_a_project_folder(path):
@@ -460,7 +461,8 @@ class GradingAutomationUI(QMainWindow):
 
         for local_path, row_index in local_paths_selected:
             errors, page = self.local_projects_info[local_path]
-            team = self.grader.convert_student_record_sheets_to_team_info(self.grader.student_records, local_path)
+            team_name = os.path.basename(local_path)
+            team = self.grader.convert_student_record_sheets_to_team_info(team_name)
             if not team:
                 self.log("### not team -  HEY YOU NEED TO CREATE THE QUIZ FIRST ####", log_type="WARN")
                 continue
@@ -493,7 +495,7 @@ class GradingAutomationUI(QMainWindow):
                 status_item.setForeground(self._COLOR_MAP["white"])
                 self.quizzes_table.setItem(row_index, 3, status_item)
             except Exception as e:
-                Print(f"Error grading project {local_path}: {e}")
+                Print(f"Error grading project {local_path}: {e}", log_type="ERROR")
             page = self.grader.add_images_to_body(page, [image])
 
     def load_state(self):
@@ -793,7 +795,7 @@ class GradingAutomationUI(QMainWindow):
         # Get spreadsheet containing general info using form_id in state.json.
         try:
             with open(state_path, "r") as f:
-                spreadsheet = json.load(state_path)
+                spreadsheet = json.load(f)
         except FileNotFoundError:
             self.log("File not found.", log_type="ERROR")
             return
@@ -808,14 +810,14 @@ class GradingAutomationUI(QMainWindow):
 
             # Might need to change implementation if the active worksheet is not in the first tab
             sheet = spreadsheet.sheet1
-            form_ids = list(set(sheet.col_values(sheet.find("form_id").col)[1:])) # Skip header row
+            form_ids = list(set(sheet.col_values(sheet.find("form_id").col)[1:]))  # type: ignore # Skip header row
 
             # Retrieve all form responses from form_ids
             all_responses = []
             for form_id in form_ids:
                 try:
                     # Get responses from google forms
-                    responses = self.grader.get_google_form_responses(form_id) # DataFrame
+                    responses = self.grader.get_google_form_responses(form_id)  # DataFrame
                     all_responses.append(responses)
 
                     # Append an empty row as a separator
@@ -865,7 +867,11 @@ class GradingAutomationUI(QMainWindow):
         dropdown_selection = self.dropdown_menu.currentText()
 
         # Check if DataFrames are already loaded
-        if not hasattr(self, 'group_avg') or not hasattr(self, 'student_avg') or not hasattr(self, 'top_3_presentations'):
+        if (
+            not hasattr(self, "group_avg")
+            or not hasattr(self, "student_avg")
+            or not hasattr(self, "top_3_presentations")
+        ):
             self.log("Data not loaded. Please analyze responses first.", log_type="ERROR")
             return
 
@@ -951,9 +957,8 @@ class GradingAutomationUI(QMainWindow):
 
         for path, (errors, page) in self.local_projects_info.items():
             # Print(f"path: {path}, team: {team}, errors: {errors}")
-            team = self.grader.convert_student_record_sheets_to_team_info(
-                self.grader.student_records, path
-            )  # TODO: Test this
+            team_name = os.path.basename(path)
+            team = self.grader.convert_student_record_sheets_to_team_info(team_name)  # TODO: Test this
             if not team:
                 self.log("### not team - ? ####", log_type="WARN")
                 continue
@@ -987,7 +992,7 @@ class GradingAutomationUI(QMainWindow):
                 # disable the checkbox
         # check for pages that are not in the module but in the folder
         # local_team_names = {team.team_name for _, (team, _, _) in self.local_projects_info.items() if team}
-        # get local team names from spreadsheet self.grader.student_records ["File_Path"]
+        # get local team names from spreadsheet self.grader.student_records ["Team_Name"]
         local_team_names = {record["Team_Name"] for record in self.grader.student_records}
         # Find pages that exist in Canvas but not locally
         for page in pages_posted_in_module:
