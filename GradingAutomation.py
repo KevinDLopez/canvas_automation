@@ -169,18 +169,33 @@ class Grader:
         self.module_id_with_presentations = self.canvas.get_module_by_title(module_title)
 
     def get_pages_to_create(self, folders: List[str]) -> List[str]:
-        # Get the folders that do not have a page in Canvas inside the module self.module_id_with_presentations[id]
+        """Get a list of folders that do not have a Canvas pages in the presentations module.
 
+        This method checks each folder against existing Canvas pages to determine which folders
+        need new pages created. It uses the team name from the folder path to match against
+        Canvas page titles.
+
+        Args:
+            folders: List of folder paths to check for existing Canvas pages.
+
+        Returns:
+            List[str]: List of folder paths that need Canvas pages created.
+
+        Example:
+            >>> grader = Grader(...)
+            >>> folders = ['/path/to/team1', '/path/to/team2']
+            >>> pages_to_create = grader.get_pages_to_create(folders)
+            >>> print(pages_to_create)
+            ['/path/to/team2']  # Only team2 needs a page created
+        """
         # Get the pages in the module
         pages_created = self.canvas.list_module_items(self.module_id_with_presentations.id)
         Print("pages already created = ", pages_created)
         pages_to_create: List[str] = []
         for folder in folders:
             team_name = os.path.basename(folder)
-            # need to get the team name from student_records
-            team_info = self.convert_student_record_sheets_to_team_info(team_name)
             # Check if the page already exists
-            page_exists = any([team_name in page.title for page in pages_created])
+            page_exists = any([team_name == page.title for page in pages_created])
             if not page_exists:
                 pages_to_create.append(folder)
         Print("pages to create = ", pages_to_create)
