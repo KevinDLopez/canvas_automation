@@ -275,21 +275,7 @@ class GradingAutomationUI(QMainWindow):
         """Continues the verification process after worksheet ID is entered"""
         folder = self.folder_path.text()
         self.log(f"Starting project verification in folder: {folder}", "INFO")
-        # folders_with_team = self.grader.get_folders_with_team(folder)
-        folders_with_team = []
-        print(f"student_records = {self.grader.student_records}")
-        seen_path = set()
-        for record in self.grader.student_records:
-            path = record["File_Path"]
-            if path in seen_path:
-                continue
-            seen_path.add(path)
-            if not self.grader.is_a_project_folder(path):
-                print("warnning ")
-                Print(f"**** Folder {path} is not a project folder", log_type="WARN")
-            else:
-                folders_with_team.append(path)
-        self.log(f"Found {len(folders_with_team)} folders with teams", log_type="INFO")
+        folders_with_team = self.grader.get_folders_with_team(folder)
 
         # Get failed projects (those with errors)
         self.local_projects_info: dict[str, tuple[TeamInfo | None, List[str], PageSchema | None]] = {
