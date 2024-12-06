@@ -158,7 +158,7 @@ class GradingAutomationUI(QMainWindow):
 
         # Functions to call at start up
         QApplication.processEvents()
-        self.verify_projects()
+        # self.verify_projects()
 
     def is_course_connected(self):
         return self.state.get("course_id") and self.state.get("canvas_token") and self.state.get("module_title")
@@ -563,11 +563,12 @@ class GradingAutomationUI(QMainWindow):
         worksheet_url_layout = QHBoxLayout()
         self.worksheet_url = QLineEdit()
         if self.state.get("worksheet_url"):
-            self.worksheet_url.setText(self.state["worksheet_url"])
+            self.worksheet_url.setText(self.state.get("worksheet_url", "https://docs.google.com/spreadsheets/u/0/d/1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ/htmlview"))
         worksheet_url_layout.addWidget(self.worksheet_url)
         worksheet_url_group.setLayout(worksheet_url_layout)
         layout.addWidget(worksheet_url_group)
         layout.addWidget(folder_group)
+        spreadsheet_id = get_id_from_url(self.worksheet_url)
 
         # Verification group
         verify_group = QGroupBox("Project Verification")
