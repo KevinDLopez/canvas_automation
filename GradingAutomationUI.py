@@ -158,7 +158,11 @@ class GradingAutomationUI(QMainWindow):
 
         # Functions to call at start up
         QApplication.processEvents()
-        # self.verify_projects()
+        # if this is the first time running the program, if not then don't verify projects
+        if self.state.get("worksheet_url"):
+            self.verify_projects()
+        else:
+            Print("First time running ")
 
     def is_course_connected(self):
         return self.state.get("course_id") and self.state.get("canvas_token") and self.state.get("module_title")
@@ -562,13 +566,16 @@ class GradingAutomationUI(QMainWindow):
         worksheet_url_group = QGroupBox("Spreadsheet URL")
         worksheet_url_layout = QHBoxLayout()
         self.worksheet_url = QLineEdit()
-        if self.state.get("worksheet_url"):
-            self.worksheet_url.setText(self.state.get("worksheet_url", "https://docs.google.com/spreadsheets/u/0/d/1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ/htmlview"))
+        self.worksheet_url.setText(
+            self.state.get(
+                "worksheet_url",
+                "https://docs.google.com/spreadsheets/u/0/d/1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ/htmlview",
+            )
+        )
         worksheet_url_layout.addWidget(self.worksheet_url)
         worksheet_url_group.setLayout(worksheet_url_layout)
         layout.addWidget(worksheet_url_group)
         layout.addWidget(folder_group)
-        spreadsheet_id = get_id_from_url(self.worksheet_url)
 
         # Verification group
         verify_group = QGroupBox("Project Verification")
@@ -837,48 +844,40 @@ class GradingAutomationUI(QMainWindow):
         # Create the output folder if it doesn't exist
         os.makedirs(output_folder, exist_ok=True)
 
-        # Get spreadsheet containing general info using form_id in state.json.
-        try:
-            with open(state_path, "r") as f:
-                spreadsheet = json.load(f)
-        except FileNotFoundError:
-            self.log("File not found.", log_type="ERROR")
-            return
-        except json.JSONDecodeError:
-            self.log("JSON Parse Error.", log_type="ERROR")
+        spreadsheet_id = get_id_from_url(self.worksheet_url.text())
+        if not spreadsheet_id:
+            self.log(
+                "Invalid spreadsheet URL, Make sure to enter a spreadsheet URL in the Project Verification Tab",
+                log_type="ERROR",
+            )
             return
 
-        spreadsheet_id = spreadsheet.get("form_id")
+        forms_ids = {}
+        for record in self.grader.student_records:
+            if record["Team_Name"] not in forms_ids and record["Google_Form_ID"]:
+                forms_ids[record["Team_Name"]] = record["Google_Form_ID"]
 
-        if spreadsheet_id:
-            spreadsheet = self.grader.get_spreadsheet_by_id(spreadsheet_id)
+        Print(f"forms_ids: {forms_ids}")
+        # Retrieve all form responses from form_ids
+        all_responses = []
+        for team_name, form_id in forms_ids.items():
+            try:
+                # Get responses from google forms
+                responses = self.grader.get_google_form_responses(form_id)  # DataFrame
+                all_responses.append(responses)
 
-            # Might need to change implementation if the active worksheet is not in the first tab
-            sheet = spreadsheet.sheet1
-            form_ids = list(set(sheet.col_values(sheet.find("form_id").col)[1:]))  # type: ignore # Skip header row
+                # Append an empty row as a separator
+                all_responses.append(pd.DataFrame({"": []}))
+            except Exception as e:
+                Print(f"Error processing form ID {form_id}: {e}", log_type="ERROR")
 
-            # Retrieve all form responses from form_ids
-            all_responses = []
-            for form_id in form_ids:
-                try:
-                    # Get responses from google forms
-                    responses = self.grader.get_google_form_responses(form_id)  # DataFrame
-                    all_responses.append(responses)
-
-                    # Append an empty row as a separator
-                    all_responses.append(pd.DataFrame({"": []}))
-                except Exception as e:
-                    self.log(f"Error processing form ID {form_id}: {e}", log_type="ERROR")
-
-            # Create Excel file containing all responses
-            if all_responses:
-                dataframe = pd.concat(all_responses, ignore_index=True)
-                dataframe.to_excel(output_file, index=False)
-                self.log(f"Form responses successfully aggregated to {output_file}.", log_type="INFO")
-            else:
-                self.log("No responses found.", log_type="ERROR")
+        # Create Excel file containing all responses
+        if all_responses:
+            dataframe = pd.concat(all_responses, ignore_index=True)
+            dataframe.to_excel(output_file, index=False)
+            Print(f"Form responses successfully aggregated to {output_file}.", log_type="INFO")
         else:
-            self.log("Can't find spreadsheet_id", log_type="ERROR")
+            Print("No responses found.", log_type="ERROR")
 
     def analyze_responses(self):
         output_folder = "grading"
@@ -895,7 +894,9 @@ class GradingAutomationUI(QMainWindow):
 
         try:
             # Retrieve group averages, student averages, and top 3 presentations
-            group_avg, student_avg, top_3_presentations, student_outliers = self.grader.process_form_responses(spreadsheet_file)
+            group_avg, student_avg, top_3_presentations, student_outliers = self.grader.process_form_responses(
+                spreadsheet_file
+            )
 
             # Store the DataFrames for reuse
             self.group_avg = group_avg
