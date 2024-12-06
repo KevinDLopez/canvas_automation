@@ -946,8 +946,7 @@ class GradingAutomationUI(QMainWindow):
         if data.empty:
             return
 
-        # Set number of rows and columns dynamically based on data
-        num_rows = len(data)
+        # Set number of columns dynamically based on data
         num_columns = data.shape[1]
         row_position = 0
 
