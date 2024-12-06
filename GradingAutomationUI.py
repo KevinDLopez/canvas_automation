@@ -35,7 +35,7 @@ from GoogleServices.GoogleServices import get_id_from_url
 from GoogleServices.schemas import Form
 from GradingAutomation import Grader
 from Logging import Print
-from schemas import TeamInfo
+from schemas import StudentRecord, TeamInfo
 
 
 class LogLevel(IntEnum):
@@ -254,6 +254,15 @@ class GradingAutomationUI(QMainWindow):
         if folder:
             self.folder_path.setText(folder)
 
+    def verify_student_information(self, canvas_emails: set[str], canvas_names: set[str], record: StudentRecord):
+        errors_email = []
+        errors_name = []
+        if record["Email"].strip().lower() not in canvas_emails:
+            errors_email.append(f"Email {record['Email']} not found in Canvas from team {record['Team_Name']}")
+        if record["Names"].strip().lower() not in canvas_names:
+            errors_name.append(f"Name {record['Names']} not found in Canvas from team {record['Team_Name']}")
+        return errors_email, errors_name
+
     def verify_projects(self):
         """Continues the verification process after worksheet ID is entered"""
         worksheet_id = get_id_from_url(self.worksheet_url.text())
@@ -267,8 +276,19 @@ class GradingAutomationUI(QMainWindow):
         print(f"student_records = {self.grader.student_records}")
         seen_path = set()
         projects_to_download = []
+        user_from_canvas = self.grader.canvas.get_users_in_course()
+        emails_in_canvas = {user["email"].strip().lower() for user in user_from_canvas}
+        names_in_canvas = {user["name"].strip().lower() for user in user_from_canvas}
+        Print(f"emails_in_canvas = {emails_in_canvas}")
+        Print(f"names_in_canvas = {names_in_canvas}")
+        errors_email = []
+        errors_name = []
         for record in self.grader.student_records:
             path = self.folder_path.text() + "/" + record["Team_Name"]
+            # TODO: Check the email, names, and student ID
+            e_mail, e_name = self.verify_student_information(emails_in_canvas, names_in_canvas, record)
+            errors_email.extend(e_mail)
+            errors_name.extend(e_name)
             if path in seen_path:
                 print(f"skipping {path} because it was already seen")
                 continue
@@ -289,7 +309,7 @@ class GradingAutomationUI(QMainWindow):
                 folders_with_team.append(path)
         self.log(f"Found {len(folders_with_team)} folders with teams", log_type="INFO")
         self.log(f"Found {len(projects_to_download)} folders to download", log_type="INFO")
-
+        self.log(f"Errors: {pprint.pformat(errors_email)}\n{pprint.pformat(errors_name)}", log_type="ERROR")
         self.file_to_download_group.setVisible(len(projects_to_download) > 0)
         self.file_to_download.setRowCount(len(projects_to_download))
         for i, (team_name, folder_path) in enumerate(projects_to_download):

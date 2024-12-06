@@ -1,7 +1,7 @@
 import base64
 import os
 import time
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional, TypedDict
 import requests
 import unittest
 import json
@@ -70,15 +70,23 @@ class CanvasAPI:
 
         raise requests.HTTPError(f"Failed to make request after {attempts} attempts")
 
-    def get_users_in_course(self) -> List[Dict]:
+    def get_users_in_course(
+        self,
+    ) -> List[UsersSchema]:
         """
         Retrieve active users enrolled in the course.
 
         Returns:
-            List[Dict]: A list of user dictionaries.
+            List[User]: A list of user dictionaries containing:
+                - id (int): User ID
+                - name (str): Full name
+                - created_at (str): Creation timestamp
+                - sortable_name (str): Name for sorting
+                - short_name (str): Short display name
+                - email (str): Email address
         """
         params = {"sort": "email", "enrollment_state": "active"}
-        users = []
+        users: List[UsersSchema] = []
         endpoint = "users"
 
         while endpoint:
