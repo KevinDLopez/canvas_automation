@@ -54,7 +54,9 @@ class QuizTableRowData(TypedDict, total=False):
     LocalPath: str
     PageName: str
     Status: str
-    StatusColor: Optional[Literal["red", "green", "gray", "yellow", "white", "blue"]]  # Now accepts string literals
+    StatusColor: Optional[
+        Literal["red", "green", "gray", "yellow", "white", "blue", "darkred"]
+    ]  # Now accepts string literals
     FontColor: Optional[Literal["white", "black"]]
 
 
@@ -68,6 +70,7 @@ class GradingAutomationUI(QMainWindow):
         "yellow": Qt.GlobalColor.yellow,
         "white": Qt.GlobalColor.white,
         "black": Qt.GlobalColor.black,
+        "darkred": QColor(139, 0, 0, 200),
     }
 
     def __init__(self):
@@ -159,10 +162,6 @@ class GradingAutomationUI(QMainWindow):
         # Functions to call at start up
         QApplication.processEvents()
         # if this is the first time running the program, if not then don't verify projects
-        if self.state.get("worksheet_url"):
-            self.verify_projects()
-        else:
-            Print("First time running ")
 
     def is_course_connected(self):
         return self.state.get("course_id") and self.state.get("canvas_token") and self.state.get("module_title")
@@ -190,8 +189,7 @@ class GradingAutomationUI(QMainWindow):
 
         # Add Module Title input
         self.module_title_input = QLineEdit()
-        if self.state.get("module_title"):
-            self.module_title_input.setText(self.state["module_title"])
+        self.module_title_input.setText(self.state.get("module_title", "Fall 2024 - Presentation"))
         group_layout.addWidget(QLabel("Presentations Module Title:"))
         group_layout.addWidget(self.module_title_input)
 
@@ -476,23 +474,27 @@ class GradingAutomationUI(QMainWindow):
         self.__make_popup(  # Using a pop up to get the assignment title
             title="Enter Assignment Title",
             label_text="Assignment Title:",
-            default_value=self.state.get("last_assignment_title_2", ""),
+            default_value=self.state.get("last_assignment_title_2", "Presentation"),
             ok_callback=handle_ok,  # Function call is done here
         )
 
     def _remove_forms_quizzes(self, assignment_title: str = "Presentation Grade"):
         # Implementation for removing forms/quizzes
-        local_paths_selected = []
+        local_paths_selected: List[Tuple[str, int, str]] = []  # (local_path, row_index, Team_Name)
         for i in range(self.quizzes_table.rowCount()):
             checkbox_item = self.quizzes_table.item(i, 0)
             if checkbox_item is not None and checkbox_item.checkState() == Qt.CheckState.Checked:
                 local_path_item = self.quizzes_table.item(i, 1)
                 if local_path_item is not None:
-                    local_paths_selected.append((local_path_item.text(), i))
+                    local_paths_selected.append((local_path_item.text(), i, self.quizzes_table.item(i, 2).text()))
 
-        for local_path, row_index in local_paths_selected:
-            errors, page = self.local_projects_info[local_path]
-            team_name = os.path.basename(local_path)
+        for local_path, row_index, team_name in local_paths_selected:
+            if local_path in self.local_projects_info:
+                _, page = self.local_projects_info[local_path]
+            else:
+                Print(f"Team_Name = {team_name}")
+                page = self.grader.canvas.get_page_by_title(team_name, self.grader.module_id_with_presentations.id)
+            # team_name = os.path.basename(local_path)
             team = self.grader.convert_student_record_sheets_to_team_info(team_name)
             if not team:
                 self.log("### not team -  HEY YOU NEED TO CREATE THE QUIZ FIRST ####", log_type="WARN")
@@ -516,7 +518,9 @@ class GradingAutomationUI(QMainWindow):
             page = self.grader.remove_feedback_url_and_quiz(page)
             # add grate and create image
             emails = [team_member.email for team_member in team.team_members]
-            image = local_path + "/" + team.team_name + ".png"
+            if not os.path.exists(local_path):  # When path is 'No local path'
+                local_path = self.folder_path.text()
+            image = local_path + "/" + team.team_name + ".png"  # TODO: Local path does not exist, fix:
             try:
                 self.grader.grade_presentation_project(
                     form_id=form_id, assignment_title=assignment_title, emails=emails, path_image=image
@@ -703,7 +707,7 @@ class GradingAutomationUI(QMainWindow):
                     for student_record in self.grader.student_records:
                         if student_record["Team_Name"] == self.file_to_download.item(checked_row, 1).text():
                             student_email = student_record["Email"]
-                            student_id = self.grader.canvas.get_student_id_by_email(student_email)
+                            student_id = self.grader.canvas.get_user_id_by_email(student_email)
                             if not student_id:
                                 Print(f"Student ID not found for {student_email}", log_type="ERROR")
                                 continue
@@ -723,7 +727,7 @@ class GradingAutomationUI(QMainWindow):
         self.__make_popup(
             title="Enter Assignment Title",
             label_text="Assignment Title:",
-            default_value=self.state.get("last_assignment_title", ""),
+            default_value=self.state.get("last_assignment_title", "Presentation"),
             ok_callback=handle_ok,
         )
 
@@ -1019,6 +1023,7 @@ class GradingAutomationUI(QMainWindow):
         # From all the pages in the module folder
         folder = self.folder_path.text()
         folders_with_team = self.grader.get_folders_with_team(folder)
+        local_project_names = {os.path.basename(folder) for folder in folders_with_team}
         self.local_projects_info: dict[str, tuple[List[str], PageSchema | None]] = {
             folder_path: (errors, None) for folder_path, errors in self.grader.verify_all_projects(folders_with_team)
         }  # Dict[dict[str, tuple[TeamInfo | None, List[str]]]. PATH, (team, errors)
@@ -1054,7 +1059,7 @@ class GradingAutomationUI(QMainWindow):
                     {
                         "LocalPath": path,
                         "PageName": team.team_name,
-                        "Status": "Not Added",
+                        "Status": "Not Created",
                         "StatusColor": "white",
                         "FontColor": "black",
                     }
@@ -1063,16 +1068,27 @@ class GradingAutomationUI(QMainWindow):
         # check for pages that are not in the module but in the folder
         # local_team_names = {team.team_name for _, (team, _, _) in self.local_projects_info.items() if team}
         # get local team names from spreadsheet self.grader.student_records ["Team_Name"]
-        local_team_names = {record["Team_Name"] for record in self.grader.student_records}
+        spreadsheet_team_names = {record["Team_Name"] for record in self.grader.student_records}
         # Find pages that exist in Canvas but not locally
         for page in pages_posted_in_module:
-            if page.title not in local_team_names:
+            if page.title in spreadsheet_team_names and page.title not in local_project_names:
+                Print(f"project {page.title} not in local projects but in spreadsheet", log_type="ERROR")
                 self._add_quiz_table_row(
                     {
-                        "LocalPath": "",
+                        "LocalPath": "It is in the spreadsheet, but no in local files",
                         "PageName": page.title,
-                        "Status": "No Local Files",
+                        "Status": "No Local, Yes Spreadsheet",
                         "StatusColor": "red",
+                        "FontColor": "white",
+                    }
+                )
+            elif page.title not in local_project_names:
+                self._add_quiz_table_row(
+                    {
+                        "LocalPath": "No Local Files, and it is not in the spreadsheet",
+                        "PageName": page.title,
+                        "Status": "No Local, No Spreadsheet",
+                        "StatusColor": "darkred",
                         "FontColor": "white",
                     }
                 )
@@ -1139,7 +1155,7 @@ class GradingAutomationUI(QMainWindow):
             >>> self._add_quiz_table_row({
             ...     "LocalPath": "/path/to/quiz",
             ...     "PageName": "Team 1 Quiz",
-            ...     "Status": "Not Added",
+            ...     "Status": "Not Created",
             ...     "StatusColor": "red",
             ...     "FontColor": "white"
             ... })
@@ -1154,12 +1170,12 @@ class GradingAutomationUI(QMainWindow):
         # Only enable checkbox if status isn't "Done" and has local files
         if (
             data.get("Status") != "Done"
-            and data.get("Status") != "No Local Files"
+            and data.get("Status") != "No Local, No Spreadsheet"
             and data.get("LocalPath")
-            and data.get("Status") != "Not Added"
+            and data.get("Status") != "Not Created"
         ):
             checkbox.setCheckState(Qt.CheckState.Unchecked)
-        else:  # or data['Status']=="Not Added"
+        else:
             checkbox.setFlags(Qt.ItemFlag.ItemIsEnabled)  # Disable checkbox
             checkbox.setCheckState(Qt.CheckState.Unchecked)
 

@@ -427,9 +427,14 @@ class Grader:
         assignment_id = self.get_assignment_id_by_title(assignment_title)
 
         # Update grades in Canvas
+        emails = [email.strip().lower() for email in emails]
         for student in students:
             if student["email"].strip().lower() in emails:
-                self.canvas.update_student_grade(assignment_id, student["id"], grade)
+                Print(f"Updating grade for {student['email']}", log_type="INFO")
+                try:
+                    self.canvas.update_student_grade(assignment_id, student["id"], grade)
+                except Exception as e:
+                    Print(f"Error updating grade for {student['email']}: {e}", log_type="ERROR")
         Print("Grading complete", log_type="INFO")
 
     def __read_team_info_file(self, path: str, raise_error: bool = True) -> TeamInfo:  # type: ignore
@@ -660,7 +665,9 @@ class Grader:
         # create canvas quiz based on the quiz file
         return self.canvas.update_page(page.page_id, body=body), form
 
-    def get_page_status(self, page: PageSchema) -> Literal["Created", "Quiz and Feedback added", "Done"]:
+    def get_page_status(
+        self, page: PageSchema
+    ) -> Literal["Created", "Quiz and Feedback added", "Done", "Evaluation Form"]:
         if page.url is None:
             raise ValueError("Page ID is None")
 
@@ -671,7 +678,9 @@ class Grader:
 
         if "Feedback Form:" in page.body:
             return "Quiz and Feedback added"
-        elif "<img" in page.body:  # Have not tested this
+        elif "Evaluation Form" in page.body:
+            return "Evaluation Form"
+        elif "<img" in page.body:
             return "Done"
         # else
         return "Created"
@@ -679,7 +688,10 @@ class Grader:
     def remove_feedback_url_and_quiz(self, page: PageSchema):
         old_body: str = page.body  # type: ignore
         # Remove the feedback form and quiz
-        body = old_body.split("<p><strong>Feedback Form:</strong>")[0]
+        if "Feedback Form:" in old_body:
+            body = old_body.split("<p><strong>Feedback Form:</strong>")[0]
+        else:  # It will not remove the feedback form
+            body = old_body
         return self.canvas.update_page(page.page_id, body=body)
 
     def add_images_to_body(self, page: PageSchema, image_paths: List[str]):

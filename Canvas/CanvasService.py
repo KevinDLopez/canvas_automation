@@ -253,7 +253,7 @@ class CanvasAPI:
 
         return downloaded_files
 
-    def get_student_id_by_email(self, email: str) -> Optional[int]:
+    def get_user_id_by_email(self, email: str) -> Optional[int]:
         """
         Get the ID of a student by their email.
         """
@@ -647,6 +647,13 @@ class CanvasAPI:
         endpoint = f"modules/{module_id}/items"
         moduleItem = self._make_request("GET", endpoint)
         return [ModuleItemSchema(**item) for item in moduleItem]
+
+    def get_page_by_title(self, title: str, module_id: int) -> PageSchema:
+        pages = self.get_module_pages(module_id)
+        for page in pages:
+            if page.title == title:
+                return page
+        raise ValueError(f"Page with title '{title}' not found.")
 
     def get_page_by_id(self, url: str) -> PageSchema:
         endpoint = f"pages/{url}"
