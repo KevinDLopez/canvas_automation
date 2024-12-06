@@ -162,6 +162,8 @@ class GradingAutomationUI(QMainWindow):
         # Functions to call at start up
         QApplication.processEvents()
         # if this is the first time running the program, if not then don't verify projects
+        if self.is_course_connected() and self.state.get("worksheet_url"):
+            self.verify_projects()
 
     def is_course_connected(self):
         return self.state.get("course_id") and self.state.get("canvas_token") and self.state.get("module_title")
@@ -263,7 +265,7 @@ class GradingAutomationUI(QMainWindow):
     def verify_projects(self):
         """Continues the verification process after worksheet ID is entered"""
         worksheet_id = get_id_from_url(self.worksheet_url.text())
-        self.grader.set_worksheet(worksheet_id)
+        self.grader.set_worksheet(worksheet_id, 0)
         self.grader.read_worksheet()
         Print(f"Worksheet ID set to {worksheet_id}", "INFO")
         folder = self.folder_path.text()
@@ -1033,6 +1035,15 @@ class GradingAutomationUI(QMainWindow):
         for path, (errors, page) in self.local_projects_info.items():
             # Print(f"path: {path}, team: {team}, errors: {errors}")
             team_name = os.path.basename(path)
+            if not self.grader.student_records:
+                try:
+                    spreadsheet_id = get_id_from_url(self.worksheet_url.text())
+                except Exception as e:
+                    Print(f"Make sure you have set a worksheet in the Project Verification Tab", log_type="ERROR")
+                    Print(f"Error: {e}", log_type="ERROR")
+                    return
+                self.grader.set_worksheet(spreadsheet_id, 0)
+                self.grader.read_worksheet()
             team = self.grader.convert_student_record_sheets_to_team_info(team_name)  # TODO: Test this
             if not team:
                 self.log("### not team - ? ####", log_type="WARN")

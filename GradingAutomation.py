@@ -718,7 +718,7 @@ class Grader:
 if __name__ == "__main__":
     # Sample Implementation
     grader = Grader(course_id=15319, module_title="Fall 2024 - Presentation")
-    grader.set_worksheet("1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ")
+    grader.set_worksheet("1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ", 0)
     # pprint.pprint(grader.worksheet.get_values())
     student_records = grader.read_worksheet()
     pprint.pprint(student_records)
