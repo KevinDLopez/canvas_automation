@@ -111,6 +111,7 @@ def apply_iqr(data: pd.Series, return_outliers=True) -> pd.Series:
 class Grader:
     SPREADSHEET_COLUMN_NAMES = {
         "email": "Email Address",
+        "team_name": "Team_Name",
         "slide_deck": "Overall grade to this team's Slide deck?",
         "presentation_skills": "Overall grade to this team's Presentation skills?",
         "research_topic": "Overall grade to this team's Research topic and (summary) paper content?",
@@ -142,7 +143,7 @@ class Grader:
         self.google.update_worksheet_from_records(self.worksheet, self.student_records)  # type: ignore
 
     def convert_student_record_sheets_to_team_info(self, Team_Name: str) -> TeamInfo:
-        # get the team that hast the project_path
+        # get the team that has the project_path
         team_record = [record for record in self.student_records if record["Team_Name"] == Team_Name]
         if not team_record:
             raise ValueError(f"Team info not found for team: {Team_Name}")
@@ -258,21 +259,22 @@ class Grader:
     def calculate_group_averages(self, data: pd.DataFrame) -> pd.DataFrame:
         """Calculates the average grade for each team on their slide deck, presentation skills, and research topic and paper content"""
 
-        # Column to store group numbers (subject to change for team names)
-        group_numbers = []
-        current_group = 1
+        # # Column to store group numbers (subject to change for team names)
+        # group_numbers = []
+        # current_group = 1
+        # for idx, row in data.iterrows():
+        #     if pd.isna(row["Email Address"]):
+        #         current_group += 1
+        #     group_numbers.append(current_group)
 
-        for idx, row in data.iterrows():
-            if pd.isna(row["Email Address"]):
-                current_group += 1
-            group_numbers.append(current_group)
+        # # Subject to change to include team names instead
+        # data.loc[:, "Team"] = group_numbers
 
-        # Subject to change to include team names instead
-        data.loc[:, "Team"] = group_numbers
+
 
         # Group by 'Team' and calculate average for each grade category
         group_avg = (
-            data.groupby("Team")
+            data.groupby(self.SPREADSHEET_COLUMN_NAMES["team_name"])
             .agg(
                 {
                     self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "mean",
@@ -295,7 +297,6 @@ class Grader:
         # Drop rows with any NaN values
         group_avg = group_avg.dropna()
         group_avg.reset_index(drop=True, inplace=True)
-        group_avg["Team"] = range(1, len(group_avg) + 1)
 
         return group_avg
 
