@@ -103,15 +103,15 @@ def apply_iqr(data: pd.Series, return_outliers=True) -> pd.Series:
     lower_whisker = Q1 - 1.5 * IQR
     upper_whisker = Q3 + 1.5 * IQR
 
-    outliers = data[(data < lower_whisker) | (data > upper_whisker)]
-    filtered_data = data[(data >= lower_whisker) & (data <= upper_whisker)]
+    outliers = data[(data < lower_whisker) | (data > upper_whisker) | (data == 0)]
+    filtered_data = data[(data >= lower_whisker) & (data <= upper_whisker) & (data != 0)]
 
-    print(f"*q1 = {Q1}, q3 = {Q3}, IQR = {IQR}, lower_whisker = {lower_whisker}, upper_whisker = {upper_whisker}")
     return filtered_data if not return_outliers else outliers
 
 class Grader:
     SPREADSHEET_COLUMN_NAMES = {
-        "email": "Email Address",
+        "email": "Email",
+        "team_name": "Team_Name",
         "slide_deck": "Overall grade to this team's Slide deck?",
         "presentation_skills": "Overall grade to this team's Presentation skills?",
         "research_topic": "Overall grade to this team's Research topic and (summary) paper content?",
@@ -143,7 +143,7 @@ class Grader:
         self.google.update_worksheet_from_records(self.worksheet, self.student_records)  # type: ignore
 
     def convert_student_record_sheets_to_team_info(self, Team_Name: str) -> TeamInfo:
-        # get the team that hast the project_path
+        # get the team that has the project_path
         team_record = [record for record in self.student_records if record["Team_Name"] == Team_Name]
         if not team_record:
             raise ValueError(f"Team info not found for team: {Team_Name}")
@@ -245,6 +245,7 @@ class Grader:
             self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
             self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
             self.SPREADSHEET_COLUMN_NAMES["research_topic"],
+            self.SPREADSHEET_COLUMN_NAMES["team_name"]
         ]
         data = pd.read_excel(spreadsheet_file, usecols=columns_to_read)
 
@@ -259,21 +260,9 @@ class Grader:
     def calculate_group_averages(self, data: pd.DataFrame) -> pd.DataFrame:
         """Calculates the average grade for each team on their slide deck, presentation skills, and research topic and paper content"""
 
-        # Column to store group numbers (subject to change for team names)
-        group_numbers = []
-        current_group = 1
-
-        for idx, row in data.iterrows():
-            if pd.isna(row["Email Address"]):
-                current_group += 1
-            group_numbers.append(current_group)
-
-        # Subject to change to include team names instead
-        data.loc[:, "Team"] = group_numbers
-
         # Group by 'Team' and calculate average for each grade category
         group_avg = (
-            data.groupby("Team")
+            data.groupby(self.SPREADSHEET_COLUMN_NAMES["team_name"])
             .agg(
                 {
                     self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "mean",
@@ -284,17 +273,25 @@ class Grader:
             .reset_index()
         )
 
+        group_avg.rename(
+            columns={
+                self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "Average Slide Deck Grade",
+                self.SPREADSHEET_COLUMN_NAMES["presentation_skills"]: "Average Presentation Skills Grade",
+                self.SPREADSHEET_COLUMN_NAMES["research_topic"]: "Average Research and Topic Grade",
+            },
+            inplace=True,
+        )
+
         # Drop rows with any NaN values
         group_avg = group_avg.dropna()
         group_avg.reset_index(drop=True, inplace=True)
-        group_avg["Team"] = range(1, len(group_avg) + 1)
 
         return group_avg
 
     def calculate_student_averages(self, data: pd.DataFrame) -> pd.DataFrame:
         """Calculates the averages students gave for each team based on each category"""
         student_avg = (
-            data.groupby("Email Address")
+            data.groupby(self.SPREADSHEET_COLUMN_NAMES["email"])
             .agg(
                 {
                     self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "mean",
@@ -322,30 +319,40 @@ class Grader:
         # Sort by the grades for each category (descending order)
         top_3 = group_averages.sort_values(
             by=[
-                self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
-                self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
-                self.SPREADSHEET_COLUMN_NAMES["research_topic"],
+                "Average Slide Deck Grade",
+                "Average Presentation Skills Grade",
+                "Average Research and Topic Grade"
             ],
             ascending=False,
         ).head(3)
         return top_3
 
     def get_student_outliers(self, data: pd.DataFrame) -> pd.DataFrame:
-        """Identifies students who provided outlier grades for any category"""
-        outliers_df = pd.DataFrame()
+        """Identifies students who provided outlier grades or zeros, and counts the number for each student."""
+
+        outliers_count = {}  # Dictionary to store email and count of outliers/zeros
 
         for category in [
             self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
             self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
-            self.SPREADSHEET_COLUMN_NAMES["research_topic"]
+            self.SPREADSHEET_COLUMN_NAMES["research_topic"],
         ]:
+            # Identify outliers and zeros in the category
             outliers = apply_iqr(data[category])
             if not outliers.empty:
-                category_outliers = data.loc[outliers.index, ["Email Address", category]].copy()
-                category_outliers.rename(columns={category: f"Outliers in {category}"}, inplace=True)
-                outliers_df = pd.concat([outliers_df, category_outliers], ignore_index=True)
+                # Get the emails of students who gave outliers or zeros
+                emails = data.loc[outliers.index, "Email Address"]
+                for email in emails:
+                    if email in outliers_count:
+                        outliers_count[email] += 1
+                    else:
+                        outliers_count[email] = 1
 
-        outliers_df.drop_duplicates(inplace=True)
+        # Convert the dictionary into a DataFrame for better readability
+        outliers_df = pd.DataFrame(
+            list(outliers_count.items()), columns=["Email Address", "Outlying Grades Given"]
+        ).sort_values(by="Outlying Grades Given", ascending=False)
+
         return outliers_df
 
     def process_form_responses(self, spreadsheet_file: str):
