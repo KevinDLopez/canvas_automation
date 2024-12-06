@@ -316,15 +316,19 @@ class Grader:
         return student_avg
 
     def get_top_three_presentations(self, group_averages: pd.DataFrame) -> pd.DataFrame:
-        # Sort by the grades for each category (descending order)
+        # Calculate the overall average grade for each team
+        group_averages["Overall Average Grade"] = group_averages[[
+            "Average Slide Deck Grade",
+            "Average Presentation Skills Grade",
+            "Average Research and Topic Grade"
+        ]].mean(axis=1)
+
+        # Sort by the Overall Average Grade (descending order)
         top_3 = group_averages.sort_values(
-            by=[
-                "Average Slide Deck Grade",
-                "Average Presentation Skills Grade",
-                "Average Research and Topic Grade"
-            ],
-            ascending=False,
+            by="Overall Average Grade",
+            ascending=False
         ).head(3)
+
         return top_3
 
     def get_student_outliers(self, data: pd.DataFrame) -> pd.DataFrame:
