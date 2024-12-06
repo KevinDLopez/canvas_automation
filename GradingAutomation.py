@@ -110,7 +110,7 @@ def apply_iqr(data: pd.Series, return_outliers=True) -> pd.Series:
 
 class Grader:
     SPREADSHEET_COLUMN_NAMES = {
-        "email": "Email Address",
+        "email": "Email",
         "team_name": "Team_Name",
         "slide_deck": "Overall grade to this team's Slide deck?",
         "presentation_skills": "Overall grade to this team's Presentation skills?",
@@ -245,6 +245,7 @@ class Grader:
             self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
             self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
             self.SPREADSHEET_COLUMN_NAMES["research_topic"],
+            self.SPREADSHEET_COLUMN_NAMES["team_name"]
         ]
         data = pd.read_excel(spreadsheet_file, usecols=columns_to_read)
 
@@ -258,19 +259,6 @@ class Grader:
 
     def calculate_group_averages(self, data: pd.DataFrame) -> pd.DataFrame:
         """Calculates the average grade for each team on their slide deck, presentation skills, and research topic and paper content"""
-
-        # # Column to store group numbers (subject to change for team names)
-        # group_numbers = []
-        # current_group = 1
-        # for idx, row in data.iterrows():
-        #     if pd.isna(row["Email Address"]):
-        #         current_group += 1
-        #     group_numbers.append(current_group)
-
-        # # Subject to change to include team names instead
-        # data.loc[:, "Team"] = group_numbers
-
-
 
         # Group by 'Team' and calculate average for each grade category
         group_avg = (
@@ -303,7 +291,7 @@ class Grader:
     def calculate_student_averages(self, data: pd.DataFrame) -> pd.DataFrame:
         """Calculates the averages students gave for each team based on each category"""
         student_avg = (
-            data.groupby("Email Address")
+            data.groupby(self.SPREADSHEET_COLUMN_NAMES["email"])
             .agg(
                 {
                     self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "mean",

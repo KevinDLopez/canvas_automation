@@ -886,13 +886,13 @@ class GradingAutomationUI(QMainWindow):
         spreadsheet_file = os.path.join(output_folder, "all_form_responses.xlsx")
 
         # Check if the file exists
-        # if not os.path.exists(spreadsheet_file):
-        #     self.log(f"Error: The file {spreadsheet_file} does not exist.", log_type="ERROR")
-        #     return
+        if not os.path.exists(spreadsheet_file):
+            self.log(f"Error: The file {spreadsheet_file} does not exist.", log_type="ERROR")
+            return
 
-        # Testing purpose (remove later)
-        project_dir = os.getcwd()
-        spreadsheet_file = os.path.join(project_dir, "S24-574-all-responses.xlsx")
+        # # Testing purpose (remove later)
+        # project_dir = os.getcwd()
+        # spreadsheet_file = os.path.join(project_dir, "S24-574-all-responses.xlsx")
 
         try:
             # Retrieve group averages, student averages, and top 3 presentations
@@ -935,6 +935,8 @@ class GradingAutomationUI(QMainWindow):
                 self.update_analysis_table(self.top_3_presentations)
             elif dropdown_selection == "Student Outliers":
                 self.update_analysis_table(self.student_outliers)
+                if self.student_outliers.empty:
+                    self.log("No student outliers found.", log_type="INFO")
         except Exception as e:
             self.log(str(e), log_type="ERROR")
 
