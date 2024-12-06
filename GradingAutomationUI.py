@@ -864,6 +864,8 @@ class GradingAutomationUI(QMainWindow):
             try:
                 # Get responses from google forms
                 responses = self.grader.get_google_form_responses(form_id)  # DataFrame
+                # add a column to reponses with the team name
+                responses["Team_Name"] = team_name
                 all_responses.append(responses)
 
                 # Append an empty row as a separator
