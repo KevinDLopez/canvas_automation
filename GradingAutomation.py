@@ -54,8 +54,8 @@ def create_image(responses: pd.DataFrame, output_path: str):
     plt.hist(
         responses["Overall grade to this team's Slide deck?"].dropna(), bins=10, edgecolor="black", color="skyblue"
     )
-    plt.title("Histogram of Overall Grades", fontsize=12)
-    plt.xlabel("Overall Grade", fontsize=10)
+    plt.title("Histogram of Overall Grades Slide deck", fontsize=12)
+    plt.xlabel("Overall Slide deck Grade", fontsize=10)
     plt.ylabel("Frequency", fontsize=10)
     plt.xticks(fontsize=8)
     plt.yticks(fontsize=8)
@@ -84,8 +84,8 @@ def create_image(responses: pd.DataFrame, output_path: str):
         edgecolor="black",
         color="skyblue",
     )
-    plt.title("Histogram of Research Topic Grades", fontsize=12)
-    plt.xlabel("Research Topic Grade", fontsize=10)
+    plt.title("Histogram of Research Topic and Paper Content Grades", fontsize=12)
+    plt.xlabel("Research Topic and Paper Content Grade", fontsize=10)
     plt.ylabel("Frequency", fontsize=10)
     plt.xticks(fontsize=8)
     plt.yticks(fontsize=8)
@@ -93,12 +93,13 @@ def create_image(responses: pd.DataFrame, output_path: str):
 
     plt.savefig(output_path)
 
+
 def apply_iqr(data: pd.Series, return_outliers=True) -> pd.Series:
     """Identifies student outliers using the IQR method"""
 
     # Calculate Q1, Q3, IQR, lower and upper whiskers
-    Q1 = data.quantile(0.25) # 25th percentile
-    Q3 = data.quantile(0.75) # 75th percentile
+    Q1 = data.quantile(0.25)  # 25th percentile
+    Q3 = data.quantile(0.75)  # 75th percentile
     IQR = Q3 - Q1
     lower_whisker = Q1 - 1.5 * IQR
     upper_whisker = Q3 + 1.5 * IQR
@@ -107,6 +108,7 @@ def apply_iqr(data: pd.Series, return_outliers=True) -> pd.Series:
     filtered_data = data[(data >= lower_whisker) & (data <= upper_whisker) & (data != 0)]
 
     return filtered_data if not return_outliers else outliers
+
 
 class Grader:
     SPREADSHEET_COLUMN_NAMES = {
@@ -245,7 +247,7 @@ class Grader:
             self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
             self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
             self.SPREADSHEET_COLUMN_NAMES["research_topic"],
-            self.SPREADSHEET_COLUMN_NAMES["team_name"]
+            self.SPREADSHEET_COLUMN_NAMES["team_name"],
         ]
         data = pd.read_excel(spreadsheet_file, usecols=columns_to_read)
 
@@ -318,11 +320,7 @@ class Grader:
     def get_top_three_presentations(self, group_averages: pd.DataFrame) -> pd.DataFrame:
         # Sort by the grades for each category (descending order)
         top_3 = group_averages.sort_values(
-            by=[
-                "Average Slide Deck Grade",
-                "Average Presentation Skills Grade",
-                "Average Research and Topic Grade"
-            ],
+            by=["Average Slide Deck Grade", "Average Presentation Skills Grade", "Average Research and Topic Grade"],
             ascending=False,
         ).head(3)
         return top_3
