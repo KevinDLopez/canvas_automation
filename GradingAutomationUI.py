@@ -176,8 +176,7 @@ class GradingAutomationUI(QMainWindow):
 
         # Course ID input
         self.course_id_input = QLineEdit()
-        if self.state.get("course_id"):
-            self.course_id_input.setText(str(self.state["course_id"]))
+        self.course_id_input.setText(str(self.state.get("course_id", 15319)))
         group_layout.addWidget(QLabel("Course ID:"))
         group_layout.addWidget(self.course_id_input)
 
@@ -191,8 +190,7 @@ class GradingAutomationUI(QMainWindow):
 
         # Add Module Title input
         self.module_title_input = QLineEdit()
-        if self.state.get("module_title"):
-            self.module_title_input.setText(self.state["module_title"])
+        self.module_title_input.setText(self.state.get("module_title", "Fall 2024 - Presentation"))
         group_layout.addWidget(QLabel("Presentations Module Title:"))
         group_layout.addWidget(self.module_title_input)
 
@@ -573,8 +571,7 @@ class GradingAutomationUI(QMainWindow):
         folder_layout = QHBoxLayout()
 
         self.folder_path = QLineEdit()
-        if self.state.get("last_folder"):
-            self.folder_path.setText(self.state["last_folder"])
+        self.folder_path.setText(self.state.get("last_folder", base_path))
 
         browse_button = QPushButton("Browse")
         browse_button.clicked.connect(self.browse_folder)

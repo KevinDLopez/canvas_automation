@@ -1,7 +1,9 @@
 import base64
 import os
+import shutil
 import time
 from typing import Any, Dict, List, Literal, Optional, TypedDict
+import zipfile
 import requests
 import unittest
 import json
@@ -223,6 +225,28 @@ class CanvasAPI:
                 response.raise_for_status()
                 with open(filepath, "wb") as f:
                     f.write(response.content)
+                if filename.endswith(".zip"):
+                    Print(f"Unzipping {filename} to {download_dir}", log_type="INFO")
+                    # Unzip the files to the download_dir
+                    with zipfile.ZipFile(filepath, "r") as zip_ref:
+                        zip_ref.extractall(download_dir)
+                        # add all the files to the downloaded_files list
+                        downloaded_files.extend(zip_ref.namelist())
+
+                    # Move the files back a directory, skipping if target exists
+                    for file in zip_ref.namelist():
+                        src = os.path.join(download_dir, file)
+                        dst = os.path.join(download_dir, os.path.basename(file))
+                        Print(f"src = {src}, dst = {dst}")
+                        if os.path.exists(dst):
+                            Print(f"Skipping {file} as it already exists at destination", log_type="WARN")
+                            continue
+                        if os.path.exists(src):
+                            os.replace(src, dst)
+                    # remove the old zip directory
+                    shutil.rmtree(filepath.replace(".zip", ""))  # Remove the folder where the fils were extracted
+                    os.remove(filepath)  # Remove the zip file
+                    continue
                 downloaded_files.append(filepath)
                 Print(f"Downloaded {filename} to {filepath}", log_type="INFO")
             break
@@ -233,7 +257,8 @@ class CanvasAPI:
         """
         Get the ID of a student by their email.
         """
-        return 143898  # Temp while testign only
+        return 143898  # TODO: Temp while testign only
+
         users = self.get_users_in_course()
         Print(f"users = {users}", log_type="DEBUG")
         for user in users:
