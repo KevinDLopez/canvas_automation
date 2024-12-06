@@ -257,7 +257,7 @@ class CanvasAPI:
         """
         Get the ID of a student by their email.
         """
-        return 143898  # TODO: Temp while testign only
+        # return 143898  # TODO: Temp while testing only
 
         users = self.get_users_in_course()
         Print(f"users = {users}", log_type="DEBUG")

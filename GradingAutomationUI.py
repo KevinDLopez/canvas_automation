@@ -190,7 +190,8 @@ class GradingAutomationUI(QMainWindow):
 
         # Add Module Title input
         self.module_title_input = QLineEdit()
-        self.module_title_input.setText(self.state.get("module_title", "Fall 2024 - Presentation"))
+        if self.state.get("module_title"):
+            self.module_title_input.setText(self.state["module_title"])
         group_layout.addWidget(QLabel("Presentations Module Title:"))
         group_layout.addWidget(self.module_title_input)
 
@@ -717,6 +718,7 @@ class GradingAutomationUI(QMainWindow):
             # Save to state
             self.state["last_assignment_title"] = assignment_title
             self.save_state()
+            self.verify_projects()  # TODO: SHOULD WE DO THIS HERE?
 
         self.__make_popup(
             title="Enter Assignment Title",
