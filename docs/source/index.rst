@@ -11,15 +11,15 @@ This project was developed by:
 * Kevin Lopez (Kevin.LopezChavez01@student.csulb.edu)
 * Jerry Wu (jerry.wu01@student.csulb.edu)
 
-Welcome to GradingAutomation's documentation. This tool helps automate the grading process for Canvas 574 with the use of 
-`Canvas API <https://canvas.instructure.com/doc/api/index.html>`_, 
-`Google Forms API <https://developers.google.com/forms/api/reference/rest>`_, 
+Welcome to GradingAutomation's documentation. This tool helps automate the grading process for Canvas 574 with the use of
+`Canvas API <https://canvas.instructure.com/doc/api/index.html>`_,
+`Google Forms API <https://developers.google.com/forms/api/reference/rest>`_,
 `pydantic <https://docs.pydantic.dev/latest/>`_ for schema verification,
 `pandas <https://pandas.pydata.org/>`_ for data analysis,
 and `Python <https://www.python.org/>`_ for the programming language.
 
 Project Goals
-------------
+-------------
 The goal of this project is to automate the following:
 
 - Cross-check student's names, ID numbers, email with Canvas
@@ -31,7 +31,7 @@ The goal of this project is to automate the following:
 - Analyze Google-form results to find the top 3 presentations, grade distribution on all presentations, student's average feedback grading, and find unfair grading outliers.
 
 Table of Contents
----------------
+-----------------
 
 .. toctree::
    :maxdepth: 2

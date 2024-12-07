@@ -1,8 +1,8 @@
 Configuration
-============
+=============
 
 Setting up Canvas Access Token
-----------------------------
+------------------------------
 
 1. Login to Canvas and navigate to Account Settings:
 
@@ -23,7 +23,7 @@ Setting up Canvas Access Token
       :alt: Create Token Screenshot
 
 Setting up Google API
--------------------
+---------------------
 
 1. Go to Google Cloud Console ``https://console.cloud.google.com/``
 2. Create a new project
