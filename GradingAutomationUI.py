@@ -111,7 +111,7 @@ class GradingAutomationUI(QMainWindow):
         self.setWindowIcon(app_icon)
         QApplication.setWindowIcon(app_icon)
         self.setWindowTitle("Grading Automation")
-        self.setMinimumSize(1200, 800)  # Sets minimum window size to 800x600 pixels
+        self.setMinimumSize(1200, 900)  # Sets minimum window size to 800x600 pixels
         self.logging_level: LogLevel = LogLevel.INFO
         # Initialize state
         self.state = {}
@@ -317,7 +317,6 @@ class GradingAutomationUI(QMainWindow):
             checkbox.setCheckState(Qt.CheckState.Checked)
             self.file_to_download.setItem(i, 0, checkbox)
             self.file_to_download.setItem(i, 1, QTableWidgetItem(team_name))
-            # self.file_to_download.setItem(i, 2, QTableWidgetItem(folder_path))
 
         # Get failed projects (those with errors)
         self.local_projects_info: dict[str, tuple[List[str], PageSchema | None]] = {
@@ -612,6 +611,14 @@ class GradingAutomationUI(QMainWindow):
         self.verify_results.setColumnCount(3)
         self.verify_results.setHorizontalHeaderLabels(["Folder", "Status", "Errors"])
         self.verify_results.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)  # Make table read-only
+        self.verify_results.setStyleSheet(
+            """
+            QTableWidget { 
+                border: 1px solid darkgray;
+                gridline-color: darkgray;
+            }
+        """
+        )
 
         self.file_to_download_group = QGroupBox("Files to Download")
         self.file_to_download_layout = QVBoxLayout()
@@ -619,6 +626,17 @@ class GradingAutomationUI(QMainWindow):
         self.file_to_download.setColumnCount(2)  # Checkbox and team_name
         self.file_to_download.setHorizontalHeaderLabels(["Select", "Folder"])
         self.file_to_download.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)  # Make table read-only
+        self.file_to_download.setStyleSheet(
+            """
+            QTableWidget { 
+                border: 1px solid darkgray;
+                gridline-color: darkgray;
+            }
+        """
+        )
+        header = self.file_to_download.horizontalHeader()
+        # header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)  # Select column fixed
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)  # Folder column stretches
 
         download_button = QPushButton("Download")
         download_button.clicked.connect(self.download_folder_click)
@@ -745,6 +763,14 @@ class GradingAutomationUI(QMainWindow):
         self.pages_table = QTableWidget()
         self.pages_table.setColumnCount(3)
         self.pages_table.setHorizontalHeaderLabels(["Select", "Page", "Status"])
+        self.pages_table.setStyleSheet(
+            """
+            QTableWidget { 
+                border: 1px solid darkgray;
+                gridline-color: darkgray;
+            }
+        """
+        )
 
         # Set column widths and behaviors
         header = self.pages_table.horizontalHeader()
@@ -780,6 +806,14 @@ class GradingAutomationUI(QMainWindow):
         self.quizzes_table = QTableWidget()
         self.quizzes_table.setColumnCount(4)  # Changed to 4 columns
         self.quizzes_table.setHorizontalHeaderLabels(["Select", "Local Path", "Team_Name", "Status"])
+        self.quizzes_table.setStyleSheet(
+            """
+            QTableWidget { 
+                border: 1px solid darkgray;
+                gridline-color: darkgray;
+            }
+        """
+        )
 
         header = self.quizzes_table.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)  # Checkbox column
@@ -856,8 +890,8 @@ class GradingAutomationUI(QMainWindow):
         self.analysis_table.setStyleSheet(
             """
             QTableWidget { 
-                border: 1px solid gray;
-                gridline-color: gray;
+                border: 1px solid darkgray;
+                gridline-color: darkgray;
             }
         """
         )
