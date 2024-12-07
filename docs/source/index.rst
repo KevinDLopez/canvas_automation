@@ -199,11 +199,28 @@ Using the Application
       :alt: Forms and Quizzes Screenshot
 
 6. After grading, view the grade distribution on Canvas:
-   * Output page after grading is done.
 
+   * After the gradin is done a image is attached to the page of the grade distribution histogram. 
+   * Also, all the reposes used for grading are saved in a `.xslx` file under the same directory as the project graded. 
+   
    .. image:: _static/grade_distribution.png
       :width: 800
       :alt: Grade Distribution Screenshot
+
+7. Form Analysis
+
+   * The last tab is used to analyze the feedback forms and find the top 3 presentations using the spreadsheet url from step 3.
+   * First click the ``Aggregate Responses`` to fetch the responses from the feedback forms.
+   * Then click on the ``Analyze Responses`` to analyze the responses.
+   * The following analysis are done:
+      * Distribution for all presentations - Shows the grade distribution across all team presentations
+      * Each student average grading for others - Displays how each student grades their peers on average
+      * Top 3 Presentations - Identifies the three highest rated presentations based on peer feedback
+      * Student Outliers - Detects students who consistently grade significantly higher or lower than their peers. It uses the quartile method to find outliers (same as boxplot). 
+      
+   .. image:: _static/form_analysis.png
+      :width: 800
+      :alt: Form Analysis Screenshot
 
 Setting up Canvas Access Token
 ------------------------------
@@ -229,6 +246,7 @@ Setting up Canvas Access Token
 .. toctree::
    :maxdepth: 4
    :caption: Contents:
+
 
 
 
