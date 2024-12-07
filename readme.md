@@ -1,4 +1,7 @@
-# Running Python Script
+# Canvas Automation 
+For the most recent [Project Documentation](https://kevindlopez.github.io/canvas_automation). 
+
+## Running Python Script
 Before running the script, please complete the **Python environment setup** to ensure all necessary libraries are installed.
 ## Prerequisites
 1. Ensure the Canvas access token is configured (see [Setting up Canvas access token](#setting-up-canvas-access-token)).
