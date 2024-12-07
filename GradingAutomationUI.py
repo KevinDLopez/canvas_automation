@@ -853,6 +853,14 @@ class GradingAutomationUI(QMainWindow):
         self.analysis_table.setRowCount(0)
         self.analysis_table.setColumnCount(0)  # Start with 0 columns
         self.analysis_table.setHorizontalHeaderLabels([])  # No headers initially
+        self.analysis_table.setStyleSheet(
+            """
+            QTableWidget { 
+                border: 1px solid gray;
+                gridline-color: gray;
+            }
+        """
+        )
         dropdown_layout.addWidget(self.analysis_table)
 
         dropdown_group.setLayout(dropdown_layout)
@@ -990,11 +998,14 @@ class GradingAutomationUI(QMainWindow):
             for col_index, value in enumerate(row):
                 value = str(value) if isinstance(value, str) else f"{value:.2f}"
                 table_item = QTableWidgetItem(str(value))
+                table_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)  # Center align the text
                 self.analysis_table.setItem(row_position, col_index, table_item)
             row_position += 1
 
-        # Update the table to show the contents
-        self.analysis_table.resizeColumnsToContents()
+        # Set all columns to stretch evenly
+        header = self.analysis_table.horizontalHeader()
+        for col in range(num_columns):
+            header.setSectionResizeMode(col, QHeaderView.ResizeMode.Stretch)
 
     def save_ui_state(self):
         """Save the current state of UI elements"""

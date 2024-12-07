@@ -342,7 +342,7 @@ class Grader:
             outliers = apply_iqr(data[category])
             if not outliers.empty:
                 # Get the emails of students who gave outliers or zeros
-                emails = data.loc[outliers.index, "Email Address"]
+                emails = data.loc[outliers.index, "Email"]
                 for email in emails:
                     if email in outliers_count:
                         outliers_count[email] += 1
@@ -351,7 +351,7 @@ class Grader:
 
         # Convert the dictionary into a DataFrame for better readability
         outliers_df = pd.DataFrame(
-            list(outliers_count.items()), columns=["Email Address", "Outlying Grades Given"]
+            list(outliers_count.items()), columns=["Email", "Outlying Grades Given"]
         ).sort_values(by="Outlying Grades Given", ascending=False)
 
         return outliers_df

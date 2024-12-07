@@ -38,7 +38,7 @@ class StudentRecord(TypedDict, total=True):
     Email: str
     Google_Form_ID: str | Literal[""]
     Names: str
-    Student_ID: str
+    # Student_ID: str
     Team_Name: str
     Topic: str
 
