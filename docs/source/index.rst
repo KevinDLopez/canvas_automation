@@ -5,10 +5,18 @@
 
 GradingAutomation Documentation
 ===============================
+This project was developed by:
 
-Welcome to GradingAutomation's documentation. This tool helps automate the grading process for Canvas 574 with the use of Canvas API, Google Forms API, and Python.
+* Kevin Lopez (Kevin.LopezChavez01@student.csulb.edu)
+* Jerry Wu (jerry.wu01@student.csulb.edu)
 
-This project is made by Jerry Wu and Kevin Lopez.
+Welcome to GradingAutomation's documentation. This tool helps automate the grading process for Canvas 574 with the use of 
+`Canvas API <https://canvas.instructure.com/doc/api/index.html>`_, 
+`Google Forms API <https://developers.google.com/forms/api/reference/rest>`_, 
+`pydantic <https://docs.pydantic.dev/latest/>`_ for schema verification,
+`pandas <https://pandas.pydata.org/>`_ for data analysis,
+and `Python <https://www.python.org/>`_ for the programming language.
+
 
 The goal of this project is to automate the following:
 
@@ -113,8 +121,8 @@ Using Python Requirements File
 
     pip install -r requirements.txt
 
-Running the Application
------------------------
+Using the Application
+--------------------
 1. Start the application using one of these methods:
 
    * Run Python script::
@@ -136,42 +144,62 @@ Running the Application
       :alt: Canvas Configuration Screenshot
 
 
-3. Download student submissions:
+3. Download student submissions and verification:
+
+   * 1. First enter the the spreadsheet url for testing we used the following: https://docs.google.com/spreadsheets/u/0/d/1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ/htmlview
+   * 2. Enter the location where the files will be downloaded. This location is used to analyze what projects are missing from the spreadsheet, does that are missing will be allowed to be downloaded.
+   * 3. Then click on verify projects to analyze the spreadsheet
+   * 4. After the spreadsheet is verified, click on download submissions to download the missing projects. 
+      * The download ui only shows when there is missing projects and need to be downloaded.
+   * 5. After the files are downloaded, click on verify submissions to verify that the files are present and correct.
+      * If everything is wrong with the student names or emails, it will be shown in the log window,
+      * if anything is wrong with the files, it will be shown in the error column of the verification table.
    
-   * Simply download the student submissions by clicking on the download button of the project verification tab
-   * A pop up will show to ask which title is the assignment is given. In the sample class, we used ``Presentation`` as the assignment title
-
    .. image:: _static/click_download.png
-      :width: 300
-      :alt: Click Download Button Screenshot
-      :align: left
-
-   .. image:: _static/popup.png
-      :width: 300
-      :alt: Assignment Title Popup Screenshot
-      :align: right
-
-   |
-
-4. Verify selected projects:
-
-   .. image:: _static/verify_projects.png
       :width: 800
-      :alt: Verify Projects Screenshot
+      :alt: Click Download Button Screenshot
 
-5. Navigate to "Page Management" to create pages from group folders:
+   Below is how the spreadsheet looks like:
+   
+   .. image:: _static/spreadsheet.png
+      :width: 800
+      :alt: spreadsheet
+
+
+   | 
+.. raw:: html
+
+   <div style="clear: both; height: 40px;"></div>
+   
+
+4. Navigate to "Page Management" to create pages from group folders:
+   * This page is used to create the pages on Canvas for the team.
+   * Here, only the pages that passed the verification step will be shown.    
+      * Is done like this because we can only publish pages that have all files correctly. 
 
    .. image:: _static/page_management.png
       :width: 800
       :alt: Page Management Screenshot
 
-6. Use the "Forms and Quizzes Tab" to add feedback forms and quizzes:
+5. Use the "Forms and Quizzes Tab" to add feedback forms and quizzes:
+   * This page is used to add the feedback forms and quizzes to the Canvas pages, and grade the assignment based on the feedback forms.
+   * At the entrance of this tab, the program fetches the pages and see on what feedback they're on and postes it for every page. 
+      * The status can be:
+         * ``Not Created`` - means that the page is not created by the application.
+         * ``Quiz and Feedback added``` - means that the quiz and feedback forms are added to the page.
+         * ``Done`` - means that the page is created and graded by the application.
+         * ``No Local, No Spreadsheet`` - means that the page is not created because there are no local files and the page is not in the spreadsheet.
+         * ``No Local, Yes Spreadsheet`` - means that the page is not created because there are no local files but the page is in the spreadsheet.
+         * ``Evaluation Form`` - means that the page was manually. Keyword ``Evaluation`` is added by the professor, not by the application.
+   * We have made it sot that it is not necessary for the page to be made by the application, pages made by manually can also be graded.
+      * The requirements is that the feedback form ID needs to be added to the spreadsheet. 
 
    .. image:: _static/forms_quizzes.png
       :width: 800
       :alt: Forms and Quizzes Screenshot
 
-7. After grading, view the grade distribution on Canvas:
+6. After grading, view the grade distribution on Canvas:
+   * Output page after grading is done.
 
    .. image:: _static/grade_distribution.png
       :width: 800
@@ -202,4 +230,18 @@ Setting up Canvas Access Token
    :maxdepth: 4
    :caption: Contents:
 
-   modules
+
+
+Setting up Google API
+---------------------
+
+* Go to Google Cloud Console ``https://console.cloud.google.com/`` 
+* Create a new project
+* Enable the Google Forms API. 
+   * Enable Forms API  - ``https://console.cloud.google.com/apis/library/forms.googleapis.com``
+   * Enable Sheets API - ``https://console.cloud.google.com/apis/library/sheets.googleapis.com``
+   * Enable Drive API - ``https://console.cloud.google.com/apis/library/drive.googleapis.com``
+* Enable beta users for the Google Forms API. ( Add users by their emails)
+   ``https://console.cloud.google.com/apis/credentials/consent``
+* Create credentials and download the ``client_secrets.json`` file. ( Create Credentials ->  OAuth Client ID )
+   ``https://console.cloud.google.com/apis/credentials``
