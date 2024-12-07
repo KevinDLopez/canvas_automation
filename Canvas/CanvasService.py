@@ -1,7 +1,9 @@
 import base64
 import os
+import shutil
 import time
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional, TypedDict
+import zipfile
 import requests
 import unittest
 import json
@@ -70,15 +72,23 @@ class CanvasAPI:
 
         raise requests.HTTPError(f"Failed to make request after {attempts} attempts")
 
-    def get_users_in_course(self) -> List[Dict]:
+    def get_users_in_course(
+        self,
+    ) -> List[UsersSchema]:
         """
         Retrieve active users enrolled in the course.
 
         Returns:
-            List[Dict]: A list of user dictionaries.
+            List[User]: A list of user dictionaries containing:
+                - id (int): User ID
+                - name (str): Full name
+                - created_at (str): Creation timestamp
+                - sortable_name (str): Name for sorting
+                - short_name (str): Short display name
+                - email (str): Email address
         """
         params = {"sort": "email", "enrollment_state": "active"}
-        users = []
+        users: List[UsersSchema] = []
         endpoint = "users"
 
         while endpoint:
@@ -141,7 +151,7 @@ class CanvasAPI:
         submissions = self._make_request("GET", f"assignments/{assignment_id}/submissions", params=params)
         return [SubmissionSchema(**submission) for submission in submissions]
 
-    def download_submission_attachments(self, assignment_id: int, download_dir: Optional[str] = None) -> List[str]:
+    def download_all_submission_attachments(self, assignment_id: int, download_dir: Optional[str] = None) -> List[str]:
         """
         Download all submission files for a specific assignment.
 
@@ -174,6 +184,88 @@ class CanvasAPI:
                 downloaded_files.append(filepath)
                 Print(f"Downloaded {filename} to {filepath}", log_type="INFO")
         return downloaded_files
+
+    def download_student_submission_attachments(
+        self, assignment_id: int, user_id: int, download_dir: Optional[str] = None
+    ) -> List[str]:
+        """
+        Download submission files for a specific student's assignment.
+
+        Args:
+            assignment_id (int): The ID of the assignment.
+            student_id (int): The ID of the student.
+            download_dir (str, optional): Directory to save files. Defaults to current directory.
+
+        Returns:
+            List[str]: List of paths to downloaded files.
+        """
+        if download_dir:
+            os.makedirs(download_dir, exist_ok=True)
+        else:
+            download_dir = os.getcwd()
+
+        downloaded_files = []
+        for submission in self.get_submissions(assignment_id):
+            if submission.user_id != user_id:
+                Print(
+                    f"skipping submission for student {user_id}, the submission belongs to {submission.user_id}",
+                    log_type="INFO",
+                )
+                continue
+            Print(f"found submission for student {user_id}", log_type="INFO")
+            if not submission.attachments:
+                Print(f"No attachments found for student {user_id}", log_type="WARN")
+                return []
+
+            for attachment in submission.attachments:
+                file_url = attachment["url"]
+                filename = attachment["filename"]
+                filepath = os.path.join(download_dir, f"{filename}")
+                response = requests.get(file_url, headers=self.headers)
+                response.raise_for_status()
+                with open(filepath, "wb") as f:
+                    f.write(response.content)
+                if filename.endswith(".zip"):
+                    Print(f"Unzipping {filename} to {download_dir}", log_type="INFO")
+                    # Unzip the files to the download_dir
+                    with zipfile.ZipFile(filepath, "r") as zip_ref:
+                        zip_ref.extractall(download_dir)
+                        # add all the files to the downloaded_files list
+                        downloaded_files.extend(zip_ref.namelist())
+
+                    # Move the files back a directory, skipping if target exists
+                    for file in zip_ref.namelist():
+                        src = os.path.join(download_dir, file)
+                        dst = os.path.join(download_dir, os.path.basename(file))
+                        Print(f"src = {src}, dst = {dst}")
+                        if os.path.exists(dst):
+                            Print(f"Skipping {file} as it already exists at destination", log_type="WARN")
+                            continue
+                        if os.path.exists(src):
+                            os.replace(src, dst)
+                    # remove the old zip directory
+                    shutil.rmtree(filepath.replace(".zip", ""))  # Remove the folder where the fils were extracted
+                    os.remove(filepath)  # Remove the zip file
+                    continue
+                downloaded_files.append(filepath)
+                Print(f"Downloaded {filename} to {filepath}", log_type="INFO")
+            break
+
+        return downloaded_files
+
+    def get_user_id_by_email(self, email: str) -> Optional[int]:
+        """
+        Get the ID of a student by their email.
+        """
+        if self.course_id == 15319:  # TODO: Temp while testing only, because there is no other student others
+            return 143898
+
+        users = self.get_users_in_course()
+        Print(f"users = {users}", log_type="DEBUG")
+        for user in users:
+            if user["email"].strip().lower() == email.strip().lower():
+                return user["id"]
+        return None
 
     def get_assignments(self) -> List[AssignmentSchema]:
         """
@@ -557,6 +649,13 @@ class CanvasAPI:
         moduleItem = self._make_request("GET", endpoint)
         return [ModuleItemSchema(**item) for item in moduleItem]
 
+    def get_page_by_title(self, title: str, module_id: int) -> PageSchema:
+        pages = self.get_module_pages(module_id)
+        for page in pages:
+            if page.title == title:
+                return page
+        raise ValueError(f"Page with title '{title}' not found.")
+
     def get_page_by_id(self, url: str) -> PageSchema:
         endpoint = f"pages/{url}"
         page = self._make_request("GET", endpoint)
@@ -692,7 +791,7 @@ if __name__ == "__main__":
     course_id = 15319
     canvas = CanvasAPI(course_id, api_token)
     assignment = canvas.get_submissions(1192803)  # It should at least not raise an error
-    assignments = canvas.download_submission_attachments(
+    assignments = canvas.download_all_submission_attachments(
         1192803
     )  # IT should not raise an error, and it should download files in the cwd + /student_id folder
 

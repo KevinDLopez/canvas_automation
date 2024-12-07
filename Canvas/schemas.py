@@ -1,7 +1,16 @@
 from pydantic import BaseModel, EmailStr, Field, HttpUrl, ValidationError, field_validator
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional, TypedDict
 import pytest
 from datetime import datetime, timezone
+
+
+class UsersSchema(TypedDict):
+    id: int
+    name: str
+    created_at: str
+    sortable_name: str
+    short_name: str
+    email: str
 
 
 class MediaComment(BaseModel):

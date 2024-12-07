@@ -20,7 +20,7 @@ class TeamInfo(BaseModel):
     team_name: str
     topic: str
     team_members: List[TeamMember]
-    github_repo: str
+    # github_repo: str
     # presentation_time: PresentationTime
 
 
@@ -38,11 +38,9 @@ class StudentRecord(TypedDict, total=True):
     Email: str
     Google_Form_ID: str | Literal[""]
     Names: str
-    Student_ID: str
+    # Student_ID: str
     Team_Name: str
-    File_Path: str
     Topic: str
-    Github_Repo: str
 
 
 StudentRecords = List[StudentRecord]

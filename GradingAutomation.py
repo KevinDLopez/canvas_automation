@@ -17,7 +17,7 @@ from gspread.worksheet import Worksheet
 def read_json_file(file_path: str) -> Dict[str, Any]:
     """Read a JSON file and return its contents as a dictionary"""
     assert file_path.endswith(".json"), "File must be a JSON file"
-    assert os.path.exists(file_path), "File does not exist"
+    assert os.path.exists(file_path), f"File does not exist, {file_path}"
     with open(file_path, "r") as file:
         data = json.load(file)
     return data
@@ -26,7 +26,7 @@ def read_json_file(file_path: str) -> Dict[str, Any]:
 def read_yml_file(file_path: str) -> Dict[str, Any]:
     """Read a YAML file and return its contents as a dictionary"""
     assert file_path.endswith(".yml"), "File must be a YAML file"
-    assert os.path.exists(file_path), "File does not exist"
+    assert os.path.exists(file_path), "File does not exist, YML"
     with open(file_path, "r") as file:
         data = yaml.load(file, Loader=yaml.FullLoader)
     return data
@@ -54,8 +54,8 @@ def create_image(responses: pd.DataFrame, output_path: str):
     plt.hist(
         responses["Overall grade to this team's Slide deck?"].dropna(), bins=10, edgecolor="black", color="skyblue"
     )
-    plt.title("Histogram of Overall Grades", fontsize=12)
-    plt.xlabel("Overall Grade", fontsize=10)
+    plt.title("Histogram of Overall Grades Slide deck", fontsize=12)
+    plt.xlabel("Overall Slide deck Grade", fontsize=10)
     plt.ylabel("Frequency", fontsize=10)
     plt.xticks(fontsize=8)
     plt.yticks(fontsize=8)
@@ -84,8 +84,8 @@ def create_image(responses: pd.DataFrame, output_path: str):
         edgecolor="black",
         color="skyblue",
     )
-    plt.title("Histogram of Research Topic Grades", fontsize=12)
-    plt.xlabel("Research Topic Grade", fontsize=10)
+    plt.title("Histogram of Research Topic and Paper Content Grades", fontsize=12)
+    plt.xlabel("Research Topic and Paper Content Grade", fontsize=10)
     plt.ylabel("Frequency", fontsize=10)
     plt.xticks(fontsize=8)
     plt.yticks(fontsize=8)
@@ -94,9 +94,26 @@ def create_image(responses: pd.DataFrame, output_path: str):
     plt.savefig(output_path)
 
 
+def apply_iqr(data: pd.Series, return_outliers=True) -> pd.Series:
+    """Identifies student outliers using the IQR method"""
+
+    # Calculate Q1, Q3, IQR, lower and upper whiskers
+    Q1 = data.quantile(0.25)  # 25th percentile
+    Q3 = data.quantile(0.75)  # 75th percentile
+    IQR = Q3 - Q1
+    lower_whisker = Q1 - 1.5 * IQR
+    upper_whisker = Q3 + 1.5 * IQR
+
+    outliers = data[(data < lower_whisker) | (data > upper_whisker) | (data == 0)]
+    filtered_data = data[(data >= lower_whisker) & (data <= upper_whisker) & (data != 0)]
+
+    return filtered_data if not return_outliers else outliers
+
+
 class Grader:
     SPREADSHEET_COLUMN_NAMES = {
-        "email": "Email Address",
+        "email": "Email",
+        "team_name": "Team_Name",
         "slide_deck": "Overall grade to this team's Slide deck?",
         "presentation_skills": "Overall grade to this team's Presentation skills?",
         "research_topic": "Overall grade to this team's Research topic and (summary) paper content?",
@@ -124,32 +141,30 @@ class Grader:
             self.student_records.append(StudentRecord(**record))  # type: ignore
         return self.student_records
 
-    def convert_student_record_sheets_to_team_info(self, student_records: StudentRecords, File_Path: str) -> TeamInfo:
-        # get the team that hast the project_path
-        team_name = os.path.basename(File_Path)
-        team_record = [record for record in student_records if record["File_Path"] == File_Path]
+    def update_worksheet(self):
+        self.google.update_worksheet_from_records(self.worksheet, self.student_records)  # type: ignore
+
+    def convert_student_record_sheets_to_team_info(self, Team_Name: str) -> TeamInfo:
+        # get the team that has the project_path
+        team_record = [record for record in self.student_records if record["Team_Name"] == Team_Name]
         if not team_record:
-            raise ValueError(f"Team info not found for team: {File_Path}")
+            raise ValueError(f"Team info not found for team: {Team_Name}")
 
         team_name = team_record[0]["Team_Name"]
         topic = team_record[0]["Topic"]
         team_members: List[TeamMember] = []  # name and email
         for record in team_record:
             team_members.append(TeamMember(name=record["Names"], email=record["Email"]))
-        github_repo = team_record[0]["Github_Repo"]
 
         return TeamInfo(
             team_name=team_name,
             topic=topic,
             team_members=team_members,
-            github_repo=github_repo,
         )
 
-    def convert_team_info_to_student_record(self, team_info: TeamInfo, File_Path: str) -> StudentRecord:
+    def convert_team_info_to_student_record(self, team_info: TeamInfo, Team_Name: str) -> StudentRecord:
         """TODO: Don't know if is necessary - Not fully implemented"""
-        return StudentRecord(
-            File_Path=File_Path, Team_Name=team_info.team_name, Topic=team_info.topic, **team_info.model_dump()
-        )
+        return StudentRecord(Team_Name=team_info.team_name, Topic=team_info.topic, **team_info.model_dump())
 
     def is_a_project_folder(self, path: str) -> bool:
         return (
@@ -157,6 +172,7 @@ class Grader:
             and os.path.isdir(path)
             and "paper.pdf" in os.listdir(path)
             and ("presentation.pdf" in os.listdir(path) or "presentation.pptx" in os.listdir(path))
+            and "github.txt" in os.listdir(path)
         )
 
     def get_folders_with_team(self, path: str) -> List[str]:
@@ -172,17 +188,33 @@ class Grader:
         self.module_id_with_presentations = self.canvas.get_module_by_title(module_title)
 
     def get_pages_to_create(self, folders: List[str]) -> List[str]:
-        # Get the folders that do not have a page in Canvas inside the module self.module_id_with_presentations[id]
+        """Get a list of folders that do not have a Canvas pages in the presentations module.
 
+        This method checks each folder against existing Canvas pages to determine which folders
+        need new pages created. It uses the team name from the folder path to match against
+        Canvas page titles.
+
+        Args:
+            folders: List of folder paths to check for existing Canvas pages.
+
+        Returns:
+            List[str]: List of folder paths that need Canvas pages created.
+
+        Example:
+            >>> grader = Grader(...)
+            >>> folders = ['/path/to/team1', '/path/to/team2']
+            >>> pages_to_create = grader.get_pages_to_create(folders)
+            >>> print(pages_to_create)
+            ['/path/to/team2']  # Only team2 needs a page created
+        """
         # Get the pages in the module
         pages_created = self.canvas.list_module_items(self.module_id_with_presentations.id)
         Print("pages already created = ", pages_created)
         pages_to_create: List[str] = []
         for folder in folders:
-            team_info = self.__read_team_info_file(folder + "/team_info.yml")
-            team_name = team_info.team_name
+            team_name = os.path.basename(folder)
             # Check if the page already exists
-            page_exists = any([team_name in page.title for page in pages_created])
+            page_exists = any([team_name == page.title for page in pages_created])
             if not page_exists:
                 pages_to_create.append(folder)
         Print("pages to create = ", pages_to_create)
@@ -215,6 +247,7 @@ class Grader:
             self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
             self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
             self.SPREADSHEET_COLUMN_NAMES["research_topic"],
+            self.SPREADSHEET_COLUMN_NAMES["team_name"],
         ]
         data = pd.read_excel(spreadsheet_file, usecols=columns_to_read)
 
@@ -229,21 +262,9 @@ class Grader:
     def calculate_group_averages(self, data: pd.DataFrame) -> pd.DataFrame:
         """Calculates the average grade for each team on their slide deck, presentation skills, and research topic and paper content"""
 
-        # Column to store group numbers (subject to change for team names)
-        group_numbers = []
-        current_group = 1
-
-        for idx, row in data.iterrows():
-            if pd.isna(row["Email Address"]):
-                current_group += 1
-            group_numbers.append(current_group)
-
-        # Subject to change to include team names instead
-        data.loc[:, "Team"] = group_numbers
-
         # Group by 'Team' and calculate average for each grade category
         group_avg = (
-            data.groupby("Team")
+            data.groupby(self.SPREADSHEET_COLUMN_NAMES["team_name"])
             .agg(
                 {
                     self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "mean",
@@ -254,17 +275,25 @@ class Grader:
             .reset_index()
         )
 
+        group_avg.rename(
+            columns={
+                self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "Average Slide Deck Grade",
+                self.SPREADSHEET_COLUMN_NAMES["presentation_skills"]: "Average Presentation Skills Grade",
+                self.SPREADSHEET_COLUMN_NAMES["research_topic"]: "Average Research and Topic Grade",
+            },
+            inplace=True,
+        )
+
         # Drop rows with any NaN values
         group_avg = group_avg.dropna()
         group_avg.reset_index(drop=True, inplace=True)
-        group_avg["Team"] = range(1, len(group_avg) + 1)
 
         return group_avg
 
     def calculate_student_averages(self, data: pd.DataFrame) -> pd.DataFrame:
         """Calculates the averages students gave for each team based on each category"""
         student_avg = (
-            data.groupby("Email Address")
+            data.groupby(self.SPREADSHEET_COLUMN_NAMES["email"])
             .agg(
                 {
                     self.SPREADSHEET_COLUMN_NAMES["slide_deck"]: "mean",
@@ -289,16 +318,43 @@ class Grader:
         return student_avg
 
     def get_top_three_presentations(self, group_averages: pd.DataFrame) -> pd.DataFrame:
-        # Sort by the grades for each category (descending order)
-        top_3 = group_averages.sort_values(
-            by=[
-                self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
-                self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
-                self.SPREADSHEET_COLUMN_NAMES["research_topic"],
-            ],
-            ascending=False,
-        ).head(3)
+        # Calculate the overall average grade for each team
+        group_averages["Overall Average Grade"] = group_averages[
+            ["Average Slide Deck Grade", "Average Presentation Skills Grade", "Average Research and Topic Grade"]
+        ].mean(axis=1)
+
+        # Sort by the Overall Average Grade (descending order)
+        top_3 = group_averages.sort_values(by="Overall Average Grade", ascending=False).head(3)
+
         return top_3
+
+    def get_student_outliers(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Identifies students who provided outlier grades or zeros, and counts the number for each student."""
+
+        outliers_count = {}  # Dictionary to store email and count of outliers/zeros
+
+        for category in [
+            self.SPREADSHEET_COLUMN_NAMES["slide_deck"],
+            self.SPREADSHEET_COLUMN_NAMES["presentation_skills"],
+            self.SPREADSHEET_COLUMN_NAMES["research_topic"],
+        ]:
+            # Identify outliers and zeros in the category
+            outliers = apply_iqr(data[category])
+            if not outliers.empty:
+                # Get the emails of students who gave outliers or zeros
+                emails = data.loc[outliers.index, "Email"]
+                for email in emails:
+                    if email in outliers_count:
+                        outliers_count[email] += 1
+                    else:
+                        outliers_count[email] = 1
+
+        # Convert the dictionary into a DataFrame for better readability
+        outliers_df = pd.DataFrame(
+            list(outliers_count.items()), columns=["Email", "Outlying Grades Given"]
+        ).sort_values(by="Outlying Grades Given", ascending=False)
+
+        return outliers_df
 
     def process_form_responses(self, spreadsheet_file: str):
 
@@ -313,7 +369,10 @@ class Grader:
         # Get the top 3 presentations
         top_3_presentations = self.get_top_three_presentations(group_averages)
 
-        return group_averages, student_averages, top_3_presentations
+        # Get student outliers
+        student_outliers = self.get_student_outliers(data)
+
+        return group_averages, student_averages, top_3_presentations, student_outliers
 
     def grade_presentation_project(
         self,
@@ -368,9 +427,14 @@ class Grader:
         assignment_id = self.get_assignment_id_by_title(assignment_title)
 
         # Update grades in Canvas
+        emails = [email.strip().lower() for email in emails]
         for student in students:
             if student["email"].strip().lower() in emails:
-                self.canvas.update_student_grade(assignment_id, student["id"], grade)
+                Print(f"Updating grade for {student['email']}", log_type="INFO")
+                try:
+                    self.canvas.update_student_grade(assignment_id, student["id"], grade)
+                except Exception as e:
+                    Print(f"Error updating grade for {student['email']}: {e}", log_type="ERROR")
         Print("Grading complete", log_type="INFO")
 
     def __read_team_info_file(self, path: str, raise_error: bool = True) -> TeamInfo:  # type: ignore
@@ -405,7 +469,7 @@ class Grader:
         # Return list of created Canvas pages
         return pages
 
-    def verify_project_files(self, folder_path: str) -> Tuple[str, Union[TeamInfo, None], List[str]]:
+    def verify_project_files(self, folder_path: str) -> Tuple[str, List[str]]:
         """Verify all required project files exist and return the absolute folder path, team info, and any errors
 
         Args:
@@ -415,7 +479,7 @@ class Grader:
             Tuple[str, TeamInfo, List[str]]: Tuple containing (absolute_path, team_info, list_of_errors)
         """
         errors: List[str] = []
-        team_info: Union[TeamInfo, None] = None
+        # team_info: Union[TeamInfo, None] = None
 
         # Get absolute folder path
         cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -424,14 +488,15 @@ class Grader:
 
         if not os.path.exists(abs_folder_path):
             errors.append("Folder path does not exist")
-            return abs_folder_path, None, errors
+            return abs_folder_path, errors
 
         # Check required files exist
         required_files = {
             "presentation.pdf": "Presentation file is missing",
             "paper.pdf": "Paper file is missing",
             "quiz.json": "Quiz file is missing",
-            "team_info.yml": "Team info file is missing",
+            # "team_info.yml": "Team info file is missing",
+            "github.txt": "Github file is missing",
         }
 
         for file, error_msg in required_files.items():
@@ -439,21 +504,21 @@ class Grader:
             if not os.path.exists(file_path):
                 errors.append(error_msg)
 
-        # Try to load and verify team info if yml exists
-        team_info_path = os.path.join(abs_folder_path, "team_info.yml")
-        if os.path.exists(team_info_path):
-            try:
-                team_info = self.__read_team_info_file(team_info_path)
-            except ValidationError as e:
-                error_details = []
-                for err in e.errors():
-                    field_path = " -> ".join(str(x) for x in err["loc"])
-                    error_details.append(f"\tField '{field_path}': {err['msg']}")
-                errors.append(f"Invalid team_info.yml:\n" + "\n".join(error_details))
-            except yaml.YAMLError as e:
-                errors.append(f"Invalid YAML syntax in team_info.yml: {str(e)}")
-            except Exception as e:
-                errors.append(f"Unexpected error reading team_info.yml: {str(e)}")
+        # # Try to load and verify team info if yml exists
+        # team_info_path = os.path.join(abs_folder_path, "team_info.yml")
+        # if os.path.exists(team_info_path):
+        #     try:
+        #         team_info = self.__read_team_info_file(team_info_path)
+        #     except ValidationError as e:
+        #         error_details = []
+        #         for err in e.errors():
+        #             field_path = " -> ".join(str(x) for x in err["loc"])
+        #             error_details.append(f"\tField '{field_path}': {err['msg']}")
+        #         errors.append(f"Invalid team_info.yml:\n" + "\n".join(error_details))
+        #     except yaml.YAMLError as e:
+        #         errors.append(f"Invalid YAML syntax in team_info.yml: {str(e)}")
+        #     except Exception as e:
+        #         errors.append(f"Unexpected error reading team_info.yml: {str(e)}")
 
         # Try to load and verify quiz if json exists
         quiz_path = os.path.join(abs_folder_path, "quiz.json")
@@ -476,17 +541,17 @@ class Grader:
             except Exception as e:
                 errors.append(f"Unexpected error reading quiz.json: {str(e)}")
 
-        return abs_folder_path, team_info, errors
+        return abs_folder_path, errors
 
-    def verify_all_projects(self, folders: List[str]) -> List[Tuple[str, Union[TeamInfo, None], List[str]]]:
+    def verify_all_projects(self, folders: List[str]) -> List[Tuple[str, List[str]]]:
         """Verify all projects in the given folders and return verification results for all folders.
 
         Args:
             folders (List[str]): List of folder paths to verify
 
         Returns:
-            List[Tuple[str, Union[TeamInfo, None], List[str]]]: List of tuples containing
-                (folder_path, team_info, list_of_errors) for all folders
+            List[Tuple[str,  List[str]]]: List of tuples containing
+                (folder_path, list_of_errors) for all folders
         """
         verification_results = []
 
@@ -509,9 +574,8 @@ class Grader:
                              Must contain:
                              - presentation.pdf
                              - paper.pdf
-                             - team_info.yml
                              - quiz.json
-
+                             - github.txt
         Returns:
             PageSchema: The created Canvas page object containing the team's information and materials.
 
@@ -523,17 +587,16 @@ class Grader:
             >>> page = grader.create_canvas_page_based_on_folder("path/to/team1_folder")
         """
         # Verify project files and get absolute path
-        folder_path, team_info, errors = self.verify_project_files(folder_path)
+        folder_path, errors = self.verify_project_files(folder_path)
         if errors:
             raise ValueError(f"Project verification failed:\n" + "\n".join(f"- {error}" for error in errors))
-
-        if team_info is None:
-            raise ValueError("Team info is None")
+        team_name = os.path.basename(folder_path)
+        team_info = self.convert_student_record_sheets_to_team_info(team_name)
 
         # Upload the presentation and paper
         presentation_url = self.canvas.upload_file(folder_path + "/presentation.pdf")
         paper_url = self.canvas.upload_file(folder_path + "/paper.pdf")
-
+        github_url = self.canvas.upload_file(folder_path + "/github.txt")
         # Create a Canvas page
         team_members_html = "".join([f"<li>{member.name} - {member.email} </li>" for member in team_info.team_members])
 
@@ -545,7 +608,7 @@ class Grader:
                 <ul style="list-style-type: disc; padding-left: 20px;">
                     {team_members_html}
                 </ul>
-                <p><strong>Github Repo:</strong> <a href="{team_info.github_repo}" style="color: #3498db;">{team_info.github_repo}</a></p>
+                <p><strong>Github Repo:</strong> <a href="{github_url}" style="color: #3498db;">github</a></p>
                 <p><strong>Presentation:</strong> <a href="{presentation_url}" style="color: #3498db;">presentation</a></p>
                 <p><strong>Paper:</strong> <a href="{paper_url}" style="color: #3498db;">paper</a></p>
         """
@@ -577,13 +640,12 @@ class Grader:
         quiz_path = folder_path + "/quiz.json"
         assert os.path.exists(quiz_path), "Quiz file does not exist"
         # Verify that schema for quiz is good
-        team_info_path = folder_path + "/team_info.yml"
-        team_info = self.__read_team_info_file(team_info_path)
+        team_name = os.path.basename(folder_path)
 
         # Create a create a google forms for feedback to open at start time and close at end time + 20minutes
         form = self.google.make_copy_of_form(
             "1XykFAgYiZgMLGq7qZTlVwwacGaA_hhMDsNqAN43M8IU",  # TODO: Need to create a shared form for everyone
-            f"Feedback for {team_info.team_name}",
+            f"Feedback for {team_name}",
             True,
         )
 
@@ -603,7 +665,9 @@ class Grader:
         # create canvas quiz based on the quiz file
         return self.canvas.update_page(page.page_id, body=body), form
 
-    def get_page_status(self, page: PageSchema) -> Literal["Created", "Quiz and Feedback added", "Done"]:
+    def get_page_status(
+        self, page: PageSchema
+    ) -> Literal["Created", "Quiz and Feedback added", "Done", "Evaluation Form"]:
         if page.url is None:
             raise ValueError("Page ID is None")
 
@@ -614,7 +678,9 @@ class Grader:
 
         if "Feedback Form:" in page.body:
             return "Quiz and Feedback added"
-        elif "<img" in page.body:  # Have not tested this
+        elif "Evaluation Form" in page.body:
+            return "Evaluation Form"
+        elif "<img" in page.body:
             return "Done"
         # else
         return "Created"
@@ -622,7 +688,10 @@ class Grader:
     def remove_feedback_url_and_quiz(self, page: PageSchema):
         old_body: str = page.body  # type: ignore
         # Remove the feedback form and quiz
-        body = old_body.split("<p><strong>Feedback Form:</strong>")[0]
+        if "Feedback Form:" in old_body:
+            body = old_body.split("<p><strong>Feedback Form:</strong>")[0]
+        else:  # It will not remove the feedback form
+            body = old_body
         return self.canvas.update_page(page.page_id, body=body)
 
     def add_images_to_body(self, page: PageSchema, image_paths: List[str]):
@@ -649,12 +718,10 @@ class Grader:
 if __name__ == "__main__":
     # Sample Implementation
     grader = Grader(course_id=15319, module_title="Fall 2024 - Presentation")
-    grader.set_worksheet("1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ")
+    grader.set_worksheet("1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ", 0)
     # pprint.pprint(grader.worksheet.get_values())
     student_records = grader.read_worksheet()
     pprint.pprint(student_records)
-    team_info = grader.convert_student_record_sheets_to_team_info(
-        student_records, "/Users/kevin/Repositories/School/Semester4/CECS_574/canvas_automation/tests/SampleTeam"
-    )
+    team_info = grader.convert_student_record_sheets_to_team_info("SampleTeam")
     print("\n\n******  team info ****** ")
     print(team_info)
