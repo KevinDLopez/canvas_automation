@@ -243,9 +243,6 @@ Setting up Canvas Access Token
       :width: 500
       :alt: Create Token Screenshot
 
-.. toctree::
-   :maxdepth: 4
-   :caption: Contents:
 
 
 
@@ -263,3 +260,9 @@ Setting up Google API
    ``https://console.cloud.google.com/apis/credentials/consent``
 * Create credentials and download the ``client_secrets.json`` file. ( Create Credentials ->  OAuth Client ID )
    ``https://console.cloud.google.com/apis/credentials``
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Contents:
+
+   modules

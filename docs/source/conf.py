@@ -40,11 +40,14 @@ html_static_path = ["_static"]
 
 # Add theme options to show the navigation tree expanded by default
 html_theme_options = {
-    "navigation_depth": 4,
+    "navigation_depth": 2,
     "collapse_navigation": False,
     "sticky_navigation": False,
     "includehidden": True,
     "titles_only": False,
+    "display_version": True,
+    "prev_next_buttons_location": "both",
+    "style_external_links": True,
 }
 
 # Napoleon settings
