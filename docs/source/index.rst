@@ -14,9 +14,9 @@ This project was developed by:
 Welcome to GradingAutomation's documentation. This tool helps automate the grading process for Canvas 574 with the use of
 `Canvas API <https://canvas.instructure.com/doc/api/index.html>`_,
 `Google Forms API <https://developers.google.com/forms/api/reference/rest>`_,
-`Pydantic <https://docs.pydantic.dev/latest/>`_ for schema verification,
-`Pandas <https://pandas.pydata.org/>`_ for data analysis,
-and `Python <https://www.python.org/>`_ for the programming language.
+`Pydantic <https://docs.pydantic.dev/latest/>`_,
+`Pandas <https://pandas.pydata.org/>`_ ,
+and `Python <https://www.python.org/>`_.
 
 Project Goals
 -------------

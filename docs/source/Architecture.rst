@@ -18,15 +18,15 @@ Backend Modules
 ~~~~~~~~~~~~~
 
 * The backend is divided into the following modules:
-   * `CanvasServices <CanvasServices.html>`_: This module is responsible for interacting with the Canvas API to automate the grading process.
+   * `CanvasServices <CanvasServices.html>`_: module interacts with the Canvas API.
       * With in this module there is a sub-module called `CanvasServicesAPI <CanvasServices.html>`_ allows communication to the  Canvas API.
       * `test_canvas_service <CanvasServices.html#test-canvas-service>`_  is responsible for testing the CanvasServicesAPI module.
       * `schemas <CanvasServices.html#schemas>`_  defines the data schemas used by the CanvasServices module. Using this schema file it allowed us to develop efficient code with low amount of errors.
-   * `GoogleServices <GoogleServices.html>`_: This module is responsible for interacting with the Google Forms API to automate the grading process.
+   * `GoogleServices <GoogleServices.html>`_:  interacts with the Google Forms API.
       *  `GoogleServicesAPI <GoogleServices.html>`_  interacts with the Google Forms API.
       *  `test_google_service <GoogleServices.html#test-google-service>`_  tests the GoogleServicesAPI module.
-      *  `schemas <GoogleServices.html#schemas>`_  defines the data schemas used by the GoogleServices module. Using this schema file it allowed us to develop efficient code with low amount of errors. The schemas were made using pydantic or typedict. 
-   * `Logging <Logging.html>`_: This module is responsible for logging the activities of the backend or front end system.
+      *  `schemas <GoogleServices.html#schemas>`_  defines the data schemas used by the GoogleServices module. Using this schema file it allowed us to develop efficient code with low amount of errors. The schemas were made using Pydantic or typedict. 
+   * `Logging <Logging.html>`_: logs the activities of the backend or front end system.
    
    
 Frontend Modules
@@ -47,7 +47,7 @@ Multi-Platform Build and Release
 
 * This pipeline is used for creating builds for linux, windows, and mac(x86 and x64). 
 * Generates this `documentation <https://kevindlopez.github.io/canvas_automation>`_ and deploys it to the github pages.
-* location of this pipeline is in the `.github/workflows/buildApplication.yml` folder.
+   * Location of this pipeline is in the `.github/workflows/buildApplication.yml` folder.
 
 pylint 
 ~~~~~~
