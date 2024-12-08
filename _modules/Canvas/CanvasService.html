@@ -1,0 +1,1084 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canvas.CanvasService &mdash; GradingAutomation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GradingAutomation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#using-conda-environment">Using Conda Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#using-python-requirements-file">Using Python Requirements File</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../using_application.html">Using the Application ( Manual )</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#start-the-application-using-one-of-these-methods">Start the application using one of these methods:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#configure-the-application">Configure the application:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#download-student-submissions-and-verify-projects-in-project-verification-tab">Download student submissions and verify projects in “Project Verification” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#create-canvas-pages-from-group-folders-on-page-management-tab">Create Canvas Pages from group folders on “Page Management” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#adding-forms-and-quizzes-and-grading-responses-on-form-and-quizzes-tab">Adding Forms and Quizzes and Grading Responses on “Form and Quizzes” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#analyze-form-responses-in-form-analysis-tab">Analyze Form Responses in “Form Analysis” Tab.</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../setting_up_canvas_access_token.html">Setting up Canvas Access Token</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setting_up_google_api.html">Setting up Google API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">canvas_automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../Architecture.html">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Architecture.html#overview-of-the-canvas-automation-system">Overview of the Canvas Automation System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Architecture.html#pipelines">Pipelines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GradingAutomation.html">GradingAutomation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.Grader"><code class="docutils literal notranslate"><span class="pre">Grader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.apply_iqr"><code class="docutils literal notranslate"><span class="pre">apply_iqr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.create_image"><code class="docutils literal notranslate"><span class="pre">create_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.read_json_file"><code class="docutils literal notranslate"><span class="pre">read_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.read_yml_file"><code class="docutils literal notranslate"><span class="pre">read_yml_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GradingAutomationUI.html">GradingAutomationUI module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../CanvasServices.html">Canvas API Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.CanvasService">Canvas Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.schemas">Canvas Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.test_canvas_service">Canvas Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GoogleServices.html">GoogleService module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#GoogleServices.GoogleServices.get_id_from_url"><code class="docutils literal notranslate"><span class="pre">get_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#module-GoogleServices.schemas">GoogleService Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#googleservice-tests">GoogleService Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Logging.html">Logging module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.LogLevel"><code class="docutils literal notranslate"><span class="pre">LogLevel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.Print"><code class="docutils literal notranslate"><span class="pre">Print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.set_log_level"><code class="docutils literal notranslate"><span class="pre">set_log_level()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../schemas.html">schemas module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.ClassInfoSchema"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.PresentationTime"><code class="docutils literal notranslate"><span class="pre">PresentationTime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.StudentRecord"><code class="docutils literal notranslate"><span class="pre">StudentRecord</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.TeamInfo"><code class="docutils literal notranslate"><span class="pre">TeamInfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.TeamMember"><code class="docutils literal notranslate"><span class="pre">TeamMember</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GradingAutomation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">Canvas.CanvasService</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for Canvas.CanvasService</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypedDict</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">Canvas.schemas</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="kn">from</span> <span class="nn">Logging</span> <span class="kn">import</span> <span class="n">Print</span><span class="p">,</span> <span class="n">set_log_level</span><span class="p">,</span> <span class="n">LogLevel</span>
+<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
+
+
+<div class="viewcode-block" id="CanvasAPI">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI">[docs]</a>
+<span class="k">class</span> <span class="nc">CanvasAPI</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">course_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">api_token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://csulb.instructure.com&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the CanvasAPI instance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            course_id (int): The ID of the course.</span>
+<span class="sd">            api_token (str, optional): Canvas API token. If not provided, it will</span>
+<span class="sd">                                       attempt to read from the &#39;API_TOKEN&#39; environment variable.</span>
+<span class="sd">            base_url (str): Base URL for the Canvas instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">course_id</span> <span class="o">=</span> <span class="n">course_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_token</span> <span class="o">=</span> <span class="n">api_token</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;API_TOKEN&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_token</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;API token must be provided either as an argument or via the &#39;API_TOKEN&#39; environment variable.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="CanvasAPI._make_request">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI._make_request">[docs]</a>
+    <span class="k">def</span> <span class="nf">_make_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;DELETE&quot;</span><span class="p">],</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper method to make HTTP requests and handle errors consistently.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            method (str): The HTTP method (e.g., &#39;GET&#39;, &#39;POST&#39;, &#39;PUT&#39;, &#39;DELETE&#39;).</span>
+<span class="sd">            endpoint (str): The endpoint part of the URL after /courses/{course_id}.</span>
+<span class="sd">            **kwargs: Additional arguments to pass to the request.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[Any]: The parsed JSON response if successful, otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/api/v1/courses/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">course_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">attempts</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">attempts</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">http_err</span><span class="p">:</span>
+                <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HTTP error occurred: </span><span class="si">{</span><span class="n">http_err</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span>
+                <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Response content: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span>
+                <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retrying in 1 second (attempt </span><span class="si">{</span><span class="n">attempt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">attempts</span><span class="si">}</span><span class="s2">)...&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Wait for 1 second before retrying</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Other error occurred: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to make request after </span><span class="si">{</span><span class="n">attempts</span><span class="si">}</span><span class="s2"> attempts&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.get_users_in_course">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_users_in_course">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_users_in_course</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">UsersSchema</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve active users enrolled in the course.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[User]: A list of user dictionaries containing:</span>
+<span class="sd">                - id (int): User ID</span>
+<span class="sd">                - name (str): Full name</span>
+<span class="sd">                - created_at (str): Creation timestamp</span>
+<span class="sd">                - sortable_name (str): Name for sorting</span>
+<span class="sd">                - short_name (str): Short display name</span>
+<span class="sd">                - email (str): Email address</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sort&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="s2">&quot;enrollment_state&quot;</span><span class="p">:</span> <span class="s2">&quot;active&quot;</span><span class="p">}</span>
+        <span class="n">users</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UsersSchema</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
+
+        <span class="k">while</span> <span class="n">endpoint</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/api/v1/courses/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">course_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+                <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Ensure we handle any errors</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="n">users</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="c1"># Handle pagination</span>
+            <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_next_page</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Clear params after the first request</span>
+        <span class="k">return</span> <span class="n">users</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.get_student_grade">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_student_grade">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_student_grade</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assignment_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve a student&#39;s grade for a specific assignment.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            assignment_id (int): The ID of the assignment.</span>
+<span class="sd">            user_id (int): The ID of the user.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[str]: The grade if available, otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;assignments/</span><span class="si">{</span><span class="n">assignment_id</span><span class="si">}</span><span class="s2">/submissions/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">submission</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">submission</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;grade&quot;</span><span class="p">,</span> <span class="s2">&quot;Not graded&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.update_student_grade">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.update_student_grade">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_student_grade</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assignment_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">new_grade</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update a student&#39;s grade for a specific assignment.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            assignment_id (int): The ID of the assignment.</span>
+<span class="sd">            user_id (int): The ID of the user.</span>
+<span class="sd">            new_grade (float): The new grade to assign.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The updated grade if successful, otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;assignments/</span><span class="si">{</span><span class="n">assignment_id</span><span class="si">}</span><span class="s2">/submissions/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;submission&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;posted_grade&quot;</span><span class="p">:</span> <span class="n">new_grade</span><span class="p">}}</span>
+        <span class="n">updated_submission</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">updated_submission</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;grade&quot;</span><span class="p">,</span> <span class="s2">&quot;No grade available&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.get_submissions">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_submissions">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_submissions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assignment_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SubmissionSchema</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve all submissions for a specific assignment.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            assignment_id (int): The ID of the assignment.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Dict]: A list of submission dictionaries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;include[]&quot;</span><span class="p">:</span> <span class="s2">&quot;attachments&quot;</span><span class="p">}</span>
+        <span class="n">submissions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;assignments/</span><span class="si">{</span><span class="n">assignment_id</span><span class="si">}</span><span class="s2">/submissions&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">SubmissionSchema</span><span class="p">(</span><span class="o">**</span><span class="n">submission</span><span class="p">)</span> <span class="k">for</span> <span class="n">submission</span> <span class="ow">in</span> <span class="n">submissions</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.download_all_submission_attachments">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.download_all_submission_attachments">[docs]</a>
+    <span class="k">def</span> <span class="nf">download_all_submission_attachments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assignment_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">download_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download all submission files for a specific assignment.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            assignment_id (int): The ID of the assignment.</span>
+<span class="sd">            download_dir (str, optional): Directory to save files. Defaults to current directory.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: List of paths to downloaded files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">download_dir</span> <span class="o">=</span> <span class="n">download_dir</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">download_dir</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid download directory: </span><span class="si">{</span><span class="n">download_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">downloaded_files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">submission</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_submissions</span><span class="p">(</span><span class="n">assignment_id</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">submission</span><span class="o">.</span><span class="n">attachments</span><span class="p">:</span>
+                <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No attachments found for submission </span><span class="si">{</span><span class="n">submission</span><span class="o">.</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;WARN&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">folder_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">download_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">submission</span><span class="o">.</span><span class="n">user_id</span><span class="p">))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">attachment</span> <span class="ow">in</span> <span class="n">submission</span><span class="o">.</span><span class="n">attachments</span><span class="p">:</span>
+                <span class="n">file_url</span> <span class="o">=</span> <span class="n">attachment</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">attachment</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span>
+                <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">file_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span>
+                <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+                <span class="n">downloaded_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+                <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">downloaded_files</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.download_student_submission_attachments">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.download_student_submission_attachments">[docs]</a>
+    <span class="k">def</span> <span class="nf">download_student_submission_attachments</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">assignment_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">download_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download submission files for a specific student&#39;s assignment.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            assignment_id (int): The ID of the assignment.</span>
+<span class="sd">            student_id (int): The ID of the student.</span>
+<span class="sd">            download_dir (str, optional): Directory to save files. Defaults to current directory.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: List of paths to downloaded files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">download_dir</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">download_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">download_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+        <span class="n">downloaded_files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">submission</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_submissions</span><span class="p">(</span><span class="n">assignment_id</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">submission</span><span class="o">.</span><span class="n">user_id</span> <span class="o">!=</span> <span class="n">user_id</span><span class="p">:</span>
+                <span class="n">Print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;skipping submission for student </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">, the submission belongs to </span><span class="si">{</span><span class="n">submission</span><span class="o">.</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;found submission for student </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">submission</span><span class="o">.</span><span class="n">attachments</span><span class="p">:</span>
+                <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No attachments found for student </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;WARN&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">attachment</span> <span class="ow">in</span> <span class="n">submission</span><span class="o">.</span><span class="n">attachments</span><span class="p">:</span>
+                <span class="n">file_url</span> <span class="o">=</span> <span class="n">attachment</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">attachment</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span>
+                <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">download_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">file_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span>
+                <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.zip&quot;</span><span class="p">):</span>
+                    <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unzipping </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">download_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+                    <span class="c1"># Unzip the files to the download_dir</span>
+                    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_ref</span><span class="p">:</span>
+                        <span class="n">zip_ref</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">download_dir</span><span class="p">)</span>
+                        <span class="c1"># add all the files to the downloaded_files list</span>
+                        <span class="n">downloaded_files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">zip_ref</span><span class="o">.</span><span class="n">namelist</span><span class="p">())</span>
+
+                    <span class="c1"># Move the files back a directory, skipping if target exists</span>
+                    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">zip_ref</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
+                        <span class="n">src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">download_dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+                        <span class="n">dst</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">download_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+                        <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;src = </span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2">, dst = </span><span class="si">{</span><span class="n">dst</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dst</span><span class="p">):</span>
+                            <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> as it already exists at destination&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;WARN&quot;</span><span class="p">)</span>
+                            <span class="k">continue</span>
+                        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
+                            <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
+                    <span class="c1"># remove the old zip directory</span>
+                    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">filepath</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>  <span class="c1"># Remove the folder where the fils were extracted</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>  <span class="c1"># Remove the zip file</span>
+                    <span class="k">continue</span>
+                <span class="n">downloaded_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+                <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">downloaded_files</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.get_user_id_by_email">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_user_id_by_email">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_user_id_by_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the ID of a student by their email.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">course_id</span> <span class="o">==</span> <span class="mi">15319</span><span class="p">:</span>  <span class="c1"># TODO: Temp while testing only, because there is no other student others</span>
+            <span class="k">return</span> <span class="mi">143898</span>
+
+        <span class="n">users</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_users_in_course</span><span class="p">()</span>
+        <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;users = </span><span class="si">{</span><span class="n">users</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">email</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.get_assignments">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_assignments">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AssignmentSchema</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve all assignments in the course.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[AssignmentSchema]: A list of assignment dictionaries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;assignments&quot;</span>
+        <span class="n">assignments_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="n">assignments</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AssignmentSchema</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">assignment</span> <span class="ow">in</span> <span class="n">assignments_</span><span class="p">:</span>
+            <span class="n">assignments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">AssignmentSchema</span><span class="p">(</span><span class="o">**</span><span class="n">assignment</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">assignments</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.get_assignment_by_title">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_assignment_by_title">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_assignment_by_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assignment_title</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets assignment id based on title</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Assignment ID if it exists</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">assignments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_assignments</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">assignment</span> <span class="ow">in</span> <span class="n">assignments</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">assignment</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">assignment_title</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">assignment</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Assignment with title &#39;</span><span class="si">{</span><span class="n">assignment_title</span><span class="si">}</span><span class="s2">&#39; not found. The assignments are </span><span class="si">{</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">assignments</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.create_announcement">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.create_announcement">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_announcement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an announcement in the course.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            title (str): The title of the announcement.</span>
+<span class="sd">            message (str): The message content of the announcement.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[Dict]: The created announcement data if successful, otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;discussion_topics&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span>
+            <span class="s2">&quot;published&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># If False, the message is in a draft state</span>
+            <span class="s2">&quot;is_announcement&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># If False, the message appears in the discussion section</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div>
+
+
+    <span class="c1"># __private</span>
+    <span class="c1"># _protected</span>
+<div class="viewcode-block" id="CanvasAPI._create_quiz">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI._create_quiz">[docs]</a>
+    <span class="k">def</span> <span class="nf">_create_quiz</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">quiz_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">time_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">shuffle_answers</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">allowed_attempts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a quiz in the course.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            title (str): The title of the quiz.</span>
+<span class="sd">            description (str): The description of the quiz.</span>
+<span class="sd">            quiz_type (str): The type of the quiz (e.g., &#39;assignment&#39;).</span>
+<span class="sd">            time_limit (int): Time limit for the quiz in minutes.</span>
+<span class="sd">            shuffle_answers (bool, optional): Whether to shuffle answers. Defaults to False.</span>
+<span class="sd">            allowed_attempts (int, optional): Number of allowed attempts. Defaults to 1.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict: The created quiz data if successful, otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;quizzes&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;quiz&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+                <span class="s2">&quot;quiz_type&quot;</span><span class="p">:</span> <span class="n">quiz_type</span><span class="p">,</span>
+                <span class="s2">&quot;time_limit&quot;</span><span class="p">:</span> <span class="n">time_limit</span><span class="p">,</span>
+                <span class="s2">&quot;shuffle_answers&quot;</span><span class="p">:</span> <span class="n">shuffle_answers</span><span class="p">,</span>
+                <span class="s2">&quot;allowed_attempts&quot;</span><span class="p">:</span> <span class="n">allowed_attempts</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI._add_question_to_quiz">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI._add_question_to_quiz">[docs]</a>
+    <span class="k">def</span> <span class="nf">_add_question_to_quiz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quiz_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">question_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a question to a specific quiz.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            quiz_id (int): The ID of the quiz.</span>
+<span class="sd">            question_data (Dict): The question data as per Canvas API specifications.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict: The added question data if successful, otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;quizzes/</span><span class="si">{</span><span class="n">quiz_id</span><span class="si">}</span><span class="s2">/questions&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">question_data</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__get_next_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse the &#39;Link&#39; header to find the URL for the next page.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            response (requests.Response): The response object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[str]: The URL for the next page if available, otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">link_header</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Link&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">link_header</span><span class="p">:</span>
+            <span class="n">links</span> <span class="o">=</span> <span class="n">link_header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+                <span class="n">parts</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="s1">&#39;rel=&quot;next&quot;&#39;</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">next_url</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&lt;&gt;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="k">return</span> <span class="n">next_url</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="CanvasAPI._create_quiz_with_questions">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI._create_quiz_with_questions">[docs]</a>
+    <span class="k">def</span> <span class="nf">_create_quiz_with_questions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">validated_quiz</span><span class="p">:</span> <span class="n">QuizSchema</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a quiz and add multiple questions based on the provided data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            validated_quiz (QuizSchema): An instance of QuizSchema containing the quiz information and questions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict: The created quiz data.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValidationError: If the input data does not conform to the schema.</span>
+<span class="sd">            requests.HTTPError: If the quiz creation or question addition fails after retries.</span>
+<span class="sd">            ValueError: If the quiz ID is not found after creation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Step 1: Create the quiz</span>
+        <span class="n">quiz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_quiz</span><span class="p">(</span>  <span class="c1"># TODO: Might need to change some of the parameters</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">validated_quiz</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">validated_quiz</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="n">quiz_type</span><span class="o">=</span><span class="n">validated_quiz</span><span class="o">.</span><span class="n">quiz_type</span><span class="p">,</span>
+            <span class="n">time_limit</span><span class="o">=</span><span class="n">validated_quiz</span><span class="o">.</span><span class="n">time_limit</span><span class="p">,</span>
+            <span class="n">shuffle_answers</span><span class="o">=</span><span class="n">validated_quiz</span><span class="o">.</span><span class="n">shuffle_answers</span><span class="p">,</span>
+            <span class="n">allowed_attempts</span><span class="o">=</span><span class="n">validated_quiz</span><span class="o">.</span><span class="n">allowed_attempts</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Step 2: Add questions to the quiz</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">question</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">validated_quiz</span><span class="o">.</span><span class="n">questions</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">question_dict</span> <span class="o">=</span> <span class="n">question</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+            <span class="n">question_data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">question_dict</span><span class="p">}</span>
+            <span class="n">added_question</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_question_to_quiz</span><span class="p">(</span><span class="n">quiz</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">question_data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">added_question</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to add question &#39;</span><span class="si">{</span><span class="n">question</span><span class="o">.</span><span class="n">question_name</span><span class="si">}</span><span class="s2">&#39; to the quiz.&quot;</span><span class="p">)</span>
+
+        <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Quiz &#39;</span><span class="si">{</span><span class="n">validated_quiz</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s2">&#39; created successfully with all questions added.&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">quiz</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.create_quiz_from_file">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.create_quiz_from_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_quiz_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a quiz by reading quiz data from a JSON file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Path to the JSON file containing quiz data.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict: The created quiz data.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundError: If the file does not exist.</span>
+<span class="sd">            ValueError: If the file content cannot be parsed as JSON.</span>
+<span class="sd">            ValidationError: If the file content does not conform to the QuizSchema.</span>
+<span class="sd">            requests.HTTPError: If the quiz creation or question addition fails after retries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Step 1: Check if the file exists</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The file &#39;</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&#39; does not exist.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Step 2: Read and parse the JSON file</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">quiz_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to parse JSON file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Unpacking the JSON data into the schema, would raise errors if the data is invalid</span>
+        <span class="n">validated_quiz</span> <span class="o">=</span> <span class="n">QuizSchema</span><span class="p">(</span><span class="o">**</span><span class="n">quiz_data</span><span class="p">)</span>
+
+        <span class="c1"># Step 3: Validate and create the quiz with questions</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_quiz_with_questions</span><span class="p">(</span><span class="n">validated_quiz</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.get_public_file_url">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_public_file_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_public_file_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve the public URL for a file in the course.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_id (int): The ID of the file.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The public URL for the file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/api/v1/files/</span><span class="si">{</span><span class="n">file_id</span><span class="si">}</span><span class="s2">/public_url&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;public_url&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.upload_file">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.upload_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">upload_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Upload an image to the course&#39;s files.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): The local path to the image file (e.g., &#39;/path/to/image.png&#39;).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: public URL .</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundError: If the file does not exist.</span>
+<span class="sd">            ValueError: If the file is not a PNG file or if the file size cannot be determined.</span>
+<span class="sd">            requests.HTTPError: If the upload fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Step 1: Check if the file exists and is a .png file</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The file &#39;</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&#39; does not exist.&quot;</span><span class="p">)</span>
+        <span class="c1"># if not file_path.lower().endswith(&quot;.png&quot;):</span>
+        <span class="c1">#     raise ValueError(&quot;Only .png files are supported for this upload method.&quot;)</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;file_path = </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Step 2: Get the file size</span>
+        <span class="n">file_size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">file_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot upload an empty file.&quot;</span><span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;File size = &quot;</span><span class="p">,</span> <span class="n">file_size</span><span class="p">)</span>
+
+        <span class="c1"># Step 3: Initiate the file upload</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;file_name = &quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+        <span class="n">file_type</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">file_name</span><span class="p">,</span>
+            <span class="c1"># &quot;content_type&quot;: &quot;image/png&quot;,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">file_size</span><span class="p">),</span>
+            <span class="s2">&quot;parent_folder_path&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>  <span class="c1"># Modify as needed for specific folder</span>
+            <span class="s2">&quot;on_duplicate&quot;</span><span class="p">:</span> <span class="s2">&quot;rename&quot;</span><span class="p">,</span>  <span class="c1"># Rename the file if a file with the same name exists</span>
+            <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Using _make_request to initiate the file upload</span>
+        <span class="n">upload_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;files&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># Step 2: Upload the file to the pre-signed URL</span>
+        <span class="n">upload_url</span> <span class="o">=</span> <span class="n">upload_info</span><span class="p">[</span><span class="s2">&quot;upload_url&quot;</span><span class="p">]</span>
+        <span class="n">upload_params</span> <span class="o">=</span> <span class="n">upload_info</span><span class="p">[</span><span class="s2">&quot;upload_params&quot;</span><span class="p">]</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_data</span><span class="p">:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">file_data</span><span class="p">)}</span>
+            <span class="n">upload_response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">upload_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">upload_params</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">upload_response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HTTPError during file upload: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Response Status Code: </span><span class="si">{</span><span class="n">upload_response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Response Text: </span><span class="si">{</span><span class="n">upload_response</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span>
+
+        <span class="c1"># Step 5: Confirm the file upload and retrieve</span>
+        <span class="k">if</span> <span class="n">upload_response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">201</span><span class="p">:</span>
+            <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&#39; uploaded successfully!&quot;</span><span class="p">)</span>
+            <span class="c1"># The file URI is usually returned as part of the upload_info or can be constructed from the file details</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Print(&quot;upload_info&quot;, pprint.pformat(upload_info))</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;file_param&quot;: &quot;file&quot;,</span>
+<span class="sd">                &quot;progress&quot;: None,</span>
+<span class="sd">                &quot;upload_params&quot;: {&quot;content_type&quot;: &quot;image/png&quot;, &quot;filename&quot;: &quot;histogram.png&quot;},</span>
+<span class="sd">                &quot;upload_url&quot;: &quot;https://inst-fs-pdx-prod.inscloudgate.net/files?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3Mjk4ODUxMTEsInVzZXJfaWQiOiIyMTEzOTAwMDAwMDAwMDU4MTMiLCJyZXNvdXJjZSI6Ii9maWxlcyIsImNhcHR1cmVfdXJsIjoiaHR0cHM6Ly9jc3VsYi5pbnN0cnVjdHVyZS5jb20vYXBpL3YxL2ZpbGVzL2NhcHR1cmUiLCJjYXB0dXJlX3BhcmFtcyI6eyJjb250ZXh0X3R5cGUiOiJDb3Vyc2UiLCJjb250ZXh0X2lkIjoiMjExMzkwMDAwMDAwMDE1MzE5IiwidXNlcl9pZCI6IjIxMTM5MDAwMDAwMDAwNTgxMyIsImZvbGRlcl9pZCI6IjIxMTM5MDAwMDAwMDA5NjIwMyIsInJvb3RfYWNjb3VudF9pZCI6IjIxMTM5MDAwMDAwMDAwMDAwMSIsInF1b3RhX2V4ZW1wdCI6ZmFsc2UsIm9uX2R1cGxpY2F0ZSI6InJlbmFtZSIsInByb2dyZXNzX2lkIjpudWxsLCJpbmNsdWRlIjpudWxsfSwibGVnYWN5X2FwaV9kZXZlbG9wZXJfa2V5X2lkIjoiMTcwMDAwMDAwMDAwMDE2IiwibGVnYWN5X2FwaV9yb290X2FjY291bnRfaWQiOiIyMTEzOTAwMDAwMDAwMDAwMDEiLCJleHAiOjE3Mjk4ODU3MTF9.BymDwnCLWTpRgo1wdRMGtOMbT1cDzxqTyYKJSdrO0pcQJf1n6g_h-3014MWKpzFmqV5zq49TGVsPbKKGgVQp-w&quot;,</span>
+<span class="sd">            }</span>
+
+
+<span class="sd">            Print(&quot;upload_reponse&quot;, pprint.pformat(upload_response.json()))</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;category&quot;: &quot;uncategorized&quot;,</span>
+<span class="sd">                &quot;content-type&quot;: &quot;image/png&quot;,</span>
+<span class="sd">                &quot;created_at&quot;: &quot;2024-10-25T19:38:31Z&quot;,</span>
+<span class="sd">                &quot;display_name&quot;: &quot;histogram-4.png&quot;,</span>
+<span class="sd">                &quot;filename&quot;: &quot;histogram.png&quot;,</span>
+<span class="sd">                &quot;folder_id&quot;: 96203,</span>
+<span class="sd">                &quot;hidden&quot;: False,</span>
+<span class="sd">                &quot;hidden_for_user&quot;: False,</span>
+<span class="sd">                &quot;id&quot;: 19085526,</span>
+<span class="sd">                &quot;instfs_uuid&quot;: &quot;026c4bf1-408b-4a0a-8669-cc5124287114&quot;,</span>
+<span class="sd">                &quot;location&quot;: &quot;https://csulb.instructure.com/api/v1/files/19085526?include%5B%5D=enhanced_preview_url&quot;,</span>
+<span class="sd">                &quot;lock_at&quot;: None,</span>
+<span class="sd">                &quot;locked&quot;: False,</span>
+<span class="sd">                &quot;locked_for_user&quot;: False,</span>
+<span class="sd">                &quot;media_entry_id&quot;: None,</span>
+<span class="sd">                &quot;mime_class&quot;: &quot;image&quot;,</span>
+<span class="sd">                &quot;modified_at&quot;: &quot;2024-10-25T19:38:31Z&quot;,</span>
+<span class="sd">                &quot;preview_url&quot;: &quot;/courses/15319/files/19085526/file_preview?annotate=0&amp;verifier=KyOBPQpIratVM9u5nL4hx7K9O2OjfW6sIEogYgac&quot;,</span>
+<span class="sd">                &quot;size&quot;: 23543,</span>
+<span class="sd">                &quot;thumbnail_url&quot;: &quot;https://csulb.instructure.com/images/thumbnails/19085526/KyOBPQpIratVM9u5nL4hx7K9O2OjfW6sIEogYgac&quot;,</span>
+<span class="sd">                &quot;unlock_at&quot;: None,</span>
+<span class="sd">                &quot;updated_at&quot;: &quot;2024-10-25T19:38:31Z&quot;,</span>
+<span class="sd">                &quot;upload_status&quot;: &quot;success&quot;,</span>
+<span class="sd">                &quot;url&quot;: &quot;https://csulb.instructure.com/files/19085526/download?download_frd=1&amp;verifier=KyOBPQpIratVM9u5nL4hx7K9O2OjfW6sIEogYgac&quot;,</span>
+<span class="sd">                &quot;uuid&quot;: &quot;KyOBPQpIratVM9u5nL4hx7K9O2OjfW6sIEogYgac&quot;,</span>
+<span class="sd">                &quot;visibility_level&quot;: &quot;inherit&quot;,</span>
+<span class="sd">            }</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="c1"># self.get_public_file_url(upload_response.json()[&quot;id&quot;]),</span>
+            <span class="k">return</span> <span class="n">upload_response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File upload failed with status: </span><span class="si">{</span><span class="n">upload_response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.list_modules">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.list_modules">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ModuleSchema</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve all modules in the course.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Dict]: A list of module dictionaries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;modules&quot;</span>
+        <span class="n">modules_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="c1"># Print(modules_dict[0])</span>
+        <span class="n">modules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ModuleSchema</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">ModuleSchema</span><span class="p">(</span><span class="o">**</span><span class="n">module</span><span class="p">)</span> <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">modules_dict</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">modules</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.get_module_by_title">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_module_by_title">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_module_by_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleSchema</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve a specific module by its ID.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): The ID of the module.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict: The module data if found, otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_modules</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_modules</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">module</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">module</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Module with name &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; not found.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.create_module">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.create_module">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_module</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">unlock_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleSchema</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a module in the course.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): The name of the module.</span>
+<span class="sd">            position (int): The position of the module in the course.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict: The created module data if successful, otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;modules&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">}}</span>
+        <span class="k">if</span> <span class="n">position</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">][</span><span class="s2">&quot;position&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unlock_at</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">][</span><span class="s2">&quot;unlock_at&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unlock_at</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+        <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ModuleSchema</span><span class="p">(</span><span class="o">**</span><span class="n">module</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.list_module_items">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.list_module_items">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_module_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ModuleItemSchema</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve all items in a specific module.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            module_id (int): The ID of the module.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Dict]: A list of module item dictionaries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;modules/</span><span class="si">{</span><span class="n">module_id</span><span class="si">}</span><span class="s2">/items&quot;</span>
+        <span class="n">moduleItem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">ModuleItemSchema</span><span class="p">(</span><span class="o">**</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">moduleItem</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.get_page_by_title">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_page_by_title">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_page_by_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">module_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageSchema</span><span class="p">:</span>
+        <span class="n">pages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_module_pages</span><span class="p">(</span><span class="n">module_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">pages</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">page</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="n">title</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">page</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Page with title &#39;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&#39; not found.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.get_page_by_id">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_page_by_id">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_page_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageSchema</span><span class="p">:</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;pages/</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">PageSchema</span><span class="p">(</span><span class="o">**</span><span class="n">page</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.get_module_pages">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_module_pages">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_module_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PageSchema</span><span class="p">]:</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_module_items</span><span class="p">(</span><span class="n">module_id</span><span class="p">)</span>
+        <span class="n">pages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PageSchema</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;Page&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">page_url</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Page </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> has no page_url&quot;</span><span class="p">)</span>
+                <span class="n">pages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_page_by_id</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">page_url</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">pages</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.create_page">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.create_page">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_page</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">body</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">editing_roles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;teachers&quot;</span><span class="p">,</span> <span class="s2">&quot;students&quot;</span><span class="p">,</span> <span class="s2">&quot;members&quot;</span><span class="p">,</span> <span class="s2">&quot;public&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">notify_of_update</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">published</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">front_page</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">publish_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageSchema</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new wiki page with the specified parameters.</span>
+
+<span class="sd">        :param title: The title for the new page.</span>
+<span class="sd">        :param body: The content for the new page.</span>
+<span class="sd">        :param editing_roles: Which user roles are allowed to edit this page.</span>
+<span class="sd">                            Allowed values: &#39;teachers&#39;, &#39;students&#39;, &#39;members&#39;, &#39;public&#39;.</span>
+<span class="sd">        :param notify_of_update: Whether participants should be notified when this page changes.</span>
+<span class="sd">        :param published: Whether the page is published (true) or draft state (false).</span>
+<span class="sd">        :param front_page: Set an unhidden page as the front page (if true).</span>
+<span class="sd">        :param publish_at: Schedule a future date/time to publish the page.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;pages&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;wiki_page&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">body</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;wiki_page&quot;</span><span class="p">][</span><span class="s2">&quot;body&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">body</span>
+        <span class="k">if</span> <span class="n">editing_roles</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;wiki_page&quot;</span><span class="p">][</span><span class="s2">&quot;editing_roles&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">editing_roles</span>
+        <span class="k">if</span> <span class="n">notify_of_update</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;wiki_page&quot;</span><span class="p">][</span><span class="s2">&quot;notify_of_update&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">notify_of_update</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">published</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;wiki_page&quot;</span><span class="p">][</span><span class="s2">&quot;published&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">published</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">front_page</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;wiki_page&quot;</span><span class="p">][</span><span class="s2">&quot;front_page&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">front_page</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">publish_at</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;wiki_page&quot;</span><span class="p">][</span><span class="s2">&quot;publish_at&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">publish_at</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+        <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;new_page = &quot;</span><span class="p">)</span>
+        <span class="n">page</span> <span class="o">=</span> <span class="n">PageSchema</span><span class="p">(</span><span class="o">**</span><span class="n">page</span><span class="p">)</span>
+        <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()[</span><span class="s2">&quot;body&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">page</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.update_page">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.update_page">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageSchema</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update an existing wiki page with the specified parameters.</span>
+
+<span class="sd">        :param id: The ID of the page to update.</span>
+<span class="sd">        :param body: The new content for the page.</span>
+<span class="sd">        :param title: The new title for the page.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;pages/</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;wiki_page&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="n">body</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;wiki_page&quot;</span><span class="p">][</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">PageSchema</span><span class="p">(</span><span class="o">**</span><span class="n">page</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.list_pages">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.list_pages">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PageSchema</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve all pages in the course.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Dict]: A list of page dictionaries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;pages&quot;</span>
+        <span class="n">pages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">PageSchema</span><span class="p">(</span><span class="o">**</span><span class="n">page</span><span class="p">)</span> <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">pages</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="CanvasAPI.create_module_item">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.CanvasService.CanvasAPI.create_module_item">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_module_item</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">module_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">page_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;File&quot;</span><span class="p">,</span> <span class="s2">&quot;Page&quot;</span><span class="p">,</span> <span class="s2">&quot;Discussion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Page&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleItemSchema</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a module item in a specific module.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            title (str): The title of the module item.</span>
+<span class="sd">            module_id (str): The ID of the module.</span>
+<span class="sd">            type (str): The type of the module item.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict: The created module item data if successful, otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;modules/</span><span class="si">{</span><span class="n">module_id</span><span class="si">}</span><span class="s2">/items&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;module_item&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span>
+                <span class="s2">&quot;page_url&quot;</span><span class="p">:</span> <span class="n">page_url</span><span class="p">,</span>
+                <span class="c1"># &quot;content_id&quot;: 123,</span>
+            <span class="p">},</span>
+            <span class="c1"># &quot;Authorization&quot;: f&quot;Bearer {self.api_token}&quot;,</span>
+        <span class="p">}</span>
+        <span class="n">module_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ModuleItemSchema</span><span class="p">(</span><span class="o">**</span><span class="n">module_item</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">set_log_level</span><span class="p">(</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">load_dotenv</span><span class="p">():</span>
+        <span class="n">api_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;API_TOKEN&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;API_TOKEN loaded successfully&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;API_TOKEN not found in .env file&quot;</span><span class="p">)</span>
+
+    <span class="n">course_id</span> <span class="o">=</span> <span class="mi">15319</span>
+    <span class="n">canvas</span> <span class="o">=</span> <span class="n">CanvasAPI</span><span class="p">(</span><span class="n">course_id</span><span class="p">,</span> <span class="n">api_token</span><span class="p">)</span>
+    <span class="n">assignment</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">get_submissions</span><span class="p">(</span><span class="mi">1192803</span><span class="p">)</span>  <span class="c1"># It should at least not raise an error</span>
+    <span class="n">assignments</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">download_all_submission_attachments</span><span class="p">(</span>
+        <span class="mi">1192803</span>
+    <span class="p">)</span>  <span class="c1"># IT should not raise an error, and it should download files in the cwd + /student_id folder</span>
+
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;stop here&quot;</span><span class="p">)</span>
+    <span class="n">cur_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;../histogram.png&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur_dir</span><span class="p">,</span> <span class="n">image_path</span><span class="p">)</span>
+    <span class="c1"># Call the upload function</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; URL for the uploaded file: </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">modules</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">list_modules</span><span class="p">()</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">modules</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+
+    <span class="c1"># #  a new module</span>
+    <span class="n">newCreate_module</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">create_module</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;New Module&quot;</span><span class="p">)</span>
+    <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;new_module = &quot;</span><span class="p">,</span> <span class="n">newCreate_module</span><span class="p">)</span>
+
+    <span class="n">module_id</span> <span class="o">=</span> <span class="n">modules</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">list_module_items</span><span class="p">(</span><span class="n">module_id</span><span class="p">)</span>
+    <span class="n">pages</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">get_module_pages</span><span class="p">(</span><span class="n">module_id</span><span class="p">)</span>
+    <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;**pages = &quot;</span><span class="p">,</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">([</span><span class="n">page</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">pages</span><span class="p">]))</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;stop here&quot;</span><span class="p">)</span>
+    <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;items = &quot;</span><span class="p">,</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">([</span><span class="n">item</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]))</span>
+
+    <span class="n">page</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">create_page</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;New Page&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="s2">&quot;This is a new page&quot;</span>
+    <span class="p">)</span>  <span class="c1"># TODO: We need to add the body, add the files, link to github, etc</span>
+    <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;page = &quot;</span><span class="p">,</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()))</span>
+
+    <span class="n">list_pages</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">list_pages</span><span class="p">()</span>
+    <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;**list_pages = &quot;</span><span class="p">,</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">([</span><span class="n">page</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">list_pages</span><span class="p">]),</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">updated_page</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">update_page</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">page</span><span class="o">.</span><span class="n">page_id</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="s2">&quot;This is an updated page&quot;</span><span class="p">)</span>
+    <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;updated_page = &quot;</span><span class="p">,</span> <span class="n">updated_page</span><span class="p">)</span>
+    <span class="n">page</span><span class="o">.</span><span class="n">url</span>
+    <span class="c1"># Create a new module item</span>
+    <span class="n">new_item</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">create_module_item</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;New Page&quot;</span><span class="p">,</span> <span class="n">module_id</span><span class="o">=</span><span class="n">module_id</span><span class="p">,</span> <span class="n">page_url</span><span class="o">=</span><span class="n">page</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;new_item = &quot;</span><span class="p">,</span> <span class="n">new_item</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Kevin Lopez, Jerry Wu.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

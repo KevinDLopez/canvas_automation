@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canvas.schemas &mdash; GradingAutomation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GradingAutomation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#using-conda-environment">Using Conda Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#using-python-requirements-file">Using Python Requirements File</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../using_application.html">Using the Application ( Manual )</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#start-the-application-using-one-of-these-methods">Start the application using one of these methods:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#configure-the-application">Configure the application:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#download-student-submissions-and-verify-projects-in-project-verification-tab">Download student submissions and verify projects in “Project Verification” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#create-canvas-pages-from-group-folders-on-page-management-tab">Create Canvas Pages from group folders on “Page Management” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#adding-forms-and-quizzes-and-grading-responses-on-form-and-quizzes-tab">Adding Forms and Quizzes and Grading Responses on “Form and Quizzes” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#analyze-form-responses-in-form-analysis-tab">Analyze Form Responses in “Form Analysis” Tab.</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../setting_up_canvas_access_token.html">Setting up Canvas Access Token</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setting_up_google_api.html">Setting up Google API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">canvas_automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../Architecture.html">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Architecture.html#overview-of-the-canvas-automation-system">Overview of the Canvas Automation System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Architecture.html#pipelines">Pipelines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GradingAutomation.html">GradingAutomation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.Grader"><code class="docutils literal notranslate"><span class="pre">Grader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.apply_iqr"><code class="docutils literal notranslate"><span class="pre">apply_iqr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.create_image"><code class="docutils literal notranslate"><span class="pre">create_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.read_json_file"><code class="docutils literal notranslate"><span class="pre">read_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.read_yml_file"><code class="docutils literal notranslate"><span class="pre">read_yml_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GradingAutomationUI.html">GradingAutomationUI module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../CanvasServices.html">Canvas API Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.CanvasService">Canvas Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.schemas">Canvas Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.test_canvas_service">Canvas Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GoogleServices.html">GoogleService module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#GoogleServices.GoogleServices.get_id_from_url"><code class="docutils literal notranslate"><span class="pre">get_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#module-GoogleServices.schemas">GoogleService Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#googleservice-tests">GoogleService Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Logging.html">Logging module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.LogLevel"><code class="docutils literal notranslate"><span class="pre">LogLevel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.Print"><code class="docutils literal notranslate"><span class="pre">Print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.set_log_level"><code class="docutils literal notranslate"><span class="pre">set_log_level()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../schemas.html">schemas module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.ClassInfoSchema"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.PresentationTime"><code class="docutils literal notranslate"><span class="pre">PresentationTime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.StudentRecord"><code class="docutils literal notranslate"><span class="pre">StudentRecord</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.TeamInfo"><code class="docutils literal notranslate"><span class="pre">TeamInfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.TeamMember"><code class="docutils literal notranslate"><span class="pre">TeamMember</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GradingAutomation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">Canvas.schemas</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for Canvas.schemas</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">EmailStr</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">HttpUrl</span><span class="p">,</span> <span class="n">ValidationError</span><span class="p">,</span> <span class="n">field_validator</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypedDict</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+
+
+<div class="viewcode-block" id="UsersSchema">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.UsersSchema">[docs]</a>
+<span class="k">class</span> <span class="nc">UsersSchema</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">sortable_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">short_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="MediaComment">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.MediaComment">[docs]</a>
+<span class="k">class</span> <span class="nc">MediaComment</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">content_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">media_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">media_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">HttpUrl</span></div>
+
+
+
+<div class="viewcode-block" id="SubmissionComment">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.SubmissionComment">[docs]</a>
+<span class="k">class</span> <span class="nc">SubmissionComment</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">author_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">author_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">author</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="n">comment</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">edited_at</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">media_comment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MediaComment</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="SubmissionSchema">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.SubmissionSchema">[docs]</a>
+<span class="k">class</span> <span class="nc">SubmissionSchema</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<div class="viewcode-block" id="SubmissionSchema.Config">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.SubmissionSchema.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="s2">&quot;allow&quot;</span>  <span class="c1"># Allow extra fields and can retrieve them without throwing an error</span></div>
+
+
+    <span class="n">assignment_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">assignment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">course</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">attempt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">body</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">grade</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">grade_matches_current_submission</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">html_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">HttpUrl</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">preview_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">HttpUrl</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">score</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">submission_comments</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SubmissionComment</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">submission_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+        <span class="n">Literal</span><span class="p">[</span>
+            <span class="s2">&quot;online_text_entry&quot;</span><span class="p">,</span> <span class="s2">&quot;online_url&quot;</span><span class="p">,</span> <span class="s2">&quot;online_upload&quot;</span><span class="p">,</span> <span class="s2">&quot;online_quiz&quot;</span><span class="p">,</span> <span class="s2">&quot;media_recording&quot;</span><span class="p">,</span> <span class="s2">&quot;student_annotation&quot;</span>
+        <span class="p">]</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">submitted_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">HttpUrl</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">grader_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">graded_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">late</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">assignment_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">missing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">excused</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">late_policy_status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;late&quot;</span><span class="p">,</span> <span class="s2">&quot;missing&quot;</span><span class="p">,</span> <span class="s2">&quot;extended&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">points_deducted</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">seconds_late</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">workflow_state</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">extra_attempts</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">anonymous_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">posted_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">read_status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">redo_request</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">attachments</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="Answer">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.Answer">[docs]</a>
+<span class="k">class</span> <span class="nc">Answer</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">answer_text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">answer_weight</span><span class="p">:</span> <span class="nb">int</span></div>
+
+
+
+<div class="viewcode-block" id="Question">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.Question">[docs]</a>
+<span class="k">class</span> <span class="nc">Question</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">question_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">question_text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">question_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">points_possible</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">answers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Answer</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Question.check_total_weight">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.Question.check_total_weight">[docs]</a>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;answers&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">check_total_weight</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">answers</span><span class="p">):</span>
+        <span class="n">total_weight</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">answer</span><span class="o">.</span><span class="n">answer_weight</span> <span class="k">for</span> <span class="n">answer</span> <span class="ow">in</span> <span class="n">answers</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">total_weight</span> <span class="o">!=</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The total weight of all answers must be 100&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">answers</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="QuizSchema">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.QuizSchema">[docs]</a>
+<span class="k">class</span> <span class="nc">QuizSchema</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">quiz_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;assignment&quot;</span>  <span class="c1"># Default value is &#39;assignment&#39;</span>
+    <span class="n">time_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Time limit must be at least 1 minute&quot;</span><span class="p">)</span>
+    <span class="n">shuffle_answers</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">allowed_attempts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Allowed attempts must be at least 1&quot;</span><span class="p">)</span>
+    <span class="n">questions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Question</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="ModuleSchema">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.ModuleSchema">[docs]</a>
+<span class="k">class</span> <span class="nc">ModuleSchema</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">workflow_state</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;active&quot;</span>  <span class="c1"># Default value</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">unlock_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">require_sequential_progress</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">prerequisite_module_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">items_count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">items_url</span><span class="p">:</span> <span class="n">HttpUrl</span>
+    <span class="n">items</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">completed_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">publish_final_grade</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">published</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="AssignmentSchema">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.AssignmentSchema">[docs]</a>
+<span class="k">class</span> <span class="nc">AssignmentSchema</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">due_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">unlock_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">lock_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">points_possible</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">grading_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">assignment_group_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">grading_standard_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">updated_at</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">peer_reviews</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">automatic_peer_reviews</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">grade_group_students_individually</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">anonymous_peer_reviews</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">group_category_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">post_to_sis</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">moderated_grading</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">omit_from_final_grade</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">intra_group_peer_reviews</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">anonymous_instructor_annotations</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">anonymous_grading</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">graders_anonymous_to_graders</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">grader_count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">grader_comments_visible_to_graders</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">final_grader_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">grader_names_visible_to_final_grader</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">allowed_attempts</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">annotatable_attachment_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">hide_in_gradebook</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">secure_params</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">lti_context_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">course_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">submission_types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">has_submitted_submissions</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">due_date_required</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">max_name_length</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">in_closed_grading_period</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">graded_submissions_exist</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">is_quiz_assignment</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">can_duplicate</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">original_course_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">original_assignment_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">original_lti_resource_link_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">original_assignment_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">original_quiz_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">workflow_state</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">important_dates</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">muted</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">html_url</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">has_overrides</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">needs_grading_count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">quiz_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">anonymous_submissions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">published</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">unpublishable</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">only_visible_to_overrides</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">visible_to_everyone</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">locked_for_user</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">submissions_download_url</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">post_manually</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">anonymize_students</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">require_lockdown_browser</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">restrict_quantitative_data</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+
+<span class="c1">############# MODULE ITEM ############</span>
+<div class="viewcode-block" id="CompletionRequirement">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.CompletionRequirement">[docs]</a>
+<span class="k">class</span> <span class="nc">CompletionRequirement</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">min_score</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">completed</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+
+<div class="viewcode-block" id="ContentDetails">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.ContentDetails">[docs]</a>
+<span class="k">class</span> <span class="nc">ContentDetails</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">points_possible</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">due_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">unlock_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">lock_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="ModuleItemSchema">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.ModuleItemSchema">[docs]</a>
+<span class="k">class</span> <span class="nc">ModuleItemSchema</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">module_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">indent</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">content_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">html_url</span><span class="p">:</span> <span class="n">HttpUrl</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">HttpUrl</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">page_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">external_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">HttpUrl</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">new_tab</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">completion_requirement</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CompletionRequirement</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">content_details</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ContentDetails</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">published</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<span class="c1">############### Page schema  ###############</span>
+<div class="viewcode-block" id="LastEditedBy">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.LastEditedBy">[docs]</a>
+<span class="k">class</span> <span class="nc">LastEditedBy</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">anonymous_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">avatar_image_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">HttpUrl</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">display_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">html_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">HttpUrl</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pronouns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="BlockEditorAttributes">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.BlockEditorAttributes">[docs]</a>
+<span class="k">class</span> <span class="nc">BlockEditorAttributes</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">blocks</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="PageSchema">
+<a class="viewcode-back" href="../../CanvasServices.html#Canvas.schemas.PageSchema">[docs]</a>
+<span class="k">class</span> <span class="nc">PageSchema</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">page_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">updated_at</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">hide_from_students</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">editing_roles</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">last_edited_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LastEditedBy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">body</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">published</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">publish_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">front_page</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">locked_for_user</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">lock_info</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">lock_explanation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">editor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;rce&quot;</span><span class="p">,</span> <span class="s2">&quot;block_editor&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">block_editor_attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BlockEditorAttributes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">test_answer_weight_validation</span><span class="p">():</span>
+        <span class="c1"># * Valid case</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="p">(</span>
+            <span class="n">question_name</span><span class="o">=</span><span class="s2">&quot;Sample Question&quot;</span><span class="p">,</span>
+            <span class="n">question_text</span><span class="o">=</span><span class="s2">&quot;What is the answer?&quot;</span><span class="p">,</span>
+            <span class="n">question_type</span><span class="o">=</span><span class="s2">&quot;multiple_choice&quot;</span><span class="p">,</span>
+            <span class="n">points_possible</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">answers</span><span class="o">=</span><span class="p">[</span>  <span class="c1"># Total weight is 100</span>
+                <span class="n">Answer</span><span class="p">(</span><span class="n">answer_text</span><span class="o">=</span><span class="s2">&quot;Answer 1&quot;</span><span class="p">,</span> <span class="n">answer_weight</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                <span class="n">Answer</span><span class="p">(</span><span class="n">answer_text</span><span class="o">=</span><span class="s2">&quot;Answer 2&quot;</span><span class="p">,</span> <span class="n">answer_weight</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">question</span>
+
+        <span class="c1"># !  Invalid case: total weight not equal to 100</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+            <span class="n">Question</span><span class="p">(</span>
+                <span class="n">question_name</span><span class="o">=</span><span class="s2">&quot;Sample Question&quot;</span><span class="p">,</span>
+                <span class="n">question_text</span><span class="o">=</span><span class="s2">&quot;What is the answer?&quot;</span><span class="p">,</span>
+                <span class="n">question_type</span><span class="o">=</span><span class="s2">&quot;multiple_choice&quot;</span><span class="p">,</span>
+                <span class="n">points_possible</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                <span class="n">answers</span><span class="o">=</span><span class="p">[</span>  <span class="c1"># Total weight is 80</span>
+                    <span class="n">Answer</span><span class="p">(</span><span class="n">answer_text</span><span class="o">=</span><span class="s2">&quot;Answer 1&quot;</span><span class="p">,</span> <span class="n">answer_weight</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+                    <span class="n">Answer</span><span class="p">(</span><span class="n">answer_text</span><span class="o">=</span><span class="s2">&quot;Answer 2&quot;</span><span class="p">,</span> <span class="n">answer_weight</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>
+                <span class="p">],</span>
+            <span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Kevin Lopez, Jerry Wu.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

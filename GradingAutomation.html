@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GradingAutomation module &mdash; GradingAutomation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GradingAutomationUI module" href="GradingAutomationUI.html" />
+    <link rel="prev" title="Architecture" href="Architecture.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GradingAutomation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-conda-environment">Using Conda Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-python-requirements-file">Using Python Requirements File</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_application.html">Using the Application ( Manual )</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#start-the-application-using-one-of-these-methods">Start the application using one of these methods:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#configure-the-application">Configure the application:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#download-student-submissions-and-verify-projects-in-project-verification-tab">Download student submissions and verify projects in “Project Verification” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#create-canvas-pages-from-group-folders-on-page-management-tab">Create Canvas Pages from group folders on “Page Management” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#adding-forms-and-quizzes-and-grading-responses-on-form-and-quizzes-tab">Adding Forms and Quizzes and Grading Responses on “Form and Quizzes” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#analyze-form-responses-in-form-analysis-tab">Analyze Form Responses in “Form Analysis” Tab.</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setting_up_canvas_access_token.html">Setting up Canvas Access Token</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setting_up_google_api.html">Setting up Google API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">canvas_automation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Architecture.html">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#overview-of-the-canvas-automation-system">Overview of the Canvas Automation System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#pipelines">Pipelines</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">GradingAutomation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#GradingAutomation.Grader"><code class="docutils literal notranslate"><span class="pre">Grader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#GradingAutomation.apply_iqr"><code class="docutils literal notranslate"><span class="pre">apply_iqr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#GradingAutomation.create_image"><code class="docutils literal notranslate"><span class="pre">create_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#GradingAutomation.read_json_file"><code class="docutils literal notranslate"><span class="pre">read_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#GradingAutomation.read_yml_file"><code class="docutils literal notranslate"><span class="pre">read_yml_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomationUI.html">GradingAutomationUI module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CanvasServices.html">Canvas API Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.CanvasService">Canvas Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.schemas">Canvas Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.test_canvas_service">Canvas Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GoogleServices.html">GoogleService module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.get_id_from_url"><code class="docutils literal notranslate"><span class="pre">get_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#module-GoogleServices.schemas">GoogleService Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#googleservice-tests">GoogleService Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Logging.html">Logging module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.LogLevel"><code class="docutils literal notranslate"><span class="pre">LogLevel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.Print"><code class="docutils literal notranslate"><span class="pre">Print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.set_log_level"><code class="docutils literal notranslate"><span class="pre">set_log_level()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html">schemas module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.ClassInfoSchema"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.PresentationTime"><code class="docutils literal notranslate"><span class="pre">PresentationTime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.StudentRecord"><code class="docutils literal notranslate"><span class="pre">StudentRecord</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamInfo"><code class="docutils literal notranslate"><span class="pre">TeamInfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamMember"><code class="docutils literal notranslate"><span class="pre">TeamMember</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GradingAutomation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">canvas_automation</a></li>
+      <li class="breadcrumb-item active">GradingAutomation module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/GradingAutomation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="Architecture.html" class="btn btn-neutral float-left" title="Architecture" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="GradingAutomationUI.html" class="btn btn-neutral float-right" title="GradingAutomationUI module" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-GradingAutomation">
+<span id="gradingautomation-module"></span><h1>GradingAutomation module<a class="headerlink" href="#module-GradingAutomation" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="GradingAutomation.Grader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GradingAutomation.</span></span><span class="sig-name descname"><span class="pre">Grader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">course_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#Grader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.SPREADSHEET_COLUMN_NAMES">
+<span class="sig-name descname"><span class="pre">SPREADSHEET_COLUMN_NAMES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'email':</span> <span class="pre">'Email',</span> <span class="pre">'presentation_skills':</span> <span class="pre">&quot;Overall</span> <span class="pre">grade</span> <span class="pre">to</span> <span class="pre">this</span> <span class="pre">team's</span> <span class="pre">Presentation</span> <span class="pre">skills?&quot;,</span> <span class="pre">'research_topic':</span> <span class="pre">&quot;Overall</span> <span class="pre">grade</span> <span class="pre">to</span> <span class="pre">this</span> <span class="pre">team's</span> <span class="pre">Research</span> <span class="pre">topic</span> <span class="pre">and</span> <span class="pre">(summary)</span> <span class="pre">paper</span> <span class="pre">content?&quot;,</span> <span class="pre">'slide_deck':</span> <span class="pre">&quot;Overall</span> <span class="pre">grade</span> <span class="pre">to</span> <span class="pre">this</span> <span class="pre">team's</span> <span class="pre">Slide</span> <span class="pre">deck?&quot;,</span> <span class="pre">'team_name':</span> <span class="pre">'Team_Name'}</span></em><a class="headerlink" href="#GradingAutomation.Grader.SPREADSHEET_COLUMN_NAMES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.add_google_forms_and_create_quiz">
+<span class="sig-name descname"><span class="pre">add_google_forms_and_create_quiz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema" title="Canvas.schemas.PageSchema"><span class="pre">PageSchema</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.add_google_forms_and_create_quiz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.add_google_forms_and_create_quiz" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.add_images_to_body">
+<span class="sig-name descname"><span class="pre">add_images_to_body</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema" title="Canvas.schemas.PageSchema"><span class="pre">PageSchema</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.add_images_to_body"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.add_images_to_body" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.calculate_group_averages">
+<span class="sig-name descname"><span class="pre">calculate_group_averages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.calculate_group_averages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.calculate_group_averages" title="Link to this definition"></a></dt>
+<dd><p>Calculates the average grade for each team on their slide deck, presentation skills, and research topic and paper content</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.calculate_student_averages">
+<span class="sig-name descname"><span class="pre">calculate_student_averages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.calculate_student_averages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.calculate_student_averages" title="Link to this definition"></a></dt>
+<dd><p>Calculates the averages students gave for each team based on each category</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.convert_student_record_sheets_to_team_info">
+<span class="sig-name descname"><span class="pre">convert_student_record_sheets_to_team_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Team_Name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="schemas.html#schemas.TeamInfo" title="schemas.TeamInfo"><span class="pre">TeamInfo</span></a></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.convert_student_record_sheets_to_team_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.convert_student_record_sheets_to_team_info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.convert_team_info_to_student_record">
+<span class="sig-name descname"><span class="pre">convert_team_info_to_student_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">team_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="schemas.html#schemas.TeamInfo" title="schemas.TeamInfo"><span class="pre">TeamInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">Team_Name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="schemas.html#schemas.StudentRecord" title="schemas.StudentRecord"><span class="pre">StudentRecord</span></a></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.convert_team_info_to_student_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.convert_team_info_to_student_record" title="Link to this definition"></a></dt>
+<dd><p>TODO: Don’t know if is necessary - Not fully implemented</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.create_canvas_page_based_on_folder">
+<span class="sig-name descname"><span class="pre">create_canvas_page_based_on_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema" title="Canvas.schemas.PageSchema"><span class="pre">PageSchema</span></a></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.create_canvas_page_based_on_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.create_canvas_page_based_on_folder" title="Link to this definition"></a></dt>
+<dd><p>Creates a Canvas page for a team project based on the contents of a folder.</p>
+<p>This function takes a folder path containing project materials (presentation, paper, team info),
+verifies all required files are present, and creates a formatted Canvas page with the team’s
+information and uploaded materials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Path to the folder containing the team’s project materials.
+Must contain:
+- presentation.pdf
+- paper.pdf
+- quiz.json
+- github.txt</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created Canvas page object containing the team’s information and materials.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema" title="Canvas.schemas.PageSchema">PageSchema</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If any required files are missing or invalid, or if team_info cannot be parsed.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grader</span> <span class="o">=</span> <span class="n">Grader</span><span class="p">(</span><span class="n">course_id</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span> <span class="n">module_title</span><span class="o">=</span><span class="s2">&quot;Team Presentations&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">grader</span><span class="o">.</span><span class="n">create_canvas_page_based_on_folder</span><span class="p">(</span><span class="s2">&quot;path/to/team1_folder&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.create_multiple_canvas_pages_based_on_folder">
+<span class="sig-name descname"><span class="pre">create_multiple_canvas_pages_based_on_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema" title="Canvas.schemas.PageSchema"><span class="pre">PageSchema</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.create_multiple_canvas_pages_based_on_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.create_multiple_canvas_pages_based_on_folder" title="Link to this definition"></a></dt>
+<dd><p>Create multiple Canvas pages based on a list of folder paths</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folders</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em>) – List of folder paths containing presentation materials</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of created Canvas page objects</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema" title="Canvas.schemas.PageSchema">PageSchema</a>]</p>
+</dd>
+</dl>
+<p>This function iterates through a list of folder paths and creates a Canvas page
+for each folder by calling create_canvas_page_based_on_folder(). Each folder
+should contain presentation materials like PDFs and team info.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.get_assignment_id_by_title">
+<span class="sig-name descname"><span class="pre">get_assignment_id_by_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assignment_title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.get_assignment_id_by_title"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.get_assignment_id_by_title" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.get_folders_with_team">
+<span class="sig-name descname"><span class="pre">get_folders_with_team</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.get_folders_with_team"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.get_folders_with_team" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.get_google_form_responses">
+<span class="sig-name descname"><span class="pre">get_google_form_responses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.get_google_form_responses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.get_google_form_responses" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.get_page_status">
+<span class="sig-name descname"><span class="pre">get_page_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema" title="Canvas.schemas.PageSchema"><span class="pre">PageSchema</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.13)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'Created'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'Quiz</span> <span class="pre">and</span> <span class="pre">Feedback</span> <span class="pre">added'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'Done'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'Evaluation</span> <span class="pre">Form'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.get_page_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.get_page_status" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.get_pages_posted_in_module">
+<span class="sig-name descname"><span class="pre">get_pages_posted_in_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema" title="Canvas.schemas.PageSchema"><span class="pre">PageSchema</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.get_pages_posted_in_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.get_pages_posted_in_module" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.get_pages_to_create">
+<span class="sig-name descname"><span class="pre">get_pages_to_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.get_pages_to_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.get_pages_to_create" title="Link to this definition"></a></dt>
+<dd><p>Get a list of folders that do not have a Canvas pages in the presentations module.</p>
+<p>This method checks each folder against existing Canvas pages to determine which folders
+need new pages created. It uses the team name from the folder path to match against
+Canvas page titles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folders</strong> – List of folder paths to check for existing Canvas pages.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of folder paths that need Canvas pages created.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grader</span> <span class="o">=</span> <span class="n">Grader</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">folders</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/path/to/team1&#39;</span><span class="p">,</span> <span class="s1">&#39;/path/to/team2&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pages_to_create</span> <span class="o">=</span> <span class="n">grader</span><span class="o">.</span><span class="n">get_pages_to_create</span><span class="p">(</span><span class="n">folders</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pages_to_create</span><span class="p">)</span>
+<span class="go">[&#39;/path/to/team2&#39;]  # Only team2 needs a page created</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.get_spreadsheet_by_id">
+<span class="sig-name descname"><span class="pre">get_spreadsheet_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spreadsheet_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.get_spreadsheet_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.get_spreadsheet_by_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.get_student_outliers">
+<span class="sig-name descname"><span class="pre">get_student_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.get_student_outliers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.get_student_outliers" title="Link to this definition"></a></dt>
+<dd><p>Identifies students who provided outlier grades or zeros, and counts the number for each student.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.get_top_three_presentations">
+<span class="sig-name descname"><span class="pre">get_top_three_presentations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_averages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.get_top_three_presentations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.get_top_three_presentations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.grade_presentation_project">
+<span class="sig-name descname"><span class="pre">grade_presentation_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">assignment_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">emails</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.grade_presentation_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.grade_presentation_project" title="Link to this definition"></a></dt>
+<dd><p>Grade the presentation for a group of students, this will read the scores from a Google Forms and update the grades in Canvas</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.is_a_project_folder">
+<span class="sig-name descname"><span class="pre">is_a_project_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.is_a_project_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.is_a_project_folder" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.load_data_from_spreadsheet">
+<span class="sig-name descname"><span class="pre">load_data_from_spreadsheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spreadsheet_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.load_data_from_spreadsheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.load_data_from_spreadsheet" title="Link to this definition"></a></dt>
+<dd><p>Loads form responses using column names</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.process_form_responses">
+<span class="sig-name descname"><span class="pre">process_form_responses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spreadsheet_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.process_form_responses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.process_form_responses" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.read_worksheet">
+<span class="sig-name descname"><span class="pre">read_worksheet</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="schemas.html#schemas.StudentRecord" title="schemas.StudentRecord"><span class="pre">StudentRecord</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.read_worksheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.read_worksheet" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.remove_feedback_url_and_quiz">
+<span class="sig-name descname"><span class="pre">remove_feedback_url_and_quiz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema" title="Canvas.schemas.PageSchema"><span class="pre">PageSchema</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.remove_feedback_url_and_quiz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.remove_feedback_url_and_quiz" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.retrieve_page_structure">
+<span class="sig-name descname"><span class="pre">retrieve_page_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema" title="Canvas.schemas.PageSchema"><span class="pre">PageSchema</span></a></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.retrieve_page_structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.retrieve_page_structure" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.set_module_id_with_presentations">
+<span class="sig-name descname"><span class="pre">set_module_id_with_presentations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.set_module_id_with_presentations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.set_module_id_with_presentations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.set_worksheet">
+<span class="sig-name descname"><span class="pre">set_worksheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sheet_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">worksheet_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.set_worksheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.set_worksheet" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.update_worksheet">
+<span class="sig-name descname"><span class="pre">update_worksheet</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.update_worksheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.update_worksheet" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.verify_all_projects">
+<span class="sig-name descname"><span class="pre">verify_all_projects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.13)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.verify_all_projects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.verify_all_projects" title="Link to this definition"></a></dt>
+<dd><p>Verify all projects in the given folders and return verification results for all folders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folders</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em>) – List of folder paths to verify</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>List of tuples containing</dt><dd><p>(folder_path, list_of_errors) for all folders</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>,  List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GradingAutomation.Grader.verify_project_files">
+<span class="sig-name descname"><span class="pre">verify_project_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.13)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#Grader.verify_project_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.Grader.verify_project_files" title="Link to this definition"></a></dt>
+<dd><p>Verify all required project files exist and return the absolute folder path, team info, and any errors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Path to the project folder</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple containing (absolute_path, team_info, list_of_errors)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, <a class="reference internal" href="schemas.html#schemas.TeamInfo" title="schemas.TeamInfo">TeamInfo</a>, List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="GradingAutomation.apply_iqr">
+<span class="sig-prename descclassname"><span class="pre">GradingAutomation.</span></span><span class="sig-name descname"><span class="pre">apply_iqr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#apply_iqr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.apply_iqr" title="Link to this definition"></a></dt>
+<dd><p>Identifies student outliers using the IQR method</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="GradingAutomation.create_image">
+<span class="sig-prename descclassname"><span class="pre">GradingAutomation.</span></span><span class="sig-name descname"><span class="pre">create_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">responses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GradingAutomation.html#create_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.create_image" title="Link to this definition"></a></dt>
+<dd><p>This function takes a DataFrame of responses and an output path to save the generated image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>responses</strong> (<em>pd.DataFrame</em>) – DataFrame containing student data</p></li>
+<li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Path where the image will be saved</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">responses</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;Student&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Alice&#39;</span><span class="p">,</span> <span class="s1">&#39;Bob&#39;</span><span class="p">,</span> <span class="s1">&#39;Charlie&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;Score&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">85</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">78</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_path</span> <span class="o">=</span> <span class="s1">&#39;output/grades_chart.png&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">create_image</span><span class="p">(</span><span class="n">responses</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="GradingAutomation.read_json_file">
+<span class="sig-prename descclassname"><span class="pre">GradingAutomation.</span></span><span class="sig-name descname"><span class="pre">read_json_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#read_json_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.read_json_file" title="Link to this definition"></a></dt>
+<dd><p>Read a JSON file and return its contents as a dictionary</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="GradingAutomation.read_yml_file">
+<span class="sig-prename descclassname"><span class="pre">GradingAutomation.</span></span><span class="sig-name descname"><span class="pre">read_yml_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/GradingAutomation.html#read_yml_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GradingAutomation.read_yml_file" title="Link to this definition"></a></dt>
+<dd><p>Read a YAML file and return its contents as a dictionary</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Architecture.html" class="btn btn-neutral float-left" title="Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="GradingAutomationUI.html" class="btn btn-neutral float-right" title="GradingAutomationUI module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Kevin Lopez, Jerry Wu.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

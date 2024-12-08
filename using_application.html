@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using the Application ( Manual ) &mdash; GradingAutomation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setting up Canvas Access Token" href="setting_up_canvas_access_token.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GradingAutomation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-conda-environment">Using Conda Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-python-requirements-file">Using Python Requirements File</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using the Application ( Manual )</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#start-the-application-using-one-of-these-methods">Start the application using one of these methods:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configure-the-application">Configure the application:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#download-student-submissions-and-verify-projects-in-project-verification-tab">Download student submissions and verify projects in “Project Verification” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-canvas-pages-from-group-folders-on-page-management-tab">Create Canvas Pages from group folders on “Page Management” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-forms-and-quizzes-and-grading-responses-on-form-and-quizzes-tab">Adding Forms and Quizzes and Grading Responses on “Form and Quizzes” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#analyze-form-responses-in-form-analysis-tab">Analyze Form Responses in “Form Analysis” Tab.</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setting_up_canvas_access_token.html">Setting up Canvas Access Token</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setting_up_google_api.html">Setting up Google API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">canvas_automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Architecture.html">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#overview-of-the-canvas-automation-system">Overview of the Canvas Automation System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#pipelines">Pipelines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomation.html">GradingAutomation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader"><code class="docutils literal notranslate"><span class="pre">Grader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.apply_iqr"><code class="docutils literal notranslate"><span class="pre">apply_iqr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.create_image"><code class="docutils literal notranslate"><span class="pre">create_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.read_json_file"><code class="docutils literal notranslate"><span class="pre">read_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.read_yml_file"><code class="docutils literal notranslate"><span class="pre">read_yml_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomationUI.html">GradingAutomationUI module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CanvasServices.html">Canvas API Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.CanvasService">Canvas Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.schemas">Canvas Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.test_canvas_service">Canvas Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GoogleServices.html">GoogleService module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.get_id_from_url"><code class="docutils literal notranslate"><span class="pre">get_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#module-GoogleServices.schemas">GoogleService Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#googleservice-tests">GoogleService Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Logging.html">Logging module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.LogLevel"><code class="docutils literal notranslate"><span class="pre">LogLevel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.Print"><code class="docutils literal notranslate"><span class="pre">Print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.set_log_level"><code class="docutils literal notranslate"><span class="pre">set_log_level()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html">schemas module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.ClassInfoSchema"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.PresentationTime"><code class="docutils literal notranslate"><span class="pre">PresentationTime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.StudentRecord"><code class="docutils literal notranslate"><span class="pre">StudentRecord</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamInfo"><code class="docutils literal notranslate"><span class="pre">TeamInfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamMember"><code class="docutils literal notranslate"><span class="pre">TeamMember</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GradingAutomation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Using the Application ( Manual )</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/using_application.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="setting_up_canvas_access_token.html" class="btn btn-neutral float-right" title="Setting up Canvas Access Token" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-the-application-manual">
+<h1>Using the Application ( Manual )<a class="headerlink" href="#using-the-application-manual" title="Link to this heading"></a></h1>
+<section id="start-the-application-using-one-of-these-methods">
+<h2>Start the application using one of these methods:<a class="headerlink" href="#start-the-application-using-one-of-these-methods" title="Link to this heading"></a></h2>
+<ul>
+<li><p>Run Python script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">GradingAutomationUI</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+<li><p>Or download and run the executable from the latest release</p>
+<p>Note: For macOS users, you may need to allow opening apps from unknown developers</p>
+</li>
+</ul>
+</section>
+<section id="configure-the-application">
+<h2>Configure the application:<a class="headerlink" href="#configure-the-application" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Enter the Canvas class ID (e.g., <code class="docutils literal notranslate"><span class="pre">15319</span></code>)</p></li>
+<li><p>Provide your Canvas access token</p></li>
+<li><p>Enter the presentation module title (e.g., <code class="docutils literal notranslate"><span class="pre">Fall</span> <span class="pre">2024</span> <span class="pre">-</span> <span class="pre">Presentation</span></code>)</p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/canvas_config.png"><img alt="Canvas Configuration Screenshot" src="_images/canvas_config.png" style="width: 800px;" />
+</a>
+</section>
+<section id="download-student-submissions-and-verify-projects-in-project-verification-tab">
+<h2>Download student submissions and verify projects in “Project Verification” Tab:<a class="headerlink" href="#download-student-submissions-and-verify-projects-in-project-verification-tab" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Enter the the spreadsheet url.</p></li>
+</ol>
+<ul class="simple">
+<li><p>For testing use the following: <code class="docutils literal notranslate"><span class="pre">https://docs.google.com/spreadsheets/u/0/d/1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ/htmlview</span></code></p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p>Enter the location where the files will be downloaded.</p></li>
+</ol>
+<ul class="simple">
+<li><p>This location will cross-check projects with the spreadsheet, enabling you to download missing projects if any.</p></li>
+</ul>
+<ol class="arabic simple" start="3">
+<li><p>Click on verify projects to analyze the spreadsheet</p></li>
+</ol>
+<ul>
+<li><p>Once verified, click on download submissions to download missing projects.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The GUI only shows the missing projects that still need to be download on the computer.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<ol class="arabic" start="4">
+<li><p>After the files are downloaded, click on verify submissions to verify that the files are present and correct.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If anything is wrong with the student names or emails, the log window will display what’s wrong.</p></li>
+<li><p>If anything is wrong with the files, the table will display an error message in the <cite>Errors</cite> column.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<p>Below is how steps 1 to 4 would appear on the GUI.</p>
+<a class="reference internal image-reference" href="_images/click_download.png"><img alt="Click Download Button Screenshot" src="_images/click_download.png" style="width: 800px;" />
+</a>
+<p>Below is how the input spreadsheet looks like:</p>
+<a class="reference internal image-reference" href="_images/spreadsheet.png"><img alt="spreadsheet" src="_images/spreadsheet.png" style="width: 800px;" />
+</a>
+</section>
+<section id="create-canvas-pages-from-group-folders-on-page-management-tab">
+<h2>Create Canvas Pages from group folders on “Page Management” Tab:<a class="headerlink" href="#create-canvas-pages-from-group-folders-on-page-management-tab" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>This panel is used to create the pages on Canvas for the team.</p></li>
+<li><p>The GUI will only displayed verified project from the “Project Verification” Tab.</p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/page_management.png"><img alt="Page Management Screenshot" src="_images/page_management.png" style="width: 800px;" />
+</a>
+</section>
+<section id="adding-forms-and-quizzes-and-grading-responses-on-form-and-quizzes-tab">
+<h2>Adding Forms and Quizzes and Grading Responses on “Form and Quizzes” Tab:<a class="headerlink" href="#adding-forms-and-quizzes-and-grading-responses-on-form-and-quizzes-tab" title="Link to this heading"></a></h2>
+<ul>
+<li><p>This panel is used to add the feedback forms and quizzes on Canvas, and grade the assignment based on the feedback forms.</p></li>
+<li><p>Initially, the program fetches the canvas page status and updates the <cite>Status</cite> Column based on the status response.</p>
+<blockquote>
+<div><ul>
+<li><p>Status response types:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Not</span> <span class="pre">Created</span></code> - page is not created by the application.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Quiz</span> <span class="pre">and</span> <span class="pre">Feedback</span> <span class="pre">added</span></code> - quiz and feedback forms are added to the page.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Done</span></code> - page is created and graded by the application.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">No</span> <span class="pre">Local,</span> <span class="pre">No</span> <span class="pre">Spreadsheet</span></code> - page is not created because there are no local files and the page is not found in the spreadsheet.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">No</span> <span class="pre">Local,</span> <span class="pre">Yes</span> <span class="pre">Spreadsheet</span></code> - page is not created because there are no local files but the page is in the spreadsheet.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Evaluation</span> <span class="pre">Form</span></code> - page was manually created. Keyword <code class="docutils literal notranslate"><span class="pre">Evaluation</span></code> is added by the professor, not by the application.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>We enabled the ability for manually create pages to be graded without affecting the behavior of the application.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If you’re grading the page(s) manually, then ensure that you enter the <strong>feedback form ID</strong> in the spreadsheet.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<a class="reference internal image-reference" href="_images/forms_quizzes.png"><img alt="Forms and Quizzes Screenshot" src="_images/forms_quizzes.png" style="width: 800px;" />
+</a>
+<ul>
+<li><p>When grading a page is complete, there will be an image attached to the page to display the grade distribution histogram.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>All the reponses used for grading are saved in a <cite>.xslx</cite> file under the same directory as the project graded.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<a class="reference internal image-reference" href="_images/grade_distribution.png"><img alt="Grade Distribution Screenshot" src="_images/grade_distribution.png" style="width: 800px;" />
+</a>
+</section>
+<section id="analyze-form-responses-in-form-analysis-tab">
+<h2>Analyze Form Responses in “Form Analysis” Tab.<a class="headerlink" href="#analyze-form-responses-in-form-analysis-tab" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>This panel is used to analyze the feedback forms and aggregate the respones into a single file.</p></li>
+</ul>
+<ol class="arabic">
+<li><p>Click the <code class="docutils literal notranslate"><span class="pre">Aggregate</span> <span class="pre">Responses</span></code> button to combine the responese from the google form.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>All of the responeses will be stored under <code class="docutils literal notranslate"><span class="pre">grading/all_form_respones.xlsx</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Click on the <code class="docutils literal notranslate"><span class="pre">Analyze</span> <span class="pre">Responses</span></code> button to analyze the responses.</p>
+<blockquote>
+<div><ul>
+<li><p>The following analysis is performed:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Distribution for all presentations - Shows the grade distribution across all team presentations</p></li>
+<li><p>Each student average grading for others - Displays how each student grades their peers on average</p></li>
+<li><p>Top 3 Presentations - Identifies the three highest rated presentations based on peer feedback</p></li>
+<li><p>Student Outliers - Detects students who consistently grade significantly higher or lower than their peers. It uses IQR to find outliers (same as boxplot).</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<a class="reference internal image-reference" href="_images/form_analysis.png"><img alt="Form Analysis Screenshot" src="_images/form_analysis.png" style="width: 800px;" />
+</a>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="setting_up_canvas_access_token.html" class="btn btn-neutral float-right" title="Setting up Canvas Access Token" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Kevin Lopez, Jerry Wu.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

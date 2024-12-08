@@ -1,0 +1,976 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>canvas_automation &mdash; GradingAutomation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Architecture" href="Architecture.html" />
+    <link rel="prev" title="Setting up Google API" href="setting_up_google_api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GradingAutomation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-conda-environment">Using Conda Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-python-requirements-file">Using Python Requirements File</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_application.html">Using the Application ( Manual )</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#start-the-application-using-one-of-these-methods">Start the application using one of these methods:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#configure-the-application">Configure the application:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#download-student-submissions-and-verify-projects-in-project-verification-tab">Download student submissions and verify projects in “Project Verification” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#create-canvas-pages-from-group-folders-on-page-management-tab">Create Canvas Pages from group folders on “Page Management” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#adding-forms-and-quizzes-and-grading-responses-on-form-and-quizzes-tab">Adding Forms and Quizzes and Grading Responses on “Form and Quizzes” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#analyze-form-responses-in-form-analysis-tab">Analyze Form Responses in “Form Analysis” Tab.</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setting_up_canvas_access_token.html">Setting up Canvas Access Token</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setting_up_google_api.html">Setting up Google API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">canvas_automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Architecture.html">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#overview-of-the-canvas-automation-system">Overview of the Canvas Automation System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#pipelines">Pipelines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomation.html">GradingAutomation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader"><code class="docutils literal notranslate"><span class="pre">Grader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.apply_iqr"><code class="docutils literal notranslate"><span class="pre">apply_iqr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.create_image"><code class="docutils literal notranslate"><span class="pre">create_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.read_json_file"><code class="docutils literal notranslate"><span class="pre">read_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.read_yml_file"><code class="docutils literal notranslate"><span class="pre">read_yml_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomationUI.html">GradingAutomationUI module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CanvasServices.html">Canvas API Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.CanvasService">Canvas Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.schemas">Canvas Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.test_canvas_service">Canvas Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GoogleServices.html">GoogleService module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.get_id_from_url"><code class="docutils literal notranslate"><span class="pre">get_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#module-GoogleServices.schemas">GoogleService Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#googleservice-tests">GoogleService Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Logging.html">Logging module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.LogLevel"><code class="docutils literal notranslate"><span class="pre">LogLevel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.Print"><code class="docutils literal notranslate"><span class="pre">Print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.set_log_level"><code class="docutils literal notranslate"><span class="pre">set_log_level()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html">schemas module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.ClassInfoSchema"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.PresentationTime"><code class="docutils literal notranslate"><span class="pre">PresentationTime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.StudentRecord"><code class="docutils literal notranslate"><span class="pre">StudentRecord</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamInfo"><code class="docutils literal notranslate"><span class="pre">TeamInfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamMember"><code class="docutils literal notranslate"><span class="pre">TeamMember</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GradingAutomation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">canvas_automation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="setting_up_google_api.html" class="btn btn-neutral float-left" title="Setting up Google API" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Architecture.html" class="btn btn-neutral float-right" title="Architecture" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="canvas-automation">
+<h1>canvas_automation<a class="headerlink" href="#canvas-automation" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Architecture.html#overview-of-the-canvas-automation-system">Overview of the Canvas Automation System</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#backend-modules">Backend Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#frontend-modules">Frontend Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture.html#pipelines">Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#multi-platform-build-and-release">Multi-Platform Build and Release</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#pylint">pylint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#id3">Documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="GradingAutomation.html">GradingAutomation module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader"><code class="docutils literal notranslate"><span class="pre">Grader</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.SPREADSHEET_COLUMN_NAMES"><code class="docutils literal notranslate"><span class="pre">Grader.SPREADSHEET_COLUMN_NAMES</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.add_google_forms_and_create_quiz"><code class="docutils literal notranslate"><span class="pre">Grader.add_google_forms_and_create_quiz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.add_images_to_body"><code class="docutils literal notranslate"><span class="pre">Grader.add_images_to_body()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.calculate_group_averages"><code class="docutils literal notranslate"><span class="pre">Grader.calculate_group_averages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.calculate_student_averages"><code class="docutils literal notranslate"><span class="pre">Grader.calculate_student_averages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.convert_student_record_sheets_to_team_info"><code class="docutils literal notranslate"><span class="pre">Grader.convert_student_record_sheets_to_team_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.convert_team_info_to_student_record"><code class="docutils literal notranslate"><span class="pre">Grader.convert_team_info_to_student_record()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.create_canvas_page_based_on_folder"><code class="docutils literal notranslate"><span class="pre">Grader.create_canvas_page_based_on_folder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.create_multiple_canvas_pages_based_on_folder"><code class="docutils literal notranslate"><span class="pre">Grader.create_multiple_canvas_pages_based_on_folder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.get_assignment_id_by_title"><code class="docutils literal notranslate"><span class="pre">Grader.get_assignment_id_by_title()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.get_folders_with_team"><code class="docutils literal notranslate"><span class="pre">Grader.get_folders_with_team()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.get_google_form_responses"><code class="docutils literal notranslate"><span class="pre">Grader.get_google_form_responses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.get_page_status"><code class="docutils literal notranslate"><span class="pre">Grader.get_page_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.get_pages_posted_in_module"><code class="docutils literal notranslate"><span class="pre">Grader.get_pages_posted_in_module()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.get_pages_to_create"><code class="docutils literal notranslate"><span class="pre">Grader.get_pages_to_create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.get_spreadsheet_by_id"><code class="docutils literal notranslate"><span class="pre">Grader.get_spreadsheet_by_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.get_student_outliers"><code class="docutils literal notranslate"><span class="pre">Grader.get_student_outliers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.get_top_three_presentations"><code class="docutils literal notranslate"><span class="pre">Grader.get_top_three_presentations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.grade_presentation_project"><code class="docutils literal notranslate"><span class="pre">Grader.grade_presentation_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.is_a_project_folder"><code class="docutils literal notranslate"><span class="pre">Grader.is_a_project_folder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.load_data_from_spreadsheet"><code class="docutils literal notranslate"><span class="pre">Grader.load_data_from_spreadsheet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.process_form_responses"><code class="docutils literal notranslate"><span class="pre">Grader.process_form_responses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.read_worksheet"><code class="docutils literal notranslate"><span class="pre">Grader.read_worksheet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.remove_feedback_url_and_quiz"><code class="docutils literal notranslate"><span class="pre">Grader.remove_feedback_url_and_quiz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.retrieve_page_structure"><code class="docutils literal notranslate"><span class="pre">Grader.retrieve_page_structure()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.set_module_id_with_presentations"><code class="docutils literal notranslate"><span class="pre">Grader.set_module_id_with_presentations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.set_worksheet"><code class="docutils literal notranslate"><span class="pre">Grader.set_worksheet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.update_worksheet"><code class="docutils literal notranslate"><span class="pre">Grader.update_worksheet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.verify_all_projects"><code class="docutils literal notranslate"><span class="pre">Grader.verify_all_projects()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader.verify_project_files"><code class="docutils literal notranslate"><span class="pre">Grader.verify_project_files()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.apply_iqr"><code class="docutils literal notranslate"><span class="pre">apply_iqr()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.create_image"><code class="docutils literal notranslate"><span class="pre">create_image()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.read_json_file"><code class="docutils literal notranslate"><span class="pre">read_json_file()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.read_yml_file"><code class="docutils literal notranslate"><span class="pre">read_yml_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="GradingAutomationUI.html">GradingAutomationUI module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CanvasServices.html">Canvas API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CanvasServices.html#module-Canvas.CanvasService">Canvas Services</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI"><code class="docutils literal notranslate"><span class="pre">CanvasAPI</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI._add_question_to_quiz"><code class="docutils literal notranslate"><span class="pre">CanvasAPI._add_question_to_quiz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI._create_quiz"><code class="docutils literal notranslate"><span class="pre">CanvasAPI._create_quiz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI._create_quiz_with_questions"><code class="docutils literal notranslate"><span class="pre">CanvasAPI._create_quiz_with_questions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI._make_request"><code class="docutils literal notranslate"><span class="pre">CanvasAPI._make_request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.create_announcement"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.create_announcement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.create_module"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.create_module()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.create_module_item"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.create_module_item()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.create_page"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.create_page()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.create_quiz_from_file"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.create_quiz_from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.download_all_submission_attachments"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.download_all_submission_attachments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.download_student_submission_attachments"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.download_student_submission_attachments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_assignment_by_title"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.get_assignment_by_title()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_assignments"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.get_assignments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_module_by_title"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.get_module_by_title()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_module_pages"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.get_module_pages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_page_by_id"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.get_page_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_page_by_title"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.get_page_by_title()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_public_file_url"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.get_public_file_url()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_student_grade"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.get_student_grade()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_submissions"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.get_submissions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_user_id_by_email"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.get_user_id_by_email()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.get_users_in_course"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.get_users_in_course()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.list_module_items"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.list_module_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.list_modules"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.list_modules()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.list_pages"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.list_pages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.update_page"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.update_page()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.update_student_grade"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.update_student_grade()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.CanvasService.CanvasAPI.upload_file"><code class="docutils literal notranslate"><span class="pre">CanvasAPI.upload_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CanvasServices.html#module-Canvas.schemas">Canvas Schema</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Answer"><code class="docutils literal notranslate"><span class="pre">Answer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Answer.answer_text"><code class="docutils literal notranslate"><span class="pre">Answer.answer_text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Answer.answer_weight"><code class="docutils literal notranslate"><span class="pre">Answer.answer_weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Answer.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">Answer.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Answer.model_config"><code class="docutils literal notranslate"><span class="pre">Answer.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Answer.model_fields"><code class="docutils literal notranslate"><span class="pre">Answer.model_fields</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.allowed_attempts"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.allowed_attempts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.annotatable_attachment_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.annotatable_attachment_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.anonymize_students"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.anonymize_students</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.anonymous_grading"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.anonymous_grading</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.anonymous_instructor_annotations"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.anonymous_instructor_annotations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.anonymous_peer_reviews"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.anonymous_peer_reviews</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.anonymous_submissions"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.anonymous_submissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.assignment_group_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.assignment_group_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.automatic_peer_reviews"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.automatic_peer_reviews</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.can_duplicate"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.can_duplicate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.course_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.course_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.created_at"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.description"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.due_at"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.due_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.due_date_required"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.due_date_required</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.final_grader_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.final_grader_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.grade_group_students_individually"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.grade_group_students_individually</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.graded_submissions_exist"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.graded_submissions_exist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.grader_comments_visible_to_graders"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.grader_comments_visible_to_graders</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.grader_count"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.grader_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.grader_names_visible_to_final_grader"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.grader_names_visible_to_final_grader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.graders_anonymous_to_graders"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.graders_anonymous_to_graders</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.grading_standard_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.grading_standard_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.grading_type"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.grading_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.group_category_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.group_category_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.has_overrides"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.has_overrides</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.has_submitted_submissions"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.has_submitted_submissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.hide_in_gradebook"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.hide_in_gradebook</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.html_url"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.html_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.important_dates"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.important_dates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.in_closed_grading_period"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.in_closed_grading_period</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.intra_group_peer_reviews"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.intra_group_peer_reviews</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.is_quiz_assignment"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.is_quiz_assignment</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.lock_at"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.lock_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.locked_for_user"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.locked_for_user</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.lti_context_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.lti_context_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.max_name_length"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.max_name_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.model_config"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.model_fields"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.moderated_grading"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.moderated_grading</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.muted"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.muted</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.name"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.needs_grading_count"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.needs_grading_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.omit_from_final_grade"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.omit_from_final_grade</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.only_visible_to_overrides"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.only_visible_to_overrides</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.original_assignment_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.original_assignment_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.original_assignment_name"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.original_assignment_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.original_course_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.original_course_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.original_lti_resource_link_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.original_lti_resource_link_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.original_quiz_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.original_quiz_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.peer_reviews"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.peer_reviews</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.points_possible"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.points_possible</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.position"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.post_manually"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.post_manually</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.post_to_sis"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.post_to_sis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.published"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.published</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.quiz_id"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.quiz_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.require_lockdown_browser"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.require_lockdown_browser</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.restrict_quantitative_data"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.restrict_quantitative_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.secure_params"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.secure_params</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.submission_types"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.submission_types</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.submissions_download_url"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.submissions_download_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.unlock_at"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.unlock_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.unpublishable"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.unpublishable</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.updated_at"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.updated_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.visible_to_everyone"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.visible_to_everyone</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.AssignmentSchema.workflow_state"><code class="docutils literal notranslate"><span class="pre">AssignmentSchema.workflow_state</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.BlockEditorAttributes"><code class="docutils literal notranslate"><span class="pre">BlockEditorAttributes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.BlockEditorAttributes.blocks"><code class="docutils literal notranslate"><span class="pre">BlockEditorAttributes.blocks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.BlockEditorAttributes.id"><code class="docutils literal notranslate"><span class="pre">BlockEditorAttributes.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.BlockEditorAttributes.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">BlockEditorAttributes.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.BlockEditorAttributes.model_config"><code class="docutils literal notranslate"><span class="pre">BlockEditorAttributes.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.BlockEditorAttributes.model_fields"><code class="docutils literal notranslate"><span class="pre">BlockEditorAttributes.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.BlockEditorAttributes.version"><code class="docutils literal notranslate"><span class="pre">BlockEditorAttributes.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.CompletionRequirement"><code class="docutils literal notranslate"><span class="pre">CompletionRequirement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.CompletionRequirement.completed"><code class="docutils literal notranslate"><span class="pre">CompletionRequirement.completed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.CompletionRequirement.min_score"><code class="docutils literal notranslate"><span class="pre">CompletionRequirement.min_score</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.CompletionRequirement.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">CompletionRequirement.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.CompletionRequirement.model_config"><code class="docutils literal notranslate"><span class="pre">CompletionRequirement.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.CompletionRequirement.model_fields"><code class="docutils literal notranslate"><span class="pre">CompletionRequirement.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.CompletionRequirement.type"><code class="docutils literal notranslate"><span class="pre">CompletionRequirement.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ContentDetails"><code class="docutils literal notranslate"><span class="pre">ContentDetails</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ContentDetails.due_at"><code class="docutils literal notranslate"><span class="pre">ContentDetails.due_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ContentDetails.lock_at"><code class="docutils literal notranslate"><span class="pre">ContentDetails.lock_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ContentDetails.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">ContentDetails.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ContentDetails.model_config"><code class="docutils literal notranslate"><span class="pre">ContentDetails.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ContentDetails.model_fields"><code class="docutils literal notranslate"><span class="pre">ContentDetails.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ContentDetails.points_possible"><code class="docutils literal notranslate"><span class="pre">ContentDetails.points_possible</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ContentDetails.unlock_at"><code class="docutils literal notranslate"><span class="pre">ContentDetails.unlock_at</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.LastEditedBy"><code class="docutils literal notranslate"><span class="pre">LastEditedBy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.LastEditedBy.anonymous_id"><code class="docutils literal notranslate"><span class="pre">LastEditedBy.anonymous_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.LastEditedBy.avatar_image_url"><code class="docutils literal notranslate"><span class="pre">LastEditedBy.avatar_image_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.LastEditedBy.display_name"><code class="docutils literal notranslate"><span class="pre">LastEditedBy.display_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.LastEditedBy.html_url"><code class="docutils literal notranslate"><span class="pre">LastEditedBy.html_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.LastEditedBy.id"><code class="docutils literal notranslate"><span class="pre">LastEditedBy.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.LastEditedBy.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">LastEditedBy.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.LastEditedBy.model_config"><code class="docutils literal notranslate"><span class="pre">LastEditedBy.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.LastEditedBy.model_fields"><code class="docutils literal notranslate"><span class="pre">LastEditedBy.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.LastEditedBy.pronouns"><code class="docutils literal notranslate"><span class="pre">LastEditedBy.pronouns</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.MediaComment"><code class="docutils literal notranslate"><span class="pre">MediaComment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.MediaComment.content_type"><code class="docutils literal notranslate"><span class="pre">MediaComment.content_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.MediaComment.display_name"><code class="docutils literal notranslate"><span class="pre">MediaComment.display_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.MediaComment.media_id"><code class="docutils literal notranslate"><span class="pre">MediaComment.media_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.MediaComment.media_type"><code class="docutils literal notranslate"><span class="pre">MediaComment.media_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.MediaComment.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">MediaComment.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.MediaComment.model_config"><code class="docutils literal notranslate"><span class="pre">MediaComment.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.MediaComment.model_fields"><code class="docutils literal notranslate"><span class="pre">MediaComment.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.MediaComment.url"><code class="docutils literal notranslate"><span class="pre">MediaComment.url</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.completion_requirement"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.completion_requirement</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.content_details"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.content_details</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.content_id"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.content_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.external_url"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.external_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.html_url"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.html_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.id"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.indent"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.indent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.model_config"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.model_fields"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.module_id"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.module_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.new_tab"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.new_tab</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.page_url"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.page_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.position"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.published"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.published</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.title"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.title</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.type"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleItemSchema.url"><code class="docutils literal notranslate"><span class="pre">ModuleItemSchema.url</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema"><code class="docutils literal notranslate"><span class="pre">ModuleSchema</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.completed_at"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.completed_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.id"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.items"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.items</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.items_count"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.items_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.items_url"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.items_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.model_config"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.model_fields"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.name"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.position"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.prerequisite_module_ids"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.prerequisite_module_ids</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.publish_final_grade"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.publish_final_grade</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.published"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.published</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.require_sequential_progress"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.require_sequential_progress</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.state"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.state</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.unlock_at"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.unlock_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.ModuleSchema.workflow_state"><code class="docutils literal notranslate"><span class="pre">ModuleSchema.workflow_state</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema"><code class="docutils literal notranslate"><span class="pre">PageSchema</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.block_editor_attributes"><code class="docutils literal notranslate"><span class="pre">PageSchema.block_editor_attributes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.body"><code class="docutils literal notranslate"><span class="pre">PageSchema.body</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.created_at"><code class="docutils literal notranslate"><span class="pre">PageSchema.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.editing_roles"><code class="docutils literal notranslate"><span class="pre">PageSchema.editing_roles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.editor"><code class="docutils literal notranslate"><span class="pre">PageSchema.editor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.front_page"><code class="docutils literal notranslate"><span class="pre">PageSchema.front_page</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.hide_from_students"><code class="docutils literal notranslate"><span class="pre">PageSchema.hide_from_students</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.last_edited_by"><code class="docutils literal notranslate"><span class="pre">PageSchema.last_edited_by</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.lock_explanation"><code class="docutils literal notranslate"><span class="pre">PageSchema.lock_explanation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.lock_info"><code class="docutils literal notranslate"><span class="pre">PageSchema.lock_info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.locked_for_user"><code class="docutils literal notranslate"><span class="pre">PageSchema.locked_for_user</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">PageSchema.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.model_config"><code class="docutils literal notranslate"><span class="pre">PageSchema.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.model_fields"><code class="docutils literal notranslate"><span class="pre">PageSchema.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.page_id"><code class="docutils literal notranslate"><span class="pre">PageSchema.page_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.publish_at"><code class="docutils literal notranslate"><span class="pre">PageSchema.publish_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.published"><code class="docutils literal notranslate"><span class="pre">PageSchema.published</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.title"><code class="docutils literal notranslate"><span class="pre">PageSchema.title</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.updated_at"><code class="docutils literal notranslate"><span class="pre">PageSchema.updated_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.PageSchema.url"><code class="docutils literal notranslate"><span class="pre">PageSchema.url</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Question"><code class="docutils literal notranslate"><span class="pre">Question</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Question.answers"><code class="docutils literal notranslate"><span class="pre">Question.answers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Question.check_total_weight"><code class="docutils literal notranslate"><span class="pre">Question.check_total_weight()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Question.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">Question.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Question.model_config"><code class="docutils literal notranslate"><span class="pre">Question.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Question.model_fields"><code class="docutils literal notranslate"><span class="pre">Question.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Question.points_possible"><code class="docutils literal notranslate"><span class="pre">Question.points_possible</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Question.question_name"><code class="docutils literal notranslate"><span class="pre">Question.question_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Question.question_text"><code class="docutils literal notranslate"><span class="pre">Question.question_text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.Question.question_type"><code class="docutils literal notranslate"><span class="pre">Question.question_type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.QuizSchema"><code class="docutils literal notranslate"><span class="pre">QuizSchema</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.QuizSchema.allowed_attempts"><code class="docutils literal notranslate"><span class="pre">QuizSchema.allowed_attempts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.QuizSchema.description"><code class="docutils literal notranslate"><span class="pre">QuizSchema.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.QuizSchema.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">QuizSchema.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.QuizSchema.model_config"><code class="docutils literal notranslate"><span class="pre">QuizSchema.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.QuizSchema.model_fields"><code class="docutils literal notranslate"><span class="pre">QuizSchema.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.QuizSchema.questions"><code class="docutils literal notranslate"><span class="pre">QuizSchema.questions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.QuizSchema.quiz_type"><code class="docutils literal notranslate"><span class="pre">QuizSchema.quiz_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.QuizSchema.shuffle_answers"><code class="docutils literal notranslate"><span class="pre">QuizSchema.shuffle_answers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.QuizSchema.time_limit"><code class="docutils literal notranslate"><span class="pre">QuizSchema.time_limit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.QuizSchema.title"><code class="docutils literal notranslate"><span class="pre">QuizSchema.title</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment"><code class="docutils literal notranslate"><span class="pre">SubmissionComment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment.author"><code class="docutils literal notranslate"><span class="pre">SubmissionComment.author</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment.author_id"><code class="docutils literal notranslate"><span class="pre">SubmissionComment.author_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment.author_name"><code class="docutils literal notranslate"><span class="pre">SubmissionComment.author_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment.comment"><code class="docutils literal notranslate"><span class="pre">SubmissionComment.comment</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment.created_at"><code class="docutils literal notranslate"><span class="pre">SubmissionComment.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment.edited_at"><code class="docutils literal notranslate"><span class="pre">SubmissionComment.edited_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment.id"><code class="docutils literal notranslate"><span class="pre">SubmissionComment.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment.media_comment"><code class="docutils literal notranslate"><span class="pre">SubmissionComment.media_comment</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">SubmissionComment.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment.model_config"><code class="docutils literal notranslate"><span class="pre">SubmissionComment.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionComment.model_fields"><code class="docutils literal notranslate"><span class="pre">SubmissionComment.model_fields</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.Config"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.Config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.anonymous_id"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.anonymous_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.assignment"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.assignment</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.assignment_id"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.assignment_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.assignment_visible"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.assignment_visible</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.attachments"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.attachments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.attempt"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.attempt</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.body"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.body</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.course"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.course</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.excused"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.excused</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.extra_attempts"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.extra_attempts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.grade"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.grade</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.grade_matches_current_submission"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.grade_matches_current_submission</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.graded_at"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.graded_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.grader_id"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.grader_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.html_url"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.html_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.late"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.late</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.late_policy_status"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.late_policy_status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.missing"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.missing</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.model_config"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.model_fields"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.points_deducted"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.points_deducted</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.posted_at"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.posted_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.preview_url"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.preview_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.read_status"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.read_status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.redo_request"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.redo_request</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.score"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.score</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.seconds_late"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.seconds_late</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.submission_comments"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.submission_comments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.submission_type"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.submission_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.submitted_at"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.submitted_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.url"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.user"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.user</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.user_id"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.user_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.SubmissionSchema.workflow_state"><code class="docutils literal notranslate"><span class="pre">SubmissionSchema.workflow_state</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.UsersSchema"><code class="docutils literal notranslate"><span class="pre">UsersSchema</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.UsersSchema.created_at"><code class="docutils literal notranslate"><span class="pre">UsersSchema.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.UsersSchema.email"><code class="docutils literal notranslate"><span class="pre">UsersSchema.email</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.UsersSchema.id"><code class="docutils literal notranslate"><span class="pre">UsersSchema.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.UsersSchema.name"><code class="docutils literal notranslate"><span class="pre">UsersSchema.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.UsersSchema.short_name"><code class="docutils literal notranslate"><span class="pre">UsersSchema.short_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.schemas.UsersSchema.sortable_name"><code class="docutils literal notranslate"><span class="pre">UsersSchema.sortable_name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CanvasServices.html#module-Canvas.test_canvas_service">Canvas Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.setUpClass"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.setUpClass()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_create_announcement"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_create_announcement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_create_module"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_create_module()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_create_module_item"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_create_module_item()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_create_page"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_create_page()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_create_quiz_and_add_question"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_create_quiz_and_add_question()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_create_quiz_from_file"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_create_quiz_from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_download_submission_attachments"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_download_submission_attachments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_get_student_grade"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_get_student_grade()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_get_submissions"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_get_submissions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_get_users_in_course"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_get_users_in_course()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_list_module_items"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_list_module_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_list_modules"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_list_modules()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_list_pages"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_list_pages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_update_page"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_update_page()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_update_student_grade"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_update_student_grade()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CanvasServices.html#Canvas.test_canvas_service.TestCanvasAPI.test_upload_file"><code class="docutils literal notranslate"><span class="pre">TestCanvasAPI.test_upload_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="GoogleServices.html">GoogleService module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.create_form_with_questions"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager.create_form_with_questions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.disable_form"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager.disable_form()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.get_form"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager.get_form()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.get_form_responses"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager.get_form_responses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.get_spreadsheets"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager.get_spreadsheets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.make_copy_of_form"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager.make_copy_of_form()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.open_spreadsheet"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager.open_spreadsheet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.open_spreadsheet_by_id"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager.open_spreadsheet_by_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.read_worksheet"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager.read_worksheet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.update_worksheet"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager.update_worksheet()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.update_worksheet_from_records"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager.update_worksheet_from_records()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GoogleServices.html#GoogleServices.GoogleServices.get_id_from_url"><code class="docutils literal notranslate"><span class="pre">get_id_from_url()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="GoogleServices.html#module-GoogleServices.schemas">GoogleService Schema</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Answer"><code class="docutils literal notranslate"><span class="pre">Answer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Answer.fileUploadAnswers"><code class="docutils literal notranslate"><span class="pre">Answer.fileUploadAnswers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Answer.grade"><code class="docutils literal notranslate"><span class="pre">Answer.grade</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Answer.questionId"><code class="docutils literal notranslate"><span class="pre">Answer.questionId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Answer.textAnswers"><code class="docutils literal notranslate"><span class="pre">Answer.textAnswers</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.BatchUpdateFormRequest"><code class="docutils literal notranslate"><span class="pre">BatchUpdateFormRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.BatchUpdateFormRequest.includeFormInResponse"><code class="docutils literal notranslate"><span class="pre">BatchUpdateFormRequest.includeFormInResponse</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.BatchUpdateFormRequest.requests"><code class="docutils literal notranslate"><span class="pre">BatchUpdateFormRequest.requests</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.BatchUpdateFormRequest.writeControl"><code class="docutils literal notranslate"><span class="pre">BatchUpdateFormRequest.writeControl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.BatchUpdateFormResponse"><code class="docutils literal notranslate"><span class="pre">BatchUpdateFormResponse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.BatchUpdateFormResponse.form"><code class="docutils literal notranslate"><span class="pre">BatchUpdateFormResponse.form</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.BatchUpdateFormResponse.replies"><code class="docutils literal notranslate"><span class="pre">BatchUpdateFormResponse.replies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.BatchUpdateFormResponse.writeControl"><code class="docutils literal notranslate"><span class="pre">BatchUpdateFormResponse.writeControl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ChoiceQuestion"><code class="docutils literal notranslate"><span class="pre">ChoiceQuestion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ChoiceQuestion.options"><code class="docutils literal notranslate"><span class="pre">ChoiceQuestion.options</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ChoiceQuestion.shuffle"><code class="docutils literal notranslate"><span class="pre">ChoiceQuestion.shuffle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ChoiceQuestion.type"><code class="docutils literal notranslate"><span class="pre">ChoiceQuestion.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CloudPubsubTopic"><code class="docutils literal notranslate"><span class="pre">CloudPubsubTopic</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CloudPubsubTopic.topicName"><code class="docutils literal notranslate"><span class="pre">CloudPubsubTopic.topicName</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CorrectAnswer"><code class="docutils literal notranslate"><span class="pre">CorrectAnswer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CorrectAnswer.value"><code class="docutils literal notranslate"><span class="pre">CorrectAnswer.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CorrectAnswers"><code class="docutils literal notranslate"><span class="pre">CorrectAnswers</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CorrectAnswers.answers"><code class="docutils literal notranslate"><span class="pre">CorrectAnswers.answers</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CreateItemRequest"><code class="docutils literal notranslate"><span class="pre">CreateItemRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CreateItemRequest.item"><code class="docutils literal notranslate"><span class="pre">CreateItemRequest.item</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CreateItemRequest.location"><code class="docutils literal notranslate"><span class="pre">CreateItemRequest.location</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CreateItemResponse"><code class="docutils literal notranslate"><span class="pre">CreateItemResponse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CreateItemResponse.itemId"><code class="docutils literal notranslate"><span class="pre">CreateItemResponse.itemId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CreateItemResponse.questionId"><code class="docutils literal notranslate"><span class="pre">CreateItemResponse.questionId</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CreateWatchRequest"><code class="docutils literal notranslate"><span class="pre">CreateWatchRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CreateWatchRequest.watch"><code class="docutils literal notranslate"><span class="pre">CreateWatchRequest.watch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.CreateWatchRequest.watchId"><code class="docutils literal notranslate"><span class="pre">CreateWatchRequest.watchId</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.DateQuestion"><code class="docutils literal notranslate"><span class="pre">DateQuestion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.DateQuestion.includeTime"><code class="docutils literal notranslate"><span class="pre">DateQuestion.includeTime</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.DateQuestion.includeYear"><code class="docutils literal notranslate"><span class="pre">DateQuestion.includeYear</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.DeleteItemRequest"><code class="docutils literal notranslate"><span class="pre">DeleteItemRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.DeleteItemRequest.location"><code class="docutils literal notranslate"><span class="pre">DeleteItemRequest.location</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Empty"><code class="docutils literal notranslate"><span class="pre">Empty</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ExtraMaterial"><code class="docutils literal notranslate"><span class="pre">ExtraMaterial</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ExtraMaterial.link"><code class="docutils literal notranslate"><span class="pre">ExtraMaterial.link</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ExtraMaterial.video"><code class="docutils literal notranslate"><span class="pre">ExtraMaterial.video</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Feedback"><code class="docutils literal notranslate"><span class="pre">Feedback</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Feedback.material"><code class="docutils literal notranslate"><span class="pre">Feedback.material</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Feedback.text"><code class="docutils literal notranslate"><span class="pre">Feedback.text</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FileUploadAnswer"><code class="docutils literal notranslate"><span class="pre">FileUploadAnswer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FileUploadAnswer.fileId"><code class="docutils literal notranslate"><span class="pre">FileUploadAnswer.fileId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FileUploadAnswer.fileName"><code class="docutils literal notranslate"><span class="pre">FileUploadAnswer.fileName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FileUploadAnswer.mimeType"><code class="docutils literal notranslate"><span class="pre">FileUploadAnswer.mimeType</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FileUploadAnswers"><code class="docutils literal notranslate"><span class="pre">FileUploadAnswers</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FileUploadAnswers.answers"><code class="docutils literal notranslate"><span class="pre">FileUploadAnswers.answers</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FileUploadQuestion"><code class="docutils literal notranslate"><span class="pre">FileUploadQuestion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FileUploadQuestion.folderId"><code class="docutils literal notranslate"><span class="pre">FileUploadQuestion.folderId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FileUploadQuestion.maxFileSize"><code class="docutils literal notranslate"><span class="pre">FileUploadQuestion.maxFileSize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FileUploadQuestion.maxFiles"><code class="docutils literal notranslate"><span class="pre">FileUploadQuestion.maxFiles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FileUploadQuestion.types"><code class="docutils literal notranslate"><span class="pre">FileUploadQuestion.types</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Form"><code class="docutils literal notranslate"><span class="pre">Form</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Form.formId"><code class="docutils literal notranslate"><span class="pre">Form.formId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Form.info"><code class="docutils literal notranslate"><span class="pre">Form.info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Form.linkedSheetId"><code class="docutils literal notranslate"><span class="pre">Form.linkedSheetId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Form.responderUri"><code class="docutils literal notranslate"><span class="pre">Form.responderUri</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Form.revisionId"><code class="docutils literal notranslate"><span class="pre">Form.revisionId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Form.settings"><code class="docutils literal notranslate"><span class="pre">Form.settings</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FormResponse"><code class="docutils literal notranslate"><span class="pre">FormResponse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FormResponse.answers"><code class="docutils literal notranslate"><span class="pre">FormResponse.answers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FormResponse.createTime"><code class="docutils literal notranslate"><span class="pre">FormResponse.createTime</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FormResponse.formId"><code class="docutils literal notranslate"><span class="pre">FormResponse.formId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FormResponse.lastSubmittedTime"><code class="docutils literal notranslate"><span class="pre">FormResponse.lastSubmittedTime</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FormResponse.respondentEmail"><code class="docutils literal notranslate"><span class="pre">FormResponse.respondentEmail</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FormResponse.responseId"><code class="docutils literal notranslate"><span class="pre">FormResponse.responseId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FormResponse.totalScore"><code class="docutils literal notranslate"><span class="pre">FormResponse.totalScore</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FormSettings"><code class="docutils literal notranslate"><span class="pre">FormSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.FormSettings.quizSettings"><code class="docutils literal notranslate"><span class="pre">FormSettings.quizSettings</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grade"><code class="docutils literal notranslate"><span class="pre">Grade</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grade.correct"><code class="docutils literal notranslate"><span class="pre">Grade.correct</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grade.feedback"><code class="docutils literal notranslate"><span class="pre">Grade.feedback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grade.score"><code class="docutils literal notranslate"><span class="pre">Grade.score</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grading"><code class="docutils literal notranslate"><span class="pre">Grading</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grading.correctAnswers"><code class="docutils literal notranslate"><span class="pre">Grading.correctAnswers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grading.generalFeedback"><code class="docutils literal notranslate"><span class="pre">Grading.generalFeedback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grading.pointValue"><code class="docutils literal notranslate"><span class="pre">Grading.pointValue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grading.whenRight"><code class="docutils literal notranslate"><span class="pre">Grading.whenRight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grading.whenWrong"><code class="docutils literal notranslate"><span class="pre">Grading.whenWrong</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grid"><code class="docutils literal notranslate"><span class="pre">Grid</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grid.columns"><code class="docutils literal notranslate"><span class="pre">Grid.columns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Grid.shuffleQuestions"><code class="docutils literal notranslate"><span class="pre">Grid.shuffleQuestions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Image"><code class="docutils literal notranslate"><span class="pre">Image</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Image.altText"><code class="docutils literal notranslate"><span class="pre">Image.altText</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Image.contentUri"><code class="docutils literal notranslate"><span class="pre">Image.contentUri</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Image.properties"><code class="docutils literal notranslate"><span class="pre">Image.properties</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Image.sourceUri"><code class="docutils literal notranslate"><span class="pre">Image.sourceUri</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ImageItem"><code class="docutils literal notranslate"><span class="pre">ImageItem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ImageItem.image"><code class="docutils literal notranslate"><span class="pre">ImageItem.image</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Info"><code class="docutils literal notranslate"><span class="pre">Info</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Info.description"><code class="docutils literal notranslate"><span class="pre">Info.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Info.documentTitle"><code class="docutils literal notranslate"><span class="pre">Info.documentTitle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Info.title"><code class="docutils literal notranslate"><span class="pre">Info.title</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Item"><code class="docutils literal notranslate"><span class="pre">Item</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Item.description"><code class="docutils literal notranslate"><span class="pre">Item.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Item.imageItem"><code class="docutils literal notranslate"><span class="pre">Item.imageItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Item.itemId"><code class="docutils literal notranslate"><span class="pre">Item.itemId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Item.pageBreakItem"><code class="docutils literal notranslate"><span class="pre">Item.pageBreakItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Item.questionGroupItem"><code class="docutils literal notranslate"><span class="pre">Item.questionGroupItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Item.questionItem"><code class="docutils literal notranslate"><span class="pre">Item.questionItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Item.textItem"><code class="docutils literal notranslate"><span class="pre">Item.textItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Item.title"><code class="docutils literal notranslate"><span class="pre">Item.title</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Item.videoItem"><code class="docutils literal notranslate"><span class="pre">Item.videoItem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ListFormResponsesResponse"><code class="docutils literal notranslate"><span class="pre">ListFormResponsesResponse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ListFormResponsesResponse.nextPageToken"><code class="docutils literal notranslate"><span class="pre">ListFormResponsesResponse.nextPageToken</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ListFormResponsesResponse.responses"><code class="docutils literal notranslate"><span class="pre">ListFormResponsesResponse.responses</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ListWatchesResponse"><code class="docutils literal notranslate"><span class="pre">ListWatchesResponse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ListWatchesResponse.watches"><code class="docutils literal notranslate"><span class="pre">ListWatchesResponse.watches</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Location"><code class="docutils literal notranslate"><span class="pre">Location</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Location.index"><code class="docutils literal notranslate"><span class="pre">Location.index</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.MediaProperties"><code class="docutils literal notranslate"><span class="pre">MediaProperties</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.MediaProperties.alignment"><code class="docutils literal notranslate"><span class="pre">MediaProperties.alignment</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.MediaProperties.width"><code class="docutils literal notranslate"><span class="pre">MediaProperties.width</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.MoveItemRequest"><code class="docutils literal notranslate"><span class="pre">MoveItemRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.MoveItemRequest.newLocation"><code class="docutils literal notranslate"><span class="pre">MoveItemRequest.newLocation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.MoveItemRequest.originalLocation"><code class="docutils literal notranslate"><span class="pre">MoveItemRequest.originalLocation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Option"><code class="docutils literal notranslate"><span class="pre">Option</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Option.goToAction"><code class="docutils literal notranslate"><span class="pre">Option.goToAction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Option.goToSectionId"><code class="docutils literal notranslate"><span class="pre">Option.goToSectionId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Option.image"><code class="docutils literal notranslate"><span class="pre">Option.image</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Option.isOther"><code class="docutils literal notranslate"><span class="pre">Option.isOther</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Option.value"><code class="docutils literal notranslate"><span class="pre">Option.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.PageBreakItem"><code class="docutils literal notranslate"><span class="pre">PageBreakItem</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Question"><code class="docutils literal notranslate"><span class="pre">Question</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Question.choiceQuestion"><code class="docutils literal notranslate"><span class="pre">Question.choiceQuestion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Question.dateQuestion"><code class="docutils literal notranslate"><span class="pre">Question.dateQuestion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Question.fileUploadQuestion"><code class="docutils literal notranslate"><span class="pre">Question.fileUploadQuestion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Question.grading"><code class="docutils literal notranslate"><span class="pre">Question.grading</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Question.questionId"><code class="docutils literal notranslate"><span class="pre">Question.questionId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Question.required"><code class="docutils literal notranslate"><span class="pre">Question.required</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Question.rowQuestion"><code class="docutils literal notranslate"><span class="pre">Question.rowQuestion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Question.scaleQuestion"><code class="docutils literal notranslate"><span class="pre">Question.scaleQuestion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Question.textQuestion"><code class="docutils literal notranslate"><span class="pre">Question.textQuestion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Question.timeQuestion"><code class="docutils literal notranslate"><span class="pre">Question.timeQuestion</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.QuestionGroupItem"><code class="docutils literal notranslate"><span class="pre">QuestionGroupItem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.QuestionGroupItem.grid"><code class="docutils literal notranslate"><span class="pre">QuestionGroupItem.grid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.QuestionGroupItem.image"><code class="docutils literal notranslate"><span class="pre">QuestionGroupItem.image</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.QuestionGroupItem.questions"><code class="docutils literal notranslate"><span class="pre">QuestionGroupItem.questions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.QuestionItem"><code class="docutils literal notranslate"><span class="pre">QuestionItem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.QuestionItem.image"><code class="docutils literal notranslate"><span class="pre">QuestionItem.image</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.QuestionItem.question"><code class="docutils literal notranslate"><span class="pre">QuestionItem.question</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.QuizSettings"><code class="docutils literal notranslate"><span class="pre">QuizSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.QuizSettings.isQuiz"><code class="docutils literal notranslate"><span class="pre">QuizSettings.isQuiz</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.RenewWatchRequest"><code class="docutils literal notranslate"><span class="pre">RenewWatchRequest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Request"><code class="docutils literal notranslate"><span class="pre">Request</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Request.createItem"><code class="docutils literal notranslate"><span class="pre">Request.createItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Request.deleteItem"><code class="docutils literal notranslate"><span class="pre">Request.deleteItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Request.moveItem"><code class="docutils literal notranslate"><span class="pre">Request.moveItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Request.updateFormInfo"><code class="docutils literal notranslate"><span class="pre">Request.updateFormInfo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Request.updateItem"><code class="docutils literal notranslate"><span class="pre">Request.updateItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Request.updateSettings"><code class="docutils literal notranslate"><span class="pre">Request.updateSettings</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Response"><code class="docutils literal notranslate"><span class="pre">Response</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Response.createItem"><code class="docutils literal notranslate"><span class="pre">Response.createItem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.RowQuestion"><code class="docutils literal notranslate"><span class="pre">RowQuestion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.RowQuestion.title"><code class="docutils literal notranslate"><span class="pre">RowQuestion.title</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ScaleQuestion"><code class="docutils literal notranslate"><span class="pre">ScaleQuestion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ScaleQuestion.high"><code class="docutils literal notranslate"><span class="pre">ScaleQuestion.high</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ScaleQuestion.highLabel"><code class="docutils literal notranslate"><span class="pre">ScaleQuestion.highLabel</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ScaleQuestion.low"><code class="docutils literal notranslate"><span class="pre">ScaleQuestion.low</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.ScaleQuestion.lowLabel"><code class="docutils literal notranslate"><span class="pre">ScaleQuestion.lowLabel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TextAnswer"><code class="docutils literal notranslate"><span class="pre">TextAnswer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TextAnswer.value"><code class="docutils literal notranslate"><span class="pre">TextAnswer.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TextAnswers"><code class="docutils literal notranslate"><span class="pre">TextAnswers</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TextAnswers.answers"><code class="docutils literal notranslate"><span class="pre">TextAnswers.answers</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TextItem"><code class="docutils literal notranslate"><span class="pre">TextItem</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TextLink"><code class="docutils literal notranslate"><span class="pre">TextLink</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TextLink.displayText"><code class="docutils literal notranslate"><span class="pre">TextLink.displayText</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TextLink.uri"><code class="docutils literal notranslate"><span class="pre">TextLink.uri</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TextQuestion"><code class="docutils literal notranslate"><span class="pre">TextQuestion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TextQuestion.paragraph"><code class="docutils literal notranslate"><span class="pre">TextQuestion.paragraph</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TimeQuestion"><code class="docutils literal notranslate"><span class="pre">TimeQuestion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.TimeQuestion.duration"><code class="docutils literal notranslate"><span class="pre">TimeQuestion.duration</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.UpdateFormInfoRequest"><code class="docutils literal notranslate"><span class="pre">UpdateFormInfoRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.UpdateFormInfoRequest.info"><code class="docutils literal notranslate"><span class="pre">UpdateFormInfoRequest.info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.UpdateFormInfoRequest.updateMask"><code class="docutils literal notranslate"><span class="pre">UpdateFormInfoRequest.updateMask</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.UpdateItemRequest"><code class="docutils literal notranslate"><span class="pre">UpdateItemRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.UpdateItemRequest.item"><code class="docutils literal notranslate"><span class="pre">UpdateItemRequest.item</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.UpdateItemRequest.location"><code class="docutils literal notranslate"><span class="pre">UpdateItemRequest.location</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.UpdateItemRequest.updateMask"><code class="docutils literal notranslate"><span class="pre">UpdateItemRequest.updateMask</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.UpdateSettingsRequest"><code class="docutils literal notranslate"><span class="pre">UpdateSettingsRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.UpdateSettingsRequest.settings"><code class="docutils literal notranslate"><span class="pre">UpdateSettingsRequest.settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.UpdateSettingsRequest.updateMask"><code class="docutils literal notranslate"><span class="pre">UpdateSettingsRequest.updateMask</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Video"><code class="docutils literal notranslate"><span class="pre">Video</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Video.properties"><code class="docutils literal notranslate"><span class="pre">Video.properties</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Video.youtubeUri"><code class="docutils literal notranslate"><span class="pre">Video.youtubeUri</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.VideoItem"><code class="docutils literal notranslate"><span class="pre">VideoItem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.VideoItem.caption"><code class="docutils literal notranslate"><span class="pre">VideoItem.caption</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.VideoItem.video"><code class="docutils literal notranslate"><span class="pre">VideoItem.video</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.VideoLink"><code class="docutils literal notranslate"><span class="pre">VideoLink</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.VideoLink.displayText"><code class="docutils literal notranslate"><span class="pre">VideoLink.displayText</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.VideoLink.youtubeUri"><code class="docutils literal notranslate"><span class="pre">VideoLink.youtubeUri</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Watch"><code class="docutils literal notranslate"><span class="pre">Watch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Watch.createTime"><code class="docutils literal notranslate"><span class="pre">Watch.createTime</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Watch.errorType"><code class="docutils literal notranslate"><span class="pre">Watch.errorType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Watch.eventType"><code class="docutils literal notranslate"><span class="pre">Watch.eventType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Watch.expireTime"><code class="docutils literal notranslate"><span class="pre">Watch.expireTime</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Watch.id"><code class="docutils literal notranslate"><span class="pre">Watch.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Watch.state"><code class="docutils literal notranslate"><span class="pre">Watch.state</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.Watch.target"><code class="docutils literal notranslate"><span class="pre">Watch.target</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.WatchTarget"><code class="docutils literal notranslate"><span class="pre">WatchTarget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.WatchTarget.topic"><code class="docutils literal notranslate"><span class="pre">WatchTarget.topic</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.WriteControl"><code class="docutils literal notranslate"><span class="pre">WriteControl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.WriteControl.requiredRevisionId"><code class="docutils literal notranslate"><span class="pre">WriteControl.requiredRevisionId</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="GoogleServices.html#GoogleServices.schemas.WriteControl.targetRevisionId"><code class="docutils literal notranslate"><span class="pre">WriteControl.targetRevisionId</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GoogleServices.html#googleservice-tests">GoogleService Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Logging.html">Logging module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Logging.html#Logging.LogLevel"><code class="docutils literal notranslate"><span class="pre">LogLevel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.LogLevel.DEBUG"><code class="docutils literal notranslate"><span class="pre">LogLevel.DEBUG</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.LogLevel.ERROR"><code class="docutils literal notranslate"><span class="pre">LogLevel.ERROR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.LogLevel.INFO"><code class="docutils literal notranslate"><span class="pre">LogLevel.INFO</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.LogLevel.WARN"><code class="docutils literal notranslate"><span class="pre">LogLevel.WARN</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Logging.html#Logging.Print"><code class="docutils literal notranslate"><span class="pre">Print()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Logging.html#Logging.set_log_level"><code class="docutils literal notranslate"><span class="pre">set_log_level()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="schemas.html">schemas module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#schemas.ClassInfoSchema"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.ClassInfoSchema.course_id"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema.course_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.ClassInfoSchema.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.ClassInfoSchema.model_config"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.ClassInfoSchema.model_fields"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.ClassInfoSchema.presentation_module_title"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema.presentation_module_title</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#schemas.PresentationTime"><code class="docutils literal notranslate"><span class="pre">PresentationTime</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.PresentationTime.end"><code class="docutils literal notranslate"><span class="pre">PresentationTime.end</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.PresentationTime.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">PresentationTime.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.PresentationTime.model_config"><code class="docutils literal notranslate"><span class="pre">PresentationTime.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.PresentationTime.model_fields"><code class="docutils literal notranslate"><span class="pre">PresentationTime.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.PresentationTime.start"><code class="docutils literal notranslate"><span class="pre">PresentationTime.start</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#schemas.StudentRecord"><code class="docutils literal notranslate"><span class="pre">StudentRecord</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.StudentRecord.Canvas_ID"><code class="docutils literal notranslate"><span class="pre">StudentRecord.Canvas_ID</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.StudentRecord.Canvas_Team_Page_State"><code class="docutils literal notranslate"><span class="pre">StudentRecord.Canvas_Team_Page_State</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.StudentRecord.Email"><code class="docutils literal notranslate"><span class="pre">StudentRecord.Email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.StudentRecord.Google_Form_ID"><code class="docutils literal notranslate"><span class="pre">StudentRecord.Google_Form_ID</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.StudentRecord.Names"><code class="docutils literal notranslate"><span class="pre">StudentRecord.Names</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.StudentRecord.Team_Name"><code class="docutils literal notranslate"><span class="pre">StudentRecord.Team_Name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.StudentRecord.Topic"><code class="docutils literal notranslate"><span class="pre">StudentRecord.Topic</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#schemas.TeamInfo"><code class="docutils literal notranslate"><span class="pre">TeamInfo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamInfo.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">TeamInfo.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamInfo.model_config"><code class="docutils literal notranslate"><span class="pre">TeamInfo.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamInfo.model_fields"><code class="docutils literal notranslate"><span class="pre">TeamInfo.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamInfo.team_members"><code class="docutils literal notranslate"><span class="pre">TeamInfo.team_members</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamInfo.team_name"><code class="docutils literal notranslate"><span class="pre">TeamInfo.team_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamInfo.topic"><code class="docutils literal notranslate"><span class="pre">TeamInfo.topic</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html#schemas.TeamMember"><code class="docutils literal notranslate"><span class="pre">TeamMember</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamMember.email"><code class="docutils literal notranslate"><span class="pre">TeamMember.email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamMember.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">TeamMember.model_computed_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamMember.model_config"><code class="docutils literal notranslate"><span class="pre">TeamMember.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamMember.model_fields"><code class="docutils literal notranslate"><span class="pre">TeamMember.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamMember.name"><code class="docutils literal notranslate"><span class="pre">TeamMember.name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="setting_up_google_api.html" class="btn btn-neutral float-left" title="Setting up Google API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Architecture.html" class="btn btn-neutral float-right" title="Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Kevin Lopez, Jerry Wu.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

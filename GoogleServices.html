@@ -1,0 +1,1556 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GoogleService module &mdash; GradingAutomation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Logging module" href="Logging.html" />
+    <link rel="prev" title="Canvas API Documentation" href="CanvasServices.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GradingAutomation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-conda-environment">Using Conda Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#using-python-requirements-file">Using Python Requirements File</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_application.html">Using the Application ( Manual )</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#start-the-application-using-one-of-these-methods">Start the application using one of these methods:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#configure-the-application">Configure the application:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#download-student-submissions-and-verify-projects-in-project-verification-tab">Download student submissions and verify projects in “Project Verification” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#create-canvas-pages-from-group-folders-on-page-management-tab">Create Canvas Pages from group folders on “Page Management” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#adding-forms-and-quizzes-and-grading-responses-on-form-and-quizzes-tab">Adding Forms and Quizzes and Grading Responses on “Form and Quizzes” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_application.html#analyze-form-responses-in-form-analysis-tab">Analyze Form Responses in “Form Analysis” Tab.</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setting_up_canvas_access_token.html">Setting up Canvas Access Token</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setting_up_google_api.html">Setting up Google API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">canvas_automation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Architecture.html">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#overview-of-the-canvas-automation-system">Overview of the Canvas Automation System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Architecture.html#pipelines">Pipelines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomation.html">GradingAutomation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.Grader"><code class="docutils literal notranslate"><span class="pre">Grader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.apply_iqr"><code class="docutils literal notranslate"><span class="pre">apply_iqr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.create_image"><code class="docutils literal notranslate"><span class="pre">create_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.read_json_file"><code class="docutils literal notranslate"><span class="pre">read_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="GradingAutomation.html#GradingAutomation.read_yml_file"><code class="docutils literal notranslate"><span class="pre">read_yml_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="GradingAutomationUI.html">GradingAutomationUI module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CanvasServices.html">Canvas API Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.CanvasService">Canvas Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.schemas">Canvas Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CanvasServices.html#module-Canvas.test_canvas_service">Canvas Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">GoogleService module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#GoogleServices.GoogleServices.GoogleServicesManager"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#GoogleServices.GoogleServices.get_id_from_url"><code class="docutils literal notranslate"><span class="pre">get_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-GoogleServices.schemas">GoogleService Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#googleservice-tests">GoogleService Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Logging.html">Logging module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.LogLevel"><code class="docutils literal notranslate"><span class="pre">LogLevel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.Print"><code class="docutils literal notranslate"><span class="pre">Print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Logging.html#Logging.set_log_level"><code class="docutils literal notranslate"><span class="pre">set_log_level()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="schemas.html">schemas module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.ClassInfoSchema"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.PresentationTime"><code class="docutils literal notranslate"><span class="pre">PresentationTime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.StudentRecord"><code class="docutils literal notranslate"><span class="pre">StudentRecord</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamInfo"><code class="docutils literal notranslate"><span class="pre">TeamInfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="schemas.html#schemas.TeamMember"><code class="docutils literal notranslate"><span class="pre">TeamMember</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GradingAutomation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">canvas_automation</a></li>
+      <li class="breadcrumb-item active">GoogleService module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/GoogleServices.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="CanvasServices.html" class="btn btn-neutral float-left" title="Canvas API Documentation" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Logging.html" class="btn btn-neutral float-right" title="Logging module" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-GoogleServices.GoogleServices">
+<span id="googleservice-module"></span><h1>GoogleService module<a class="headerlink" href="#module-GoogleServices.GoogleServices" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.GoogleServices.</span></span><span class="sig-name descname"><span class="pre">GoogleServicesManager</span></span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A manager class for interacting with various Google services including Forms, Sheets and Drive.</p>
+<p>This class provides methods to:
+- Authenticate with Google services using OAuth2
+- Work with Google Forms (create, copy, get responses)
+- Work with Google Sheets (read, write, update worksheets)
+- Access Google Drive files</p>
+<p>The manager handles authentication automatically on initialization and maintains
+credentials for subsequent API calls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>form_service</strong> – Google Forms API service instance</p></li>
+<li><p><strong>sheets_service</strong> – Google Sheets API service instance</p></li>
+<li><p><strong>gspread_client</strong> – Authorized gspread client for spreadsheet operations</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager.create_form_with_questions">
+<span class="sig-name descname"><span class="pre">create_form_with_questions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">questions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager.create_form_with_questions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager.create_form_with_questions" title="Link to this definition"></a></dt>
+<dd><p>Create a form with a title and a list of questions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The title of the form to create</p></li>
+<li><p><strong>questions</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>]</em>) – List of question dictionaries, where each dict contains:
+- title (str): The question text
+- required (bool): Whether the question is required
+- type (str): The question type (e.g. ‘textQuestion’, ‘choiceQuestion’)
+- options (dict): Type-specific configuration for the question</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Response from the form creation API containing details</dt><dd><p>about the created form and questions</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#GoogleServices.schemas.BatchUpdateFormResponse" title="GoogleServices.schemas.BatchUpdateFormResponse">BatchUpdateFormResponse</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">questions</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;What is your name?&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;textQuestion&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+<span class="gp">... </span>    <span class="p">},</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Select your favorite color&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;choiceQuestion&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>            <span class="s2">&quot;choices&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>                <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;Red&quot;</span><span class="p">},</span>
+<span class="gp">... </span>                <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;Blue&quot;</span><span class="p">},</span>
+<span class="gp">... </span>                <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;Green&quot;</span><span class="p">}</span>
+<span class="gp">... </span>            <span class="p">]</span>
+<span class="gp">... </span>        <span class="p">}</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">form</span> <span class="o">=</span> <span class="n">google_services</span><span class="o">.</span><span class="n">create_form_with_questions</span><span class="p">(</span><span class="s2">&quot;Survey Form&quot;</span><span class="p">,</span> <span class="n">questions</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager.disable_form">
+<span class="sig-name descname"><span class="pre">disable_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager.disable_form"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager.disable_form" title="Link to this definition"></a></dt>
+<dd><p>Disable a form by stopping it from accepting responses.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager.get_form">
+<span class="sig-name descname"><span class="pre">get_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#GoogleServices.schemas.Form" title="GoogleServices.schemas.Form"><span class="pre">Form</span></a></span></span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager.get_form"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager.get_form" title="Link to this definition"></a></dt>
+<dd><p>Get the details of a Google Form using its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>form_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The ID of the form to retrieve</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A Form object containing the form details including:</dt><dd><ul class="simple">
+<li><p>formId: The unique identifier of the form</p></li>
+<li><p>info: Basic form information like title</p></li>
+<li><p>items: List of form items/questions</p></li>
+<li><p>linkedSheetId: ID of linked response spreadsheet</p></li>
+<li><p>responderUri: URL for form respondents</p></li>
+<li><p>revisionId: Form revision identifier</p></li>
+<li><p>settings: Form settings configuration</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#GoogleServices.schemas.Form" title="GoogleServices.schemas.Form">Form</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">google_service</span> <span class="o">=</span> <span class="n">GoogleServices</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">form</span> <span class="o">=</span> <span class="n">google_service</span><span class="o">.</span><span class="n">get_form</span><span class="p">(</span><span class="s2">&quot;abc123xyz&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;info&quot;</span><span class="p">][</span><span class="s2">&quot;title&quot;</span><span class="p">])</span>
+<span class="go">&quot;My Survey Form&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager.get_form_responses">
+<span class="sig-name descname"><span class="pre">get_form_responses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager.get_form_responses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager.get_form_responses" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager.get_spreadsheets">
+<span class="sig-name descname"><span class="pre">get_spreadsheets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager.get_spreadsheets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager.get_spreadsheets" title="Link to this definition"></a></dt>
+<dd><p>Get all spreadsheets from Google Drive</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of spreadsheets</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager.make_copy_of_form">
+<span class="sig-name descname"><span class="pre">make_copy_of_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#GoogleServices.schemas.Form" title="GoogleServices.schemas.Form"><span class="pre">Form</span></a></span></span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager.make_copy_of_form"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager.make_copy_of_form" title="Link to this definition"></a></dt>
+<dd><p>Make a copy of a Google Form with the given form ID and customize it.</p>
+<p>This method creates a copy of an existing form template and optionally adds an email field
+at the beginning. All other questions from the template form are copied over.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>form_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The ID of the template form to copy</p></li>
+<li><p><strong>new_title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The title for the new form copy</p></li>
+<li><p><strong>add_email</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether to add an email field at the start of the form</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created form object containing details like formId, title and URLs</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#GoogleServices.schemas.Form" title="GoogleServices.schemas.Form">Form</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">google_service</span> <span class="o">=</span> <span class="n">GoogleServices</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">template_id</span> <span class="o">=</span> <span class="s2">&quot;1234abcd...&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_form</span> <span class="o">=</span> <span class="n">google_service</span><span class="o">.</span><span class="n">make_copy_of_form</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">form_id</span><span class="o">=</span><span class="n">template_id</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">new_title</span><span class="o">=</span><span class="s2">&quot;Student Survey 2024&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">add_email</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created form with ID: </span><span class="si">{</span><span class="n">new_form</span><span class="p">[</span><span class="s1">&#39;formId&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">Created form with ID: 5678efgh...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Form URL: </span><span class="si">{</span><span class="n">new_form</span><span class="p">[</span><span class="s1">&#39;responderUri&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">Form URL: https://docs.google.com/forms/d/5678efgh.../viewform</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager.open_spreadsheet">
+<span class="sig-name descname"><span class="pre">open_spreadsheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spreadsheet_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager.open_spreadsheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager.open_spreadsheet" title="Link to this definition"></a></dt>
+<dd><p>Open a spreadsheet by name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>spreadsheet_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of the spreadsheet</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Spreadsheet object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gspread.Spreadsheet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager.open_spreadsheet_by_id">
+<span class="sig-name descname"><span class="pre">open_spreadsheet_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spreadsheet_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager.open_spreadsheet_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager.open_spreadsheet_by_id" title="Link to this definition"></a></dt>
+<dd><p>Open a spreadsheet by its ID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>spreadsheet_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The ID of the spreadsheet (can be extracted from the URL)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Spreadsheet object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gspread.Spreadsheet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager.read_worksheet">
+<span class="sig-name descname"><span class="pre">read_worksheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">worksheet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Worksheet</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager.read_worksheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager.read_worksheet" title="Link to this definition"></a></dt>
+<dd><p>Read all values from a worksheet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>worksheet</strong> (<em>gspread.Worksheet</em>) – Worksheet object to read from</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of rows containing worksheet data</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager.update_worksheet">
+<span class="sig-name descname"><span class="pre">update_worksheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">worksheet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Worksheet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager.update_worksheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager.update_worksheet" title="Link to this definition"></a></dt>
+<dd><p>Update values in a worksheet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>worksheet</strong> (<em>gspread.Worksheet</em>) – Worksheet object to update</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – List of rows to update</p></li>
+<li><p><strong>range_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – A1 notation range to update. If None, updates from A1</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.GoogleServicesManager.update_worksheet_from_records">
+<span class="sig-name descname"><span class="pre">update_worksheet_from_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">worksheet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Worksheet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#GoogleServicesManager.update_worksheet_from_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.GoogleServicesManager.update_worksheet_from_records" title="Link to this definition"></a></dt>
+<dd><p>Update or append records to a worksheet, clearing existing content when not appending</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>worksheet</strong> (<em>gspread.Worksheet</em>) – The worksheet to update</p></li>
+<li><p><strong>records</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>]</em>) – List of dictionary records to update/append</p></li>
+<li><p><strong>append_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – If True, only appends new records. If False, clears and rewrites worksheet</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="GoogleServices.GoogleServices.get_id_from_url">
+<span class="sig-prename descclassname"><span class="pre">GoogleServices.GoogleServices.</span></span><span class="sig-name descname"><span class="pre">get_id_from_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/GoogleServices/GoogleServices.html#get_id_from_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.GoogleServices.get_id_from_url" title="Link to this definition"></a></dt>
+<dd><p>Extract the spreadsheet ID from a Google Sheets URL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Google Sheets URL</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Spreadsheet ID</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://docs.google.com/spreadsheets/d/1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ/edit?gid=407629335&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_id_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="go">&#39;1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<section id="module-GoogleServices.schemas">
+<span id="googleservice-schema"></span><h2>GoogleService Schema<a class="headerlink" href="#module-GoogleServices.schemas" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Answer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Answer</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Answer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Answer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Answer.fileUploadAnswers">
+<span class="sig-name descname"><span class="pre">fileUploadAnswers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.FileUploadAnswers" title="GoogleServices.schemas.FileUploadAnswers"><span class="pre">FileUploadAnswers</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Answer.fileUploadAnswers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Answer.grade">
+<span class="sig-name descname"><span class="pre">grade</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Grade" title="GoogleServices.schemas.Grade"><span class="pre">Grade</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Answer.grade" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Answer.questionId">
+<span class="sig-name descname"><span class="pre">questionId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Answer.questionId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Answer.textAnswers">
+<span class="sig-name descname"><span class="pre">textAnswers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.TextAnswers" title="GoogleServices.schemas.TextAnswers"><span class="pre">TextAnswers</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Answer.textAnswers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.BatchUpdateFormRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">BatchUpdateFormRequest</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#BatchUpdateFormRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.BatchUpdateFormRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.BatchUpdateFormRequest.includeFormInResponse">
+<span class="sig-name descname"><span class="pre">includeFormInResponse</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#GoogleServices.schemas.BatchUpdateFormRequest.includeFormInResponse" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.BatchUpdateFormRequest.requests">
+<span class="sig-name descname"><span class="pre">requests</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#GoogleServices.schemas.Request" title="GoogleServices.schemas.Request"><span class="pre">Request</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.BatchUpdateFormRequest.requests" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.BatchUpdateFormRequest.writeControl">
+<span class="sig-name descname"><span class="pre">writeControl</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.WriteControl" title="GoogleServices.schemas.WriteControl"><span class="pre">WriteControl</span></a></em><a class="headerlink" href="#GoogleServices.schemas.BatchUpdateFormRequest.writeControl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.BatchUpdateFormResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">BatchUpdateFormResponse</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#BatchUpdateFormResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.BatchUpdateFormResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.BatchUpdateFormResponse.form">
+<span class="sig-name descname"><span class="pre">form</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Form" title="GoogleServices.schemas.Form"><span class="pre">Form</span></a></em><a class="headerlink" href="#GoogleServices.schemas.BatchUpdateFormResponse.form" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.BatchUpdateFormResponse.replies">
+<span class="sig-name descname"><span class="pre">replies</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#GoogleServices.schemas.Response" title="GoogleServices.schemas.Response"><span class="pre">Response</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.BatchUpdateFormResponse.replies" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.BatchUpdateFormResponse.writeControl">
+<span class="sig-name descname"><span class="pre">writeControl</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.WriteControl" title="GoogleServices.schemas.WriteControl"><span class="pre">WriteControl</span></a></em><a class="headerlink" href="#GoogleServices.schemas.BatchUpdateFormResponse.writeControl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ChoiceQuestion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">ChoiceQuestion</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#ChoiceQuestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.ChoiceQuestion" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ChoiceQuestion.options">
+<span class="sig-name descname"><span class="pre">options</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#GoogleServices.schemas.Option" title="GoogleServices.schemas.Option"><span class="pre">Option</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.ChoiceQuestion.options" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ChoiceQuestion.shuffle">
+<span class="sig-name descname"><span class="pre">shuffle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#GoogleServices.schemas.ChoiceQuestion.shuffle" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ChoiceQuestion.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.ChoiceQuestion.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CloudPubsubTopic">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">CloudPubsubTopic</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#CloudPubsubTopic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.CloudPubsubTopic" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CloudPubsubTopic.topicName">
+<span class="sig-name descname"><span class="pre">topicName</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.CloudPubsubTopic.topicName" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CorrectAnswer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">CorrectAnswer</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#CorrectAnswer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.CorrectAnswer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CorrectAnswer.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.CorrectAnswer.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CorrectAnswers">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">CorrectAnswers</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#CorrectAnswers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.CorrectAnswers" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CorrectAnswers.answers">
+<span class="sig-name descname"><span class="pre">answers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#GoogleServices.schemas.CorrectAnswer" title="GoogleServices.schemas.CorrectAnswer"><span class="pre">CorrectAnswer</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.CorrectAnswers.answers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CreateItemRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">CreateItemRequest</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#CreateItemRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.CreateItemRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CreateItemRequest.item">
+<span class="sig-name descname"><span class="pre">item</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Item" title="GoogleServices.schemas.Item"><span class="pre">Item</span></a></em><a class="headerlink" href="#GoogleServices.schemas.CreateItemRequest.item" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CreateItemRequest.location">
+<span class="sig-name descname"><span class="pre">location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Location" title="GoogleServices.schemas.Location"><span class="pre">Location</span></a></em><a class="headerlink" href="#GoogleServices.schemas.CreateItemRequest.location" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CreateItemResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">CreateItemResponse</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#CreateItemResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.CreateItemResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CreateItemResponse.itemId">
+<span class="sig-name descname"><span class="pre">itemId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.CreateItemResponse.itemId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CreateItemResponse.questionId">
+<span class="sig-name descname"><span class="pre">questionId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.CreateItemResponse.questionId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CreateWatchRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">CreateWatchRequest</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#CreateWatchRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.CreateWatchRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CreateWatchRequest.watch">
+<span class="sig-name descname"><span class="pre">watch</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Watch" title="GoogleServices.schemas.Watch"><span class="pre">Watch</span></a></em><a class="headerlink" href="#GoogleServices.schemas.CreateWatchRequest.watch" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.CreateWatchRequest.watchId">
+<span class="sig-name descname"><span class="pre">watchId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.CreateWatchRequest.watchId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.DateQuestion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">DateQuestion</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#DateQuestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.DateQuestion" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.DateQuestion.includeTime">
+<span class="sig-name descname"><span class="pre">includeTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#GoogleServices.schemas.DateQuestion.includeTime" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.DateQuestion.includeYear">
+<span class="sig-name descname"><span class="pre">includeYear</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#GoogleServices.schemas.DateQuestion.includeYear" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.DeleteItemRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">DeleteItemRequest</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#DeleteItemRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.DeleteItemRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.DeleteItemRequest.location">
+<span class="sig-name descname"><span class="pre">location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Location" title="GoogleServices.schemas.Location"><span class="pre">Location</span></a></em><a class="headerlink" href="#GoogleServices.schemas.DeleteItemRequest.location" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Empty">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Empty</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Empty" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ExtraMaterial">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">ExtraMaterial</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#ExtraMaterial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.ExtraMaterial" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ExtraMaterial.link">
+<span class="sig-name descname"><span class="pre">link</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.TextLink" title="GoogleServices.schemas.TextLink"><span class="pre">TextLink</span></a></em><a class="headerlink" href="#GoogleServices.schemas.ExtraMaterial.link" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ExtraMaterial.video">
+<span class="sig-name descname"><span class="pre">video</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.VideoLink" title="GoogleServices.schemas.VideoLink"><span class="pre">VideoLink</span></a></em><a class="headerlink" href="#GoogleServices.schemas.ExtraMaterial.video" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Feedback">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Feedback</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Feedback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Feedback" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Feedback.material">
+<span class="sig-name descname"><span class="pre">material</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#GoogleServices.schemas.ExtraMaterial" title="GoogleServices.schemas.ExtraMaterial"><span class="pre">ExtraMaterial</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.Feedback.material" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Feedback.text">
+<span class="sig-name descname"><span class="pre">text</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Feedback.text" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FileUploadAnswer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">FileUploadAnswer</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#FileUploadAnswer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.FileUploadAnswer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FileUploadAnswer.fileId">
+<span class="sig-name descname"><span class="pre">fileId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FileUploadAnswer.fileId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FileUploadAnswer.fileName">
+<span class="sig-name descname"><span class="pre">fileName</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FileUploadAnswer.fileName" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FileUploadAnswer.mimeType">
+<span class="sig-name descname"><span class="pre">mimeType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FileUploadAnswer.mimeType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FileUploadAnswers">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">FileUploadAnswers</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#FileUploadAnswers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.FileUploadAnswers" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FileUploadAnswers.answers">
+<span class="sig-name descname"><span class="pre">answers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#GoogleServices.schemas.FileUploadAnswer" title="GoogleServices.schemas.FileUploadAnswer"><span class="pre">FileUploadAnswer</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.FileUploadAnswers.answers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FileUploadQuestion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">FileUploadQuestion</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#FileUploadQuestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.FileUploadQuestion" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FileUploadQuestion.folderId">
+<span class="sig-name descname"><span class="pre">folderId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FileUploadQuestion.folderId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FileUploadQuestion.maxFileSize">
+<span class="sig-name descname"><span class="pre">maxFileSize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FileUploadQuestion.maxFileSize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FileUploadQuestion.maxFiles">
+<span class="sig-name descname"><span class="pre">maxFiles</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FileUploadQuestion.maxFiles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FileUploadQuestion.types">
+<span class="sig-name descname"><span class="pre">types</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.FileUploadQuestion.types" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Form">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Form</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Form"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Form" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Form.formId">
+<span class="sig-name descname"><span class="pre">formId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Form.formId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Form.info">
+<span class="sig-name descname"><span class="pre">info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Info" title="GoogleServices.schemas.Info"><span class="pre">Info</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Form.info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Form.linkedSheetId">
+<span class="sig-name descname"><span class="pre">linkedSheetId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Form.linkedSheetId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Form.responderUri">
+<span class="sig-name descname"><span class="pre">responderUri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Form.responderUri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Form.revisionId">
+<span class="sig-name descname"><span class="pre">revisionId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Form.revisionId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Form.settings">
+<span class="sig-name descname"><span class="pre">settings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.FormSettings" title="GoogleServices.schemas.FormSettings"><span class="pre">FormSettings</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Form.settings" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FormResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">FormResponse</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#FormResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.FormResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FormResponse.answers">
+<span class="sig-name descname"><span class="pre">answers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.FormResponse.answers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FormResponse.createTime">
+<span class="sig-name descname"><span class="pre">createTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FormResponse.createTime" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FormResponse.formId">
+<span class="sig-name descname"><span class="pre">formId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FormResponse.formId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FormResponse.lastSubmittedTime">
+<span class="sig-name descname"><span class="pre">lastSubmittedTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FormResponse.lastSubmittedTime" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FormResponse.respondentEmail">
+<span class="sig-name descname"><span class="pre">respondentEmail</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FormResponse.respondentEmail" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FormResponse.responseId">
+<span class="sig-name descname"><span class="pre">responseId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FormResponse.responseId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FormResponse.totalScore">
+<span class="sig-name descname"><span class="pre">totalScore</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FormResponse.totalScore" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FormSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">FormSettings</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#FormSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.FormSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.FormSettings.quizSettings">
+<span class="sig-name descname"><span class="pre">quizSettings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.QuizSettings" title="GoogleServices.schemas.QuizSettings"><span class="pre">QuizSettings</span></a></em><a class="headerlink" href="#GoogleServices.schemas.FormSettings.quizSettings" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grade">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Grade</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Grade"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Grade" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grade.correct">
+<span class="sig-name descname"><span class="pre">correct</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Grade.correct" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grade.feedback">
+<span class="sig-name descname"><span class="pre">feedback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Feedback" title="GoogleServices.schemas.Feedback"><span class="pre">Feedback</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Grade.feedback" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grade.score">
+<span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Grade.score" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grading">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Grading</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Grading"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Grading" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grading.correctAnswers">
+<span class="sig-name descname"><span class="pre">correctAnswers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.CorrectAnswers" title="GoogleServices.schemas.CorrectAnswers"><span class="pre">CorrectAnswers</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Grading.correctAnswers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grading.generalFeedback">
+<span class="sig-name descname"><span class="pre">generalFeedback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Feedback" title="GoogleServices.schemas.Feedback"><span class="pre">Feedback</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Grading.generalFeedback" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grading.pointValue">
+<span class="sig-name descname"><span class="pre">pointValue</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Grading.pointValue" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grading.whenRight">
+<span class="sig-name descname"><span class="pre">whenRight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Feedback" title="GoogleServices.schemas.Feedback"><span class="pre">Feedback</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Grading.whenRight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grading.whenWrong">
+<span class="sig-name descname"><span class="pre">whenWrong</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Feedback" title="GoogleServices.schemas.Feedback"><span class="pre">Feedback</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Grading.whenWrong" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grid">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Grid</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Grid" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grid.columns">
+<span class="sig-name descname"><span class="pre">columns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.ChoiceQuestion" title="GoogleServices.schemas.ChoiceQuestion"><span class="pre">ChoiceQuestion</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Grid.columns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Grid.shuffleQuestions">
+<span class="sig-name descname"><span class="pre">shuffleQuestions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Grid.shuffleQuestions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Image">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Image</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Image" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Image.altText">
+<span class="sig-name descname"><span class="pre">altText</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Image.altText" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Image.contentUri">
+<span class="sig-name descname"><span class="pre">contentUri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Image.contentUri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Image.properties">
+<span class="sig-name descname"><span class="pre">properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.MediaProperties" title="GoogleServices.schemas.MediaProperties"><span class="pre">MediaProperties</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Image.properties" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Image.sourceUri">
+<span class="sig-name descname"><span class="pre">sourceUri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Image.sourceUri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ImageItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">ImageItem</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#ImageItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.ImageItem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ImageItem.image">
+<span class="sig-name descname"><span class="pre">image</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Image" title="GoogleServices.schemas.Image"><span class="pre">Image</span></a></em><a class="headerlink" href="#GoogleServices.schemas.ImageItem.image" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Info">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Info</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Info" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Info.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Info.description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Info.documentTitle">
+<span class="sig-name descname"><span class="pre">documentTitle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Info.documentTitle" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Info.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Info.title" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Item">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Item</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Item" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Item.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Item.description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Item.imageItem">
+<span class="sig-name descname"><span class="pre">imageItem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.ImageItem" title="GoogleServices.schemas.ImageItem"><span class="pre">ImageItem</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Item.imageItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Item.itemId">
+<span class="sig-name descname"><span class="pre">itemId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Item.itemId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Item.pageBreakItem">
+<span class="sig-name descname"><span class="pre">pageBreakItem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.PageBreakItem" title="GoogleServices.schemas.PageBreakItem"><span class="pre">PageBreakItem</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Item.pageBreakItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Item.questionGroupItem">
+<span class="sig-name descname"><span class="pre">questionGroupItem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.QuestionGroupItem" title="GoogleServices.schemas.QuestionGroupItem"><span class="pre">QuestionGroupItem</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Item.questionGroupItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Item.questionItem">
+<span class="sig-name descname"><span class="pre">questionItem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.QuestionItem" title="GoogleServices.schemas.QuestionItem"><span class="pre">QuestionItem</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Item.questionItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Item.textItem">
+<span class="sig-name descname"><span class="pre">textItem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.TextItem" title="GoogleServices.schemas.TextItem"><span class="pre">TextItem</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Item.textItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Item.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Item.title" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Item.videoItem">
+<span class="sig-name descname"><span class="pre">videoItem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.VideoItem" title="GoogleServices.schemas.VideoItem"><span class="pre">VideoItem</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Item.videoItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ListFormResponsesResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">ListFormResponsesResponse</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#ListFormResponsesResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.ListFormResponsesResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ListFormResponsesResponse.nextPageToken">
+<span class="sig-name descname"><span class="pre">nextPageToken</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.ListFormResponsesResponse.nextPageToken" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ListFormResponsesResponse.responses">
+<span class="sig-name descname"><span class="pre">responses</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#GoogleServices.schemas.FormResponse" title="GoogleServices.schemas.FormResponse"><span class="pre">FormResponse</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.ListFormResponsesResponse.responses" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ListWatchesResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">ListWatchesResponse</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#ListWatchesResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.ListWatchesResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ListWatchesResponse.watches">
+<span class="sig-name descname"><span class="pre">watches</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#GoogleServices.schemas.Watch" title="GoogleServices.schemas.Watch"><span class="pre">Watch</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.ListWatchesResponse.watches" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Location">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Location</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Location" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Location.index">
+<span class="sig-name descname"><span class="pre">index</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Location.index" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.MediaProperties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">MediaProperties</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#MediaProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.MediaProperties" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.MediaProperties.alignment">
+<span class="sig-name descname"><span class="pre">alignment</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.MediaProperties.alignment" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.MediaProperties.width">
+<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#GoogleServices.schemas.MediaProperties.width" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.MoveItemRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">MoveItemRequest</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#MoveItemRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.MoveItemRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.MoveItemRequest.newLocation">
+<span class="sig-name descname"><span class="pre">newLocation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Location" title="GoogleServices.schemas.Location"><span class="pre">Location</span></a></em><a class="headerlink" href="#GoogleServices.schemas.MoveItemRequest.newLocation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.MoveItemRequest.originalLocation">
+<span class="sig-name descname"><span class="pre">originalLocation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Location" title="GoogleServices.schemas.Location"><span class="pre">Location</span></a></em><a class="headerlink" href="#GoogleServices.schemas.MoveItemRequest.originalLocation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Option">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Option</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Option"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Option" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Option.goToAction">
+<span class="sig-name descname"><span class="pre">goToAction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Option.goToAction" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Option.goToSectionId">
+<span class="sig-name descname"><span class="pre">goToSectionId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Option.goToSectionId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Option.image">
+<span class="sig-name descname"><span class="pre">image</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Image" title="GoogleServices.schemas.Image"><span class="pre">Image</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Option.image" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Option.isOther">
+<span class="sig-name descname"><span class="pre">isOther</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Option.isOther" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Option.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Option.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.PageBreakItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">PageBreakItem</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#PageBreakItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.PageBreakItem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Question">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Question</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Question"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Question" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Question.choiceQuestion">
+<span class="sig-name descname"><span class="pre">choiceQuestion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.ChoiceQuestion" title="GoogleServices.schemas.ChoiceQuestion"><span class="pre">ChoiceQuestion</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Question.choiceQuestion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Question.dateQuestion">
+<span class="sig-name descname"><span class="pre">dateQuestion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.DateQuestion" title="GoogleServices.schemas.DateQuestion"><span class="pre">DateQuestion</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Question.dateQuestion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Question.fileUploadQuestion">
+<span class="sig-name descname"><span class="pre">fileUploadQuestion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.FileUploadQuestion" title="GoogleServices.schemas.FileUploadQuestion"><span class="pre">FileUploadQuestion</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Question.fileUploadQuestion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Question.grading">
+<span class="sig-name descname"><span class="pre">grading</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Grading" title="GoogleServices.schemas.Grading"><span class="pre">Grading</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Question.grading" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Question.questionId">
+<span class="sig-name descname"><span class="pre">questionId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Question.questionId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Question.required">
+<span class="sig-name descname"><span class="pre">required</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Question.required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Question.rowQuestion">
+<span class="sig-name descname"><span class="pre">rowQuestion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.RowQuestion" title="GoogleServices.schemas.RowQuestion"><span class="pre">RowQuestion</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Question.rowQuestion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Question.scaleQuestion">
+<span class="sig-name descname"><span class="pre">scaleQuestion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.ScaleQuestion" title="GoogleServices.schemas.ScaleQuestion"><span class="pre">ScaleQuestion</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Question.scaleQuestion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Question.textQuestion">
+<span class="sig-name descname"><span class="pre">textQuestion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.TextQuestion" title="GoogleServices.schemas.TextQuestion"><span class="pre">TextQuestion</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Question.textQuestion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Question.timeQuestion">
+<span class="sig-name descname"><span class="pre">timeQuestion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.TimeQuestion" title="GoogleServices.schemas.TimeQuestion"><span class="pre">TimeQuestion</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Question.timeQuestion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.QuestionGroupItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">QuestionGroupItem</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#QuestionGroupItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.QuestionGroupItem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.QuestionGroupItem.grid">
+<span class="sig-name descname"><span class="pre">grid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Grid" title="GoogleServices.schemas.Grid"><span class="pre">Grid</span></a></em><a class="headerlink" href="#GoogleServices.schemas.QuestionGroupItem.grid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.QuestionGroupItem.image">
+<span class="sig-name descname"><span class="pre">image</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Image" title="GoogleServices.schemas.Image"><span class="pre">Image</span></a></em><a class="headerlink" href="#GoogleServices.schemas.QuestionGroupItem.image" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.QuestionGroupItem.questions">
+<span class="sig-name descname"><span class="pre">questions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#GoogleServices.schemas.Question" title="GoogleServices.schemas.Question"><span class="pre">Question</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.QuestionGroupItem.questions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.QuestionItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">QuestionItem</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#QuestionItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.QuestionItem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.QuestionItem.image">
+<span class="sig-name descname"><span class="pre">image</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Image" title="GoogleServices.schemas.Image"><span class="pre">Image</span></a></em><a class="headerlink" href="#GoogleServices.schemas.QuestionItem.image" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.QuestionItem.question">
+<span class="sig-name descname"><span class="pre">question</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Question" title="GoogleServices.schemas.Question"><span class="pre">Question</span></a></em><a class="headerlink" href="#GoogleServices.schemas.QuestionItem.question" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.QuizSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">QuizSettings</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#QuizSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.QuizSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.QuizSettings.isQuiz">
+<span class="sig-name descname"><span class="pre">isQuiz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#GoogleServices.schemas.QuizSettings.isQuiz" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.RenewWatchRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">RenewWatchRequest</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#RenewWatchRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.RenewWatchRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Request">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Request</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Request" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Request.createItem">
+<span class="sig-name descname"><span class="pre">createItem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.CreateItemRequest" title="GoogleServices.schemas.CreateItemRequest"><span class="pre">CreateItemRequest</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Request.createItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Request.deleteItem">
+<span class="sig-name descname"><span class="pre">deleteItem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.DeleteItemRequest" title="GoogleServices.schemas.DeleteItemRequest"><span class="pre">DeleteItemRequest</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Request.deleteItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Request.moveItem">
+<span class="sig-name descname"><span class="pre">moveItem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.MoveItemRequest" title="GoogleServices.schemas.MoveItemRequest"><span class="pre">MoveItemRequest</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Request.moveItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Request.updateFormInfo">
+<span class="sig-name descname"><span class="pre">updateFormInfo</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.UpdateFormInfoRequest" title="GoogleServices.schemas.UpdateFormInfoRequest"><span class="pre">UpdateFormInfoRequest</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Request.updateFormInfo" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Request.updateItem">
+<span class="sig-name descname"><span class="pre">updateItem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.UpdateItemRequest" title="GoogleServices.schemas.UpdateItemRequest"><span class="pre">UpdateItemRequest</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Request.updateItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Request.updateSettings">
+<span class="sig-name descname"><span class="pre">updateSettings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.UpdateSettingsRequest" title="GoogleServices.schemas.UpdateSettingsRequest"><span class="pre">UpdateSettingsRequest</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Request.updateSettings" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Response">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Response</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Response" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Response.createItem">
+<span class="sig-name descname"><span class="pre">createItem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.CreateItemResponse" title="GoogleServices.schemas.CreateItemResponse"><span class="pre">CreateItemResponse</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Response.createItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.RowQuestion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">RowQuestion</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#RowQuestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.RowQuestion" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.RowQuestion.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.RowQuestion.title" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ScaleQuestion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">ScaleQuestion</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#ScaleQuestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.ScaleQuestion" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ScaleQuestion.high">
+<span class="sig-name descname"><span class="pre">high</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#GoogleServices.schemas.ScaleQuestion.high" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ScaleQuestion.highLabel">
+<span class="sig-name descname"><span class="pre">highLabel</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.ScaleQuestion.highLabel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ScaleQuestion.low">
+<span class="sig-name descname"><span class="pre">low</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#GoogleServices.schemas.ScaleQuestion.low" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.ScaleQuestion.lowLabel">
+<span class="sig-name descname"><span class="pre">lowLabel</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.ScaleQuestion.lowLabel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TextAnswer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">TextAnswer</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#TextAnswer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.TextAnswer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TextAnswer.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.TextAnswer.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TextAnswers">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">TextAnswers</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#TextAnswers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.TextAnswers" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TextAnswers.answers">
+<span class="sig-name descname"><span class="pre">answers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#GoogleServices.schemas.TextAnswer" title="GoogleServices.schemas.TextAnswer"><span class="pre">TextAnswer</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#GoogleServices.schemas.TextAnswers.answers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TextItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">TextItem</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#TextItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.TextItem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TextLink">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">TextLink</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#TextLink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.TextLink" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TextLink.displayText">
+<span class="sig-name descname"><span class="pre">displayText</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.TextLink.displayText" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TextLink.uri">
+<span class="sig-name descname"><span class="pre">uri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.TextLink.uri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TextQuestion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">TextQuestion</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#TextQuestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.TextQuestion" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TextQuestion.paragraph">
+<span class="sig-name descname"><span class="pre">paragraph</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#GoogleServices.schemas.TextQuestion.paragraph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TimeQuestion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">TimeQuestion</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#TimeQuestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.TimeQuestion" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.TimeQuestion.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#GoogleServices.schemas.TimeQuestion.duration" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.UpdateFormInfoRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">UpdateFormInfoRequest</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#UpdateFormInfoRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.UpdateFormInfoRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.UpdateFormInfoRequest.info">
+<span class="sig-name descname"><span class="pre">info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Info" title="GoogleServices.schemas.Info"><span class="pre">Info</span></a></em><a class="headerlink" href="#GoogleServices.schemas.UpdateFormInfoRequest.info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.UpdateFormInfoRequest.updateMask">
+<span class="sig-name descname"><span class="pre">updateMask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.UpdateFormInfoRequest.updateMask" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.UpdateItemRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">UpdateItemRequest</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#UpdateItemRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.UpdateItemRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.UpdateItemRequest.item">
+<span class="sig-name descname"><span class="pre">item</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Item" title="GoogleServices.schemas.Item"><span class="pre">Item</span></a></em><a class="headerlink" href="#GoogleServices.schemas.UpdateItemRequest.item" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.UpdateItemRequest.location">
+<span class="sig-name descname"><span class="pre">location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Location" title="GoogleServices.schemas.Location"><span class="pre">Location</span></a></em><a class="headerlink" href="#GoogleServices.schemas.UpdateItemRequest.location" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.UpdateItemRequest.updateMask">
+<span class="sig-name descname"><span class="pre">updateMask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.UpdateItemRequest.updateMask" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.UpdateSettingsRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">UpdateSettingsRequest</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#UpdateSettingsRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.UpdateSettingsRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.UpdateSettingsRequest.settings">
+<span class="sig-name descname"><span class="pre">settings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.FormSettings" title="GoogleServices.schemas.FormSettings"><span class="pre">FormSettings</span></a></em><a class="headerlink" href="#GoogleServices.schemas.UpdateSettingsRequest.settings" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.UpdateSettingsRequest.updateMask">
+<span class="sig-name descname"><span class="pre">updateMask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.UpdateSettingsRequest.updateMask" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Video">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Video</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Video"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Video" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Video.properties">
+<span class="sig-name descname"><span class="pre">properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.MediaProperties" title="GoogleServices.schemas.MediaProperties"><span class="pre">MediaProperties</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Video.properties" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Video.youtubeUri">
+<span class="sig-name descname"><span class="pre">youtubeUri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Video.youtubeUri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.VideoItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">VideoItem</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#VideoItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.VideoItem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.VideoItem.caption">
+<span class="sig-name descname"><span class="pre">caption</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.VideoItem.caption" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.VideoItem.video">
+<span class="sig-name descname"><span class="pre">video</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.Video" title="GoogleServices.schemas.Video"><span class="pre">Video</span></a></em><a class="headerlink" href="#GoogleServices.schemas.VideoItem.video" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.VideoLink">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">VideoLink</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#VideoLink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.VideoLink" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.VideoLink.displayText">
+<span class="sig-name descname"><span class="pre">displayText</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.VideoLink.displayText" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.VideoLink.youtubeUri">
+<span class="sig-name descname"><span class="pre">youtubeUri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.VideoLink.youtubeUri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Watch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">Watch</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#Watch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.Watch" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Watch.createTime">
+<span class="sig-name descname"><span class="pre">createTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Watch.createTime" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Watch.errorType">
+<span class="sig-name descname"><span class="pre">errorType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Watch.errorType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Watch.eventType">
+<span class="sig-name descname"><span class="pre">eventType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Watch.eventType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Watch.expireTime">
+<span class="sig-name descname"><span class="pre">expireTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Watch.expireTime" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Watch.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Watch.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Watch.state">
+<span class="sig-name descname"><span class="pre">state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Watch.state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.Watch.target">
+<span class="sig-name descname"><span class="pre">target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.WatchTarget" title="GoogleServices.schemas.WatchTarget"><span class="pre">WatchTarget</span></a></em><a class="headerlink" href="#GoogleServices.schemas.Watch.target" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.WatchTarget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">WatchTarget</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#WatchTarget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.WatchTarget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.WatchTarget.topic">
+<span class="sig-name descname"><span class="pre">topic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#GoogleServices.schemas.CloudPubsubTopic" title="GoogleServices.schemas.CloudPubsubTopic"><span class="pre">CloudPubsubTopic</span></a></em><a class="headerlink" href="#GoogleServices.schemas.WatchTarget.topic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="GoogleServices.schemas.WriteControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GoogleServices.schemas.</span></span><span class="sig-name descname"><span class="pre">WriteControl</span></span><a class="reference internal" href="_modules/GoogleServices/schemas.html#WriteControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GoogleServices.schemas.WriteControl" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypedDict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.WriteControl.requiredRevisionId">
+<span class="sig-name descname"><span class="pre">requiredRevisionId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.WriteControl.requiredRevisionId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="GoogleServices.schemas.WriteControl.targetRevisionId">
+<span class="sig-name descname"><span class="pre">targetRevisionId</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#GoogleServices.schemas.WriteControl.targetRevisionId" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="googleservice-tests">
+<h2>GoogleService Tests<a class="headerlink" href="#googleservice-tests" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CanvasServices.html" class="btn btn-neutral float-left" title="Canvas API Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Logging.html" class="btn btn-neutral float-right" title="Logging module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Kevin Lopez, Jerry Wu.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

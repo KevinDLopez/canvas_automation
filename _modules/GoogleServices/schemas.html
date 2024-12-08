@@ -1,0 +1,672 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GoogleServices.schemas &mdash; GradingAutomation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GradingAutomation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#using-conda-environment">Using Conda Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#using-python-requirements-file">Using Python Requirements File</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../using_application.html">Using the Application ( Manual )</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#start-the-application-using-one-of-these-methods">Start the application using one of these methods:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#configure-the-application">Configure the application:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#download-student-submissions-and-verify-projects-in-project-verification-tab">Download student submissions and verify projects in “Project Verification” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#create-canvas-pages-from-group-folders-on-page-management-tab">Create Canvas Pages from group folders on “Page Management” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#adding-forms-and-quizzes-and-grading-responses-on-form-and-quizzes-tab">Adding Forms and Quizzes and Grading Responses on “Form and Quizzes” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#analyze-form-responses-in-form-analysis-tab">Analyze Form Responses in “Form Analysis” Tab.</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../setting_up_canvas_access_token.html">Setting up Canvas Access Token</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setting_up_google_api.html">Setting up Google API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">canvas_automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../Architecture.html">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Architecture.html#overview-of-the-canvas-automation-system">Overview of the Canvas Automation System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Architecture.html#pipelines">Pipelines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GradingAutomation.html">GradingAutomation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.Grader"><code class="docutils literal notranslate"><span class="pre">Grader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.apply_iqr"><code class="docutils literal notranslate"><span class="pre">apply_iqr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.create_image"><code class="docutils literal notranslate"><span class="pre">create_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.read_json_file"><code class="docutils literal notranslate"><span class="pre">read_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.read_yml_file"><code class="docutils literal notranslate"><span class="pre">read_yml_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GradingAutomationUI.html">GradingAutomationUI module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../CanvasServices.html">Canvas API Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.CanvasService">Canvas Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.schemas">Canvas Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.test_canvas_service">Canvas Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GoogleServices.html">GoogleService module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#GoogleServices.GoogleServices.get_id_from_url"><code class="docutils literal notranslate"><span class="pre">get_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#module-GoogleServices.schemas">GoogleService Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#googleservice-tests">GoogleService Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Logging.html">Logging module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.LogLevel"><code class="docutils literal notranslate"><span class="pre">LogLevel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.Print"><code class="docutils literal notranslate"><span class="pre">Print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.set_log_level"><code class="docutils literal notranslate"><span class="pre">set_log_level()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../schemas.html">schemas module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.ClassInfoSchema"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.PresentationTime"><code class="docutils literal notranslate"><span class="pre">PresentationTime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.StudentRecord"><code class="docutils literal notranslate"><span class="pre">StudentRecord</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.TeamInfo"><code class="docutils literal notranslate"><span class="pre">TeamInfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.TeamMember"><code class="docutils literal notranslate"><span class="pre">TeamMember</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GradingAutomation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">GoogleServices.schemas</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for GoogleServices.schemas</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+
+<div class="viewcode-block" id="Answer">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Answer">[docs]</a>
+<span class="k">class</span> <span class="nc">Answer</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">fileUploadAnswers</span><span class="p">:</span> <span class="s2">&quot;FileUploadAnswers&quot;</span>
+    <span class="n">grade</span><span class="p">:</span> <span class="s2">&quot;Grade&quot;</span>
+    <span class="n">questionId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">textAnswers</span><span class="p">:</span> <span class="s2">&quot;TextAnswers&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="BatchUpdateFormRequest">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.BatchUpdateFormRequest">[docs]</a>
+<span class="k">class</span> <span class="nc">BatchUpdateFormRequest</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">includeFormInResponse</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">requests</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Request&quot;</span><span class="p">]</span>
+    <span class="n">writeControl</span><span class="p">:</span> <span class="s2">&quot;WriteControl&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="BatchUpdateFormResponse">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.BatchUpdateFormResponse">[docs]</a>
+<span class="k">class</span> <span class="nc">BatchUpdateFormResponse</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">form</span><span class="p">:</span> <span class="s2">&quot;Form&quot;</span>
+    <span class="n">replies</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Response&quot;</span><span class="p">]</span>
+    <span class="n">writeControl</span><span class="p">:</span> <span class="s2">&quot;WriteControl&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="ChoiceQuestion">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.ChoiceQuestion">[docs]</a>
+<span class="k">class</span> <span class="nc">ChoiceQuestion</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Option&quot;</span><span class="p">]</span>
+    <span class="n">shuffle</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="CloudPubsubTopic">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.CloudPubsubTopic">[docs]</a>
+<span class="k">class</span> <span class="nc">CloudPubsubTopic</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">topicName</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="CorrectAnswer">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.CorrectAnswer">[docs]</a>
+<span class="k">class</span> <span class="nc">CorrectAnswer</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="CorrectAnswers">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.CorrectAnswers">[docs]</a>
+<span class="k">class</span> <span class="nc">CorrectAnswers</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">answers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;CorrectAnswer&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="CreateItemRequest">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.CreateItemRequest">[docs]</a>
+<span class="k">class</span> <span class="nc">CreateItemRequest</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">item</span><span class="p">:</span> <span class="s2">&quot;Item&quot;</span>
+    <span class="n">location</span><span class="p">:</span> <span class="s2">&quot;Location&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="CreateItemResponse">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.CreateItemResponse">[docs]</a>
+<span class="k">class</span> <span class="nc">CreateItemResponse</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">itemId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">questionId</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="CreateWatchRequest">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.CreateWatchRequest">[docs]</a>
+<span class="k">class</span> <span class="nc">CreateWatchRequest</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">watch</span><span class="p">:</span> <span class="s2">&quot;Watch&quot;</span>
+    <span class="n">watchId</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="DateQuestion">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.DateQuestion">[docs]</a>
+<span class="k">class</span> <span class="nc">DateQuestion</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">includeTime</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">includeYear</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+
+<div class="viewcode-block" id="DeleteItemRequest">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.DeleteItemRequest">[docs]</a>
+<span class="k">class</span> <span class="nc">DeleteItemRequest</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">location</span><span class="p">:</span> <span class="s2">&quot;Location&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Empty">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Empty">[docs]</a>
+<span class="k">class</span> <span class="nc">Empty</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="ExtraMaterial">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.ExtraMaterial">[docs]</a>
+<span class="k">class</span> <span class="nc">ExtraMaterial</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">link</span><span class="p">:</span> <span class="s2">&quot;TextLink&quot;</span>
+    <span class="n">video</span><span class="p">:</span> <span class="s2">&quot;VideoLink&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Feedback">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Feedback">[docs]</a>
+<span class="k">class</span> <span class="nc">Feedback</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">material</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;ExtraMaterial&quot;</span><span class="p">]</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="FileUploadAnswer">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.FileUploadAnswer">[docs]</a>
+<span class="k">class</span> <span class="nc">FileUploadAnswer</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">fileId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">fileName</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">mimeType</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="FileUploadAnswers">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.FileUploadAnswers">[docs]</a>
+<span class="k">class</span> <span class="nc">FileUploadAnswers</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">answers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;FileUploadAnswer&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="FileUploadQuestion">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.FileUploadQuestion">[docs]</a>
+<span class="k">class</span> <span class="nc">FileUploadQuestion</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">folderId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">maxFileSize</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">maxFiles</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="Form">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Form">[docs]</a>
+<span class="k">class</span> <span class="nc">Form</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">formId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">info</span><span class="p">:</span> <span class="s2">&quot;Info&quot;</span>
+    <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Item&quot;</span><span class="p">]</span>
+    <span class="n">linkedSheetId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">responderUri</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">revisionId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">settings</span><span class="p">:</span> <span class="s2">&quot;FormSettings&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="FormResponse">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.FormResponse">[docs]</a>
+<span class="k">class</span> <span class="nc">FormResponse</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">answers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">createTime</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">formId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">lastSubmittedTime</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">respondentEmail</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">responseId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">totalScore</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
+
+<div class="viewcode-block" id="FormSettings">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.FormSettings">[docs]</a>
+<span class="k">class</span> <span class="nc">FormSettings</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">quizSettings</span><span class="p">:</span> <span class="s2">&quot;QuizSettings&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Grade">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Grade">[docs]</a>
+<span class="k">class</span> <span class="nc">Grade</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">correct</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">feedback</span><span class="p">:</span> <span class="s2">&quot;Feedback&quot;</span>
+    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span></div>
+
+
+
+<div class="viewcode-block" id="Grading">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Grading">[docs]</a>
+<span class="k">class</span> <span class="nc">Grading</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">correctAnswers</span><span class="p">:</span> <span class="s2">&quot;CorrectAnswers&quot;</span>
+    <span class="n">generalFeedback</span><span class="p">:</span> <span class="s2">&quot;Feedback&quot;</span>
+    <span class="n">pointValue</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">whenRight</span><span class="p">:</span> <span class="s2">&quot;Feedback&quot;</span>
+    <span class="n">whenWrong</span><span class="p">:</span> <span class="s2">&quot;Feedback&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Grid">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Grid">[docs]</a>
+<span class="k">class</span> <span class="nc">Grid</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">columns</span><span class="p">:</span> <span class="s2">&quot;ChoiceQuestion&quot;</span>
+    <span class="n">shuffleQuestions</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+
+<div class="viewcode-block" id="Image">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Image">[docs]</a>
+<span class="k">class</span> <span class="nc">Image</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">altText</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">contentUri</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">properties</span><span class="p">:</span> <span class="s2">&quot;MediaProperties&quot;</span>
+    <span class="n">sourceUri</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="ImageItem">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.ImageItem">[docs]</a>
+<span class="k">class</span> <span class="nc">ImageItem</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">image</span><span class="p">:</span> <span class="s2">&quot;Image&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Info">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Info">[docs]</a>
+<span class="k">class</span> <span class="nc">Info</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">documentTitle</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="Item">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Item">[docs]</a>
+<span class="k">class</span> <span class="nc">Item</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">imageItem</span><span class="p">:</span> <span class="s2">&quot;ImageItem&quot;</span>
+    <span class="n">itemId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">pageBreakItem</span><span class="p">:</span> <span class="s2">&quot;PageBreakItem&quot;</span>
+    <span class="n">questionGroupItem</span><span class="p">:</span> <span class="s2">&quot;QuestionGroupItem&quot;</span>
+    <span class="n">questionItem</span><span class="p">:</span> <span class="s2">&quot;QuestionItem&quot;</span>
+    <span class="n">textItem</span><span class="p">:</span> <span class="s2">&quot;TextItem&quot;</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">videoItem</span><span class="p">:</span> <span class="s2">&quot;VideoItem&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="ListFormResponsesResponse">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.ListFormResponsesResponse">[docs]</a>
+<span class="k">class</span> <span class="nc">ListFormResponsesResponse</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">nextPageToken</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">responses</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;FormResponse&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="ListWatchesResponse">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.ListWatchesResponse">[docs]</a>
+<span class="k">class</span> <span class="nc">ListWatchesResponse</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">watches</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Watch&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="Location">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Location">[docs]</a>
+<span class="k">class</span> <span class="nc">Location</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span></div>
+
+
+
+<div class="viewcode-block" id="MediaProperties">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.MediaProperties">[docs]</a>
+<span class="k">class</span> <span class="nc">MediaProperties</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">alignment</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">int</span></div>
+
+
+
+<div class="viewcode-block" id="MoveItemRequest">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.MoveItemRequest">[docs]</a>
+<span class="k">class</span> <span class="nc">MoveItemRequest</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">newLocation</span><span class="p">:</span> <span class="s2">&quot;Location&quot;</span>
+    <span class="n">originalLocation</span><span class="p">:</span> <span class="s2">&quot;Location&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Option">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Option">[docs]</a>
+<span class="k">class</span> <span class="nc">Option</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">goToAction</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">goToSectionId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">image</span><span class="p">:</span> <span class="s2">&quot;Image&quot;</span>
+    <span class="n">isOther</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="PageBreakItem">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.PageBreakItem">[docs]</a>
+<span class="k">class</span> <span class="nc">PageBreakItem</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="Question">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Question">[docs]</a>
+<span class="k">class</span> <span class="nc">Question</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">choiceQuestion</span><span class="p">:</span> <span class="s2">&quot;ChoiceQuestion&quot;</span>
+    <span class="n">dateQuestion</span><span class="p">:</span> <span class="s2">&quot;DateQuestion&quot;</span>
+    <span class="n">fileUploadQuestion</span><span class="p">:</span> <span class="s2">&quot;FileUploadQuestion&quot;</span>
+    <span class="n">grading</span><span class="p">:</span> <span class="s2">&quot;Grading&quot;</span>
+    <span class="n">questionId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">required</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">rowQuestion</span><span class="p">:</span> <span class="s2">&quot;RowQuestion&quot;</span>
+    <span class="n">scaleQuestion</span><span class="p">:</span> <span class="s2">&quot;ScaleQuestion&quot;</span>
+    <span class="n">textQuestion</span><span class="p">:</span> <span class="s2">&quot;TextQuestion&quot;</span>
+    <span class="n">timeQuestion</span><span class="p">:</span> <span class="s2">&quot;TimeQuestion&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="QuestionGroupItem">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.QuestionGroupItem">[docs]</a>
+<span class="k">class</span> <span class="nc">QuestionGroupItem</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">grid</span><span class="p">:</span> <span class="s2">&quot;Grid&quot;</span>
+    <span class="n">image</span><span class="p">:</span> <span class="s2">&quot;Image&quot;</span>
+    <span class="n">questions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Question&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="QuestionItem">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.QuestionItem">[docs]</a>
+<span class="k">class</span> <span class="nc">QuestionItem</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">image</span><span class="p">:</span> <span class="s2">&quot;Image&quot;</span>
+    <span class="n">question</span><span class="p">:</span> <span class="s2">&quot;Question&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="QuizSettings">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.QuizSettings">[docs]</a>
+<span class="k">class</span> <span class="nc">QuizSettings</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">isQuiz</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+
+<div class="viewcode-block" id="RenewWatchRequest">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.RenewWatchRequest">[docs]</a>
+<span class="k">class</span> <span class="nc">RenewWatchRequest</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="Request">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Request">[docs]</a>
+<span class="k">class</span> <span class="nc">Request</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">createItem</span><span class="p">:</span> <span class="s2">&quot;CreateItemRequest&quot;</span>
+    <span class="n">deleteItem</span><span class="p">:</span> <span class="s2">&quot;DeleteItemRequest&quot;</span>
+    <span class="n">moveItem</span><span class="p">:</span> <span class="s2">&quot;MoveItemRequest&quot;</span>
+    <span class="n">updateFormInfo</span><span class="p">:</span> <span class="s2">&quot;UpdateFormInfoRequest&quot;</span>
+    <span class="n">updateItem</span><span class="p">:</span> <span class="s2">&quot;UpdateItemRequest&quot;</span>
+    <span class="n">updateSettings</span><span class="p">:</span> <span class="s2">&quot;UpdateSettingsRequest&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Response">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Response">[docs]</a>
+<span class="k">class</span> <span class="nc">Response</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">createItem</span><span class="p">:</span> <span class="s2">&quot;CreateItemResponse&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="RowQuestion">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.RowQuestion">[docs]</a>
+<span class="k">class</span> <span class="nc">RowQuestion</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="ScaleQuestion">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.ScaleQuestion">[docs]</a>
+<span class="k">class</span> <span class="nc">ScaleQuestion</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">high</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">highLabel</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">low</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">lowLabel</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="TextAnswer">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.TextAnswer">[docs]</a>
+<span class="k">class</span> <span class="nc">TextAnswer</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="TextAnswers">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.TextAnswers">[docs]</a>
+<span class="k">class</span> <span class="nc">TextAnswers</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">answers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;TextAnswer&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="TextItem">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.TextItem">[docs]</a>
+<span class="k">class</span> <span class="nc">TextItem</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="TextLink">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.TextLink">[docs]</a>
+<span class="k">class</span> <span class="nc">TextLink</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">displayText</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="TextQuestion">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.TextQuestion">[docs]</a>
+<span class="k">class</span> <span class="nc">TextQuestion</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">paragraph</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+
+<div class="viewcode-block" id="TimeQuestion">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.TimeQuestion">[docs]</a>
+<span class="k">class</span> <span class="nc">TimeQuestion</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+
+<div class="viewcode-block" id="UpdateFormInfoRequest">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.UpdateFormInfoRequest">[docs]</a>
+<span class="k">class</span> <span class="nc">UpdateFormInfoRequest</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">info</span><span class="p">:</span> <span class="s2">&quot;Info&quot;</span>
+    <span class="n">updateMask</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="UpdateItemRequest">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.UpdateItemRequest">[docs]</a>
+<span class="k">class</span> <span class="nc">UpdateItemRequest</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">item</span><span class="p">:</span> <span class="s2">&quot;Item&quot;</span>
+    <span class="n">location</span><span class="p">:</span> <span class="s2">&quot;Location&quot;</span>
+    <span class="n">updateMask</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="UpdateSettingsRequest">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.UpdateSettingsRequest">[docs]</a>
+<span class="k">class</span> <span class="nc">UpdateSettingsRequest</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">settings</span><span class="p">:</span> <span class="s2">&quot;FormSettings&quot;</span>
+    <span class="n">updateMask</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="Video">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Video">[docs]</a>
+<span class="k">class</span> <span class="nc">Video</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">properties</span><span class="p">:</span> <span class="s2">&quot;MediaProperties&quot;</span>
+    <span class="n">youtubeUri</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="VideoItem">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.VideoItem">[docs]</a>
+<span class="k">class</span> <span class="nc">VideoItem</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">video</span><span class="p">:</span> <span class="s2">&quot;Video&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="VideoLink">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.VideoLink">[docs]</a>
+<span class="k">class</span> <span class="nc">VideoLink</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">displayText</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">youtubeUri</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="Watch">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.Watch">[docs]</a>
+<span class="k">class</span> <span class="nc">Watch</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">createTime</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">errorType</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">eventType</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">expireTime</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">state</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">target</span><span class="p">:</span> <span class="s2">&quot;WatchTarget&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="WatchTarget">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.WatchTarget">[docs]</a>
+<span class="k">class</span> <span class="nc">WatchTarget</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">topic</span><span class="p">:</span> <span class="s2">&quot;CloudPubsubTopic&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="WriteControl">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.schemas.WriteControl">[docs]</a>
+<span class="k">class</span> <span class="nc">WriteControl</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">requiredRevisionId</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">targetRevisionId</span><span class="p">:</span> <span class="nb">str</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Kevin Lopez, Jerry Wu.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>

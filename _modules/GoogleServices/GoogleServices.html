@@ -1,0 +1,656 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GoogleServices.GoogleServices &mdash; GradingAutomation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GradingAutomation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#using-conda-environment">Using Conda Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#using-python-requirements-file">Using Python Requirements File</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../using_application.html">Using the Application ( Manual )</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#start-the-application-using-one-of-these-methods">Start the application using one of these methods:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#configure-the-application">Configure the application:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#download-student-submissions-and-verify-projects-in-project-verification-tab">Download student submissions and verify projects in “Project Verification” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#create-canvas-pages-from-group-folders-on-page-management-tab">Create Canvas Pages from group folders on “Page Management” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#adding-forms-and-quizzes-and-grading-responses-on-form-and-quizzes-tab">Adding Forms and Quizzes and Grading Responses on “Form and Quizzes” Tab:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../using_application.html#analyze-form-responses-in-form-analysis-tab">Analyze Form Responses in “Form Analysis” Tab.</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../setting_up_canvas_access_token.html">Setting up Canvas Access Token</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setting_up_google_api.html">Setting up Google API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">canvas_automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../Architecture.html">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Architecture.html#overview-of-the-canvas-automation-system">Overview of the Canvas Automation System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Architecture.html#pipelines">Pipelines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GradingAutomation.html">GradingAutomation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.Grader"><code class="docutils literal notranslate"><span class="pre">Grader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.apply_iqr"><code class="docutils literal notranslate"><span class="pre">apply_iqr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.create_image"><code class="docutils literal notranslate"><span class="pre">create_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.read_json_file"><code class="docutils literal notranslate"><span class="pre">read_json_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GradingAutomation.html#GradingAutomation.read_yml_file"><code class="docutils literal notranslate"><span class="pre">read_yml_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GradingAutomationUI.html">GradingAutomationUI module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../CanvasServices.html">Canvas API Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.CanvasService">Canvas Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.schemas">Canvas Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../CanvasServices.html#module-Canvas.test_canvas_service">Canvas Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../GoogleServices.html">GoogleService module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager"><code class="docutils literal notranslate"><span class="pre">GoogleServicesManager</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#GoogleServices.GoogleServices.get_id_from_url"><code class="docutils literal notranslate"><span class="pre">get_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#module-GoogleServices.schemas">GoogleService Schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../GoogleServices.html#googleservice-tests">GoogleService Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Logging.html">Logging module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.LogLevel"><code class="docutils literal notranslate"><span class="pre">LogLevel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.Print"><code class="docutils literal notranslate"><span class="pre">Print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Logging.html#Logging.set_log_level"><code class="docutils literal notranslate"><span class="pre">set_log_level()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../schemas.html">schemas module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.ClassInfoSchema"><code class="docutils literal notranslate"><span class="pre">ClassInfoSchema</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.PresentationTime"><code class="docutils literal notranslate"><span class="pre">PresentationTime</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.StudentRecord"><code class="docutils literal notranslate"><span class="pre">StudentRecord</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.TeamInfo"><code class="docutils literal notranslate"><span class="pre">TeamInfo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../schemas.html#schemas.TeamMember"><code class="docutils literal notranslate"><span class="pre">TeamMember</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GradingAutomation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">GoogleServices.GoogleServices</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for GoogleServices.GoogleServices</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
+<span class="kn">from</span> <span class="nn">google.auth.transport.requests</span> <span class="kn">import</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">google.oauth2.credentials</span> <span class="kn">import</span> <span class="n">Credentials</span>
+<span class="kn">from</span> <span class="nn">google_auth_oauthlib.flow</span> <span class="kn">import</span> <span class="n">InstalledAppFlow</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">gspread</span>
+<span class="kn">from</span> <span class="nn">gspread.spreadsheet</span> <span class="kn">import</span> <span class="n">Spreadsheet</span>
+<span class="kn">from</span> <span class="nn">gspread.worksheet</span> <span class="kn">import</span> <span class="n">Worksheet</span>
+
+<span class="kn">from</span> <span class="nn">GoogleServices.schemas</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BatchUpdateFormResponse</span><span class="p">,</span>
+    <span class="n">Form</span><span class="p">,</span>
+    <span class="n">Item</span><span class="p">,</span>
+    <span class="n">ListFormResponsesResponse</span><span class="p">,</span>
+    <span class="n">Request</span> <span class="k">as</span> <span class="n">RequestType</span><span class="p">,</span>
+    <span class="n">Response</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">Logging</span> <span class="kn">import</span> <span class="n">Print</span>
+
+<span class="n">SCOPES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;https://www.googleapis.com/auth/forms.body&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;https://www.googleapis.com/auth/spreadsheets&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;https://www.googleapis.com/auth/drive.file&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">DISCOVERY_DOC</span> <span class="o">=</span> <span class="s2">&quot;https://forms.googleapis.com/$discovery/rest?version=v1&quot;</span>
+
+<span class="n">base_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">)</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s2">&quot;frozen&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+
+<span class="n">client_secrets_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="s2">&quot;client_secrets.json&quot;</span><span class="p">)</span>
+<span class="n">token_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="s2">&quot;token.json&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_id_from_url">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.get_id_from_url">[docs]</a>
+<span class="k">def</span> <span class="nf">get_id_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract the spreadsheet ID from a Google Sheets URL.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): Google Sheets URL</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Spreadsheet ID</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; url = &quot;https://docs.google.com/spreadsheets/d/1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ/edit?gid=407629335&quot;</span>
+<span class="sd">        &gt;&gt;&gt; get_id_from_url(url)</span>
+<span class="sd">        &#39;1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Split on /d/ and take the second part</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/d/&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Split on first / after the ID and take the first part</span>
+    <span class="n">id_part</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">id_part</span></div>
+
+
+
+<div class="viewcode-block" id="GoogleServicesManager">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager">[docs]</a>
+<span class="k">class</span> <span class="nc">GoogleServicesManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A manager class for interacting with various Google services including Forms, Sheets and Drive.</span>
+
+<span class="sd">    This class provides methods to:</span>
+<span class="sd">    - Authenticate with Google services using OAuth2</span>
+<span class="sd">    - Work with Google Forms (create, copy, get responses)</span>
+<span class="sd">    - Work with Google Sheets (read, write, update worksheets)</span>
+<span class="sd">    - Access Google Drive files</span>
+
+<span class="sd">    The manager handles authentication automatically on initialization and maintains</span>
+<span class="sd">    credentials for subsequent API calls.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        form_service: Google Forms API service instance</span>
+<span class="sd">        sheets_service: Google Sheets API service instance</span>
+<span class="sd">        gspread_client: Authorized gspread client for spreadsheet operations</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__authenticate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">form_service</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">discovery</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="s2">&quot;forms&quot;</span><span class="p">,</span> <span class="s2">&quot;v1&quot;</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sheets_service</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">discovery</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="s2">&quot;sheets&quot;</span><span class="p">,</span> <span class="s2">&quot;v4&quot;</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gspread_client</span> <span class="o">=</span> <span class="n">gspread</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="c1"># Add these new methods for gspread functionality</span>
+<div class="viewcode-block" id="GoogleServicesManager.open_spreadsheet">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.open_spreadsheet">[docs]</a>
+    <span class="k">def</span> <span class="nf">open_spreadsheet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spreadsheet_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Open a spreadsheet by name</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            spreadsheet_name (str): Name of the spreadsheet</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            gspread.Spreadsheet: Spreadsheet object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspread_client</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">spreadsheet_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GoogleServicesManager.read_worksheet">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.read_worksheet">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_worksheet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worksheet</span><span class="p">:</span> <span class="n">Worksheet</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read all values from a worksheet</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            worksheet (gspread.Worksheet): Worksheet object to read from</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of rows containing worksheet data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">worksheet</span><span class="o">.</span><span class="n">get_all_records</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GoogleServicesManager.get_spreadsheets">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.get_spreadsheets">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_spreadsheets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all spreadsheets from Google Drive</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of spreadsheets</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspread_client</span><span class="o">.</span><span class="n">list_spreadsheet_files</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GoogleServicesManager.open_spreadsheet_by_id">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.open_spreadsheet_by_id">[docs]</a>
+    <span class="k">def</span> <span class="nf">open_spreadsheet_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spreadsheet_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Open a spreadsheet by its ID</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            spreadsheet_id (str): The ID of the spreadsheet (can be extracted from the URL)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            gspread.Spreadsheet: Spreadsheet object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gspread_client</span><span class="o">.</span><span class="n">open_by_key</span><span class="p">(</span><span class="n">spreadsheet_id</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># The file token.json stores the user&#39;s access and refresh tokens, and is</span>
+        <span class="c1"># created automatically when the authorization flow completes for the first time.</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">token_path</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span> <span class="o">=</span> <span class="n">Credentials</span><span class="o">.</span><span class="n">from_authorized_user_file</span><span class="p">(</span><span class="n">token_path</span><span class="p">,</span> <span class="n">SCOPES</span><span class="p">)</span>
+        <span class="c1"># If there are no (valid) credentials available, let the user log in.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="o">.</span><span class="n">valid</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="o">.</span><span class="n">expired</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="o">.</span><span class="n">expired</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">Request</span><span class="p">())</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid credentials&quot;</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error during token refresh: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">token_path</span><span class="p">):</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">token_path</span><span class="p">)</span>
+                    <span class="n">flow</span> <span class="o">=</span> <span class="n">InstalledAppFlow</span><span class="o">.</span><span class="n">from_client_secrets_file</span><span class="p">(</span><span class="n">client_secrets_path</span><span class="p">,</span> <span class="n">SCOPES</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">run_local_server</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="c1"># Save the credentials for the next run</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">token_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">token</span><span class="p">:</span>
+                        <span class="n">token</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flow</span> <span class="o">=</span> <span class="n">InstalledAppFlow</span><span class="o">.</span><span class="n">from_client_secrets_file</span><span class="p">(</span><span class="n">client_secrets_path</span><span class="p">,</span> <span class="n">SCOPES</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">run_local_server</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1"># Save the credentials for the next run</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">token_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">token</span><span class="p">:</span>
+                <span class="n">token</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
+
+<div class="viewcode-block" id="GoogleServicesManager.get_form">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.get_form">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_form</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Form</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the details of a Google Form using its ID.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            form_id (str): The ID of the form to retrieve</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Form: A Form object containing the form details including:</span>
+<span class="sd">                - formId: The unique identifier of the form</span>
+<span class="sd">                - info: Basic form information like title</span>
+<span class="sd">                - items: List of form items/questions</span>
+<span class="sd">                - linkedSheetId: ID of linked response spreadsheet</span>
+<span class="sd">                - responderUri: URL for form respondents</span>
+<span class="sd">                - revisionId: Form revision identifier</span>
+<span class="sd">                - settings: Form settings configuration</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; google_service = GoogleServices()</span>
+<span class="sd">            &gt;&gt;&gt; form = google_service.get_form(&quot;abc123xyz&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; print(form[&quot;info&quot;][&quot;title&quot;])</span>
+<span class="sd">            &quot;My Survey Form&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_service</span><span class="o">.</span><span class="n">forms</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">formId</span><span class="o">=</span><span class="n">form_id</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__get_form_responses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ListFormResponsesResponse</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve and print form responses using the form ID.&quot;&quot;&quot;</span>
+        <span class="c1"># MIGHT NEED TO HAN</span>
+        <span class="n">responses</span><span class="p">:</span> <span class="n">ListFormResponsesResponse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_service</span><span class="o">.</span><span class="n">forms</span><span class="p">()</span><span class="o">.</span><span class="n">responses</span><span class="p">()</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">formId</span><span class="o">=</span><span class="n">form_id</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">responses</span>
+
+<div class="viewcode-block" id="GoogleServicesManager.make_copy_of_form">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.make_copy_of_form">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_copy_of_form</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">add_email</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Form</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make a copy of a Google Form with the given form ID and customize it.</span>
+
+<span class="sd">        This method creates a copy of an existing form template and optionally adds an email field</span>
+<span class="sd">        at the beginning. All other questions from the template form are copied over.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            form_id (str): The ID of the template form to copy</span>
+<span class="sd">            new_title (str): The title for the new form copy</span>
+<span class="sd">            add_email (bool): Whether to add an email field at the start of the form</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Form: The created form object containing details like formId, title and URLs</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; google_service = GoogleServices()</span>
+<span class="sd">            &gt;&gt;&gt; template_id = &quot;1234abcd...&quot;</span>
+<span class="sd">            &gt;&gt;&gt; new_form = google_service.make_copy_of_form(</span>
+<span class="sd">            ...     form_id=template_id,</span>
+<span class="sd">            ...     new_title=&quot;Student Survey 2024&quot;,</span>
+<span class="sd">            ...     add_email=True</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; print(f&quot;Created form with ID: {new_form[&#39;formId&#39;]}&quot;)</span>
+<span class="sd">            Created form with ID: 5678efgh...</span>
+<span class="sd">            &gt;&gt;&gt; print(f&quot;Form URL: {new_form[&#39;responderUri&#39;]}&quot;)</span>
+<span class="sd">            Form URL: https://docs.google.com/forms/d/5678efgh.../viewform</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">template_form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_form</span><span class="p">(</span><span class="n">form_id</span><span class="p">)</span>  <span class="c1"># Get the details from the template</span>
+
+        <span class="n">new_form</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;info&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">new_title</span><span class="p">}}</span>
+        <span class="n">created_form</span><span class="p">:</span> <span class="n">Form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_service</span><span class="o">.</span><span class="n">forms</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="n">new_form</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;created_form&quot;</span><span class="p">,</span> <span class="n">created_form</span><span class="p">)</span>
+
+        <span class="n">create_items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RequestType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">add_email</span><span class="p">:</span>
+            <span class="n">create_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;createItem&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;item&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Email&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;questionItem&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                    <span class="s2">&quot;textQuestion&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+                                    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                                <span class="p">},</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Enter your CSULB email address, e.g., First.Last.001@student.csulb.edu&quot;</span><span class="p">,</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">j</span><span class="p">},</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>  <span class="c1"># type: ignore</span>
+            <span class="p">)</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">template_form</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]):</span>
+            <span class="n">create_items</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;createItem&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;item&quot;</span><span class="p">:</span> <span class="n">item</span><span class="p">,</span> <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">}}})</span>
+
+        <span class="n">batch_update_request</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;requests&quot;</span><span class="p">:</span> <span class="n">create_items</span><span class="p">}</span>
+
+        <span class="c1"># Execute the batch update</span>
+        <span class="n">batch_update_response</span><span class="p">:</span> <span class="n">BatchUpdateFormResponse</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">form_service</span><span class="o">.</span><span class="n">forms</span><span class="p">()</span><span class="o">.</span><span class="n">batchUpdate</span><span class="p">(</span><span class="n">formId</span><span class="o">=</span><span class="n">created_form</span><span class="p">[</span><span class="s2">&quot;formId&quot;</span><span class="p">],</span> <span class="n">body</span><span class="o">=</span><span class="n">batch_update_request</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;batch_update_response&quot;</span><span class="p">,</span> <span class="n">batch_update_response</span><span class="p">)</span>
+
+        <span class="c1"># Print the form ID and URL</span>
+        <span class="c1"># fmt: off</span>
+        <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Form ID: </span><span class="si">{</span><span class="n">created_form</span><span class="p">[</span><span class="s1">&#39;formId&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Form URL to edit: https://docs.google.com/forms/d/</span><span class="si">{</span><span class="n">created_form</span><span class="p">[</span><span class="s1">&#39;formId&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/edit&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Form URL to view: </span><span class="si">{</span><span class="n">created_form</span><span class="p">[</span><span class="s1">&#39;responderUri&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Title = </span><span class="si">{</span><span class="n">created_form</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+        <span class="c1"># fmt: on</span>
+        <span class="k">return</span> <span class="n">created_form</span></div>
+
+
+<div class="viewcode-block" id="GoogleServicesManager.create_form_with_questions">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.create_form_with_questions">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_form_with_questions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">questions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a form with a title and a list of questions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            title (str): The title of the form to create</span>
+<span class="sd">            questions (List[dict]): List of question dictionaries, where each dict contains:</span>
+<span class="sd">                - title (str): The question text</span>
+<span class="sd">                - required (bool): Whether the question is required</span>
+<span class="sd">                - type (str): The question type (e.g. &#39;textQuestion&#39;, &#39;choiceQuestion&#39;)</span>
+<span class="sd">                - options (dict): Type-specific configuration for the question</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            BatchUpdateFormResponse: Response from the form creation API containing details</span>
+<span class="sd">                about the created form and questions</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; questions = [</span>
+<span class="sd">            ...     {</span>
+<span class="sd">            ...         &quot;title&quot;: &quot;What is your name?&quot;,</span>
+<span class="sd">            ...         &quot;required&quot;: True,</span>
+<span class="sd">            ...         &quot;type&quot;: &quot;textQuestion&quot;,</span>
+<span class="sd">            ...         &quot;options&quot;: {&quot;paragraph&quot;: False}</span>
+<span class="sd">            ...     },</span>
+<span class="sd">            ...     {</span>
+<span class="sd">            ...         &quot;title&quot;: &quot;Select your favorite color&quot;,</span>
+<span class="sd">            ...         &quot;required&quot;: False,</span>
+<span class="sd">            ...         &quot;type&quot;: &quot;choiceQuestion&quot;,</span>
+<span class="sd">            ...         &quot;options&quot;: {</span>
+<span class="sd">            ...             &quot;choices&quot;: [</span>
+<span class="sd">            ...                 {&quot;value&quot;: &quot;Red&quot;},</span>
+<span class="sd">            ...                 {&quot;value&quot;: &quot;Blue&quot;},</span>
+<span class="sd">            ...                 {&quot;value&quot;: &quot;Green&quot;}</span>
+<span class="sd">            ...             ]</span>
+<span class="sd">            ...         }</span>
+<span class="sd">            ...     }</span>
+<span class="sd">            ... ]</span>
+<span class="sd">            &gt;&gt;&gt; form = google_services.create_form_with_questions(&quot;Survey Form&quot;, questions)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create the form with just the title</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;info&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">}}</span>
+
+        <span class="n">created_form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_service</span><span class="o">.</span><span class="n">forms</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="n">form</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+
+        <span class="c1"># Define the batch update request to add questions</span>
+        <span class="n">form_questions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RequestType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">question</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">questions</span><span class="p">):</span>
+            <span class="n">form_questions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;createItem&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;item&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">question</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span>
+                            <span class="s2">&quot;questionItem&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="p">{</span>  <span class="c1"># type: ignore</span>
+                                    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="n">question</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">],</span>
+                                    <span class="n">question</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]:</span> <span class="n">question</span><span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">],</span>
+                                <span class="p">},</span>
+                            <span class="p">},</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">},</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="n">batch_update_request</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;requests&quot;</span><span class="p">:</span> <span class="n">form_questions</span><span class="p">}</span>
+
+        <span class="c1"># Execute the batch update</span>
+        <span class="n">batch_update_response</span><span class="p">:</span> <span class="n">BatchUpdateFormResponse</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">form_service</span><span class="o">.</span><span class="n">forms</span><span class="p">()</span><span class="o">.</span><span class="n">batchUpdate</span><span class="p">(</span><span class="n">formId</span><span class="o">=</span><span class="n">created_form</span><span class="p">[</span><span class="s2">&quot;formId&quot;</span><span class="p">],</span> <span class="n">body</span><span class="o">=</span><span class="n">batch_update_request</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;batch_update_response&quot;</span><span class="p">,</span> <span class="n">batch_update_response</span><span class="p">)</span>
+
+        <span class="c1"># Print the form ID and URL</span>
+        <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Form ID: </span><span class="si">{</span><span class="n">created_form</span><span class="p">[</span><span class="s1">&#39;formId&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Form URL: https://docs.google.com/forms/d/</span><span class="si">{</span><span class="n">created_form</span><span class="p">[</span><span class="s1">&#39;formId&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/edit&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">batch_update_response</span></div>
+
+
+<div class="viewcode-block" id="GoogleServicesManager.get_form_responses">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.get_form_responses">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_form_responses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+        <span class="n">form_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_form</span><span class="p">(</span><span class="n">form_id</span><span class="p">)</span>  <span class="c1"># questions are in form_data[&#39;questions&#39;]</span>
+        <span class="n">id_to_question</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">form_data</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s2">&quot;questionItem&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+                <span class="n">question</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;questionItem&quot;</span><span class="p">][</span><span class="s2">&quot;question&quot;</span><span class="p">]</span>
+                <span class="n">id_to_question</span><span class="p">[</span><span class="n">question</span><span class="p">[</span><span class="s2">&quot;questionId&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;questionGroupItem&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">question</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;questionGroupItem&quot;</span><span class="p">][</span><span class="s2">&quot;questions&quot;</span><span class="p">]:</span>
+                    <span class="n">id_to_question</span><span class="p">[</span><span class="n">question</span><span class="p">[</span><span class="s2">&quot;questionId&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">question</span><span class="p">[</span><span class="s2">&quot;rowQuestion&quot;</span><span class="p">][</span><span class="s2">&quot;title&quot;</span><span class="p">]</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_form_responses</span><span class="p">(</span><span class="n">form_id</span><span class="p">)</span>  <span class="c1"># Generate pandas dataframe</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="s2">&quot;responses&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;No responses yet&quot;</span><span class="p">,</span> <span class="n">log_type</span><span class="o">=</span><span class="s2">&quot;WARN&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">response</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;responses&quot;</span><span class="p">]:</span>
+            <span class="c1"># Print(response)</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;responseId&quot;</span><span class="p">:</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;responseId&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;createTime&quot;</span><span class="p">:</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;createTime&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;lastSubmittedTime&quot;</span><span class="p">:</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;lastSubmittedTime&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">question_id</span><span class="p">,</span> <span class="n">answer_data</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;answers&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">row</span><span class="p">[</span><span class="n">id_to_question</span><span class="p">[</span><span class="n">question_id</span><span class="p">]]</span> <span class="o">=</span> <span class="n">answer_data</span><span class="p">[</span><span class="s2">&quot;textAnswers&quot;</span><span class="p">][</span><span class="s2">&quot;answers&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+            <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="GoogleServicesManager.disable_form">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.disable_form">[docs]</a>
+    <span class="k">def</span> <span class="nf">disable_form</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># THIS DOES NOT WORK</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Disable a form by stopping it from accepting responses.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not authenticated&quot;</span><span class="p">)</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://forms.googleapis.com/v1/forms/</span><span class="si">{</span><span class="n">form_id</span><span class="si">}</span><span class="s2">:batchUpdate&quot;</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__creds</span><span class="o">.</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">}</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;requests&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;updateSettings&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;settings&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;acceptingResponses&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span> <span class="s2">&quot;updateMask&quot;</span><span class="p">:</span> <span class="s2">&quot;acceptingResponses&quot;</span><span class="p">}}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Debugging information</span>
+        <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;URL:&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;Headers:&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;Body:&quot;</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">body</span><span class="p">)</span>
+
+        <span class="c1"># More debugging information</span>
+        <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;Response Status Code:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+        <span class="n">Print</span><span class="p">(</span><span class="s2">&quot;Response Content:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GoogleServicesManager.update_worksheet">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.update_worksheet">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_worksheet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worksheet</span><span class="p">:</span> <span class="n">Worksheet</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">range_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update values in a worksheet</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            worksheet (gspread.Worksheet): Worksheet object to update</span>
+<span class="sd">            data (list): List of rows to update</span>
+<span class="sd">            range_name (str, optional): A1 notation range to update. If None, updates from A1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">range_name</span><span class="p">:</span>
+            <span class="n">worksheet</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">range_name</span><span class="o">=</span><span class="n">range_name</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">worksheet</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GoogleServicesManager.update_worksheet_from_records">
+<a class="viewcode-back" href="../../GoogleServices.html#GoogleServices.GoogleServices.GoogleServicesManager.update_worksheet_from_records">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_worksheet_from_records</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worksheet</span><span class="p">:</span> <span class="n">Worksheet</span><span class="p">,</span> <span class="n">records</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">append_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update or append records to a worksheet, clearing existing content when not appending</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            worksheet (gspread.Worksheet): The worksheet to update</span>
+<span class="sd">            records (list[dict]): List of dictionary records to update/append</span>
+<span class="sd">            append_only (bool): If True, only appends new records. If False, clears and rewrites worksheet</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">records</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Get headers from the first record</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">records</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># Convert records to rows format</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">headers</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">append_only</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+            <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">record</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">append_only</span><span class="p">:</span>
+            <span class="c1"># Clear the existing content before updating</span>
+            <span class="n">worksheet</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">append_only</span><span class="p">:</span>
+            <span class="n">worksheet</span><span class="o">.</span><span class="n">append_rows</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">worksheet</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">rows</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">GoogleServicesManager</span><span class="p">()</span>
+
+    <span class="n">spreadsheet</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">open_spreadsheet_by_id</span><span class="p">(</span><span class="s2">&quot;1tuuIobh2R4KQJBxCPR60E0EFVW_jr9_l6Aaj3lx6qaQ&quot;</span><span class="p">)</span>
+    <span class="n">worksheet</span> <span class="o">=</span> <span class="n">spreadsheet</span><span class="o">.</span><span class="n">get_worksheet</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">worksheet_records</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">read_worksheet</span><span class="p">(</span><span class="n">worksheet</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Kevin Lopez, Jerry Wu.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(false);
+      });
+  </script> 
+
+</body>
+</html>
