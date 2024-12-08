@@ -40,7 +40,7 @@ html_static_path = ["_static"]
 
 # Add theme options to show the navigation tree expanded by default
 html_theme_options = {
-    "navigation_depth": 2,
+    "navigation_depth": 3,
     "collapse_navigation": False,
     "sticky_navigation": False,
     "includehidden": True,

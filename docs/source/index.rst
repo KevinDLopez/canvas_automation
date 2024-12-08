@@ -14,8 +14,8 @@ This project was developed by:
 Welcome to GradingAutomation's documentation. This tool helps automate the grading process for Canvas 574 with the use of
 `Canvas API <https://canvas.instructure.com/doc/api/index.html>`_,
 `Google Forms API <https://developers.google.com/forms/api/reference/rest>`_,
-`pydantic <https://docs.pydantic.dev/latest/>`_ for schema verification,
-`pandas <https://pandas.pydata.org/>`_ for data analysis,
+`Pydantic <https://docs.pydantic.dev/latest/>`_ for schema verification,
+`Pandas <https://pandas.pydata.org/>`_ for data analysis,
 and `Python <https://www.python.org/>`_ for the programming language.
 
 Project Goals
@@ -34,7 +34,7 @@ Table of Contents
 -----------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Getting Started
 
    prerequisites
@@ -42,14 +42,14 @@ Table of Contents
    using_application
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Configuration
 
    setting_up_canvas_access_token
    setting_up_google_api
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Development
 
    modules
