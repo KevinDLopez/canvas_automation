@@ -1,9 +1,9 @@
 .vscode
 .env
 
-# Personal tokens from google 
-token.json 
-client_secrets.json 
+# Personal tokens from google
+token.json
+client_secrets.json
 .env
 
 *.pyc

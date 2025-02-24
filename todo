@@ -1,9 +1,0 @@
-# Add verify on emails in the first step. Make sure that everyone in team_form is enrolled in the course.
-# Clean up looging, Maybe make the logs show up in the bottom of the UI 
-
-
-# ------ Test it more ----
-# Add test students with emails, also allow us to grade
-
-# ------ Questions to clarify ------
-# Add the presentation assignment title in the initial page or create assignment with script, Tell Professor to name it  "Presentation Grade"
